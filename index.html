@@ -673,26 +673,76 @@
         min-height: 350px;
       }
 
-      /* Sticky Caller Name Column on Mobile */
-      thead th.col-officer, tbody td.cell-officer {
+      /* -------------------------------------------------------------
+         FIXED-WIDTH FREEZE PANE TABLE (Zero Distortion on Mobile)
+         ------------------------------------------------------------- */
+      table.leaderboard-table {
+        min-width: 920px !important;
+        width: max-content !important;
+        table-layout: fixed;
+      }
+
+      /* Column 1: Sr. NO (Sticky at left: 0) */
+      thead th:first-child {
         position: sticky;
         left: 0;
-        z-index: 15;
+        z-index: 40;
+        width: 44px !important;
+        min-width: 44px !important;
+        max-width: 44px !important;
+        background: #1e3a5f;
+      }
+      tbody td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 20;
+        width: 44px !important;
+        min-width: 44px !important;
+        max-width: 44px !important;
         background: #ffffff;
-        box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+      }
+      tbody tr:nth-child(even) td:first-child {
+        background: #f1f5f9;
+      }
+
+      /* Column 2: Officer's Name (Sticky at left: 44px with divider shadow) */
+      thead th.col-officer {
+        position: sticky;
+        left: 44px;
+        z-index: 40;
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+        background: #1e3a5f;
+        box-shadow: 3px 0 6px -2px rgba(0,0,0,0.2);
+      }
+      tbody td.cell-officer {
+        position: sticky;
+        left: 44px;
+        z-index: 20;
+        width: 140px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+        background: #ffffff;
+        box-shadow: 3px 0 6px -2px rgba(0,0,0,0.15);
       }
       tbody tr:nth-child(even) td.cell-officer {
         background: #f1f5f9;
       }
-      thead th.col-officer {
+
+      /* Table Footer Freeze */
+      tfoot td:first-child {
+        position: sticky;
+        left: 0;
         z-index: 35;
-        background: #1e3a5f;
+        background: #0b3966;
       }
       tfoot td.footer-total-label {
         position: sticky;
         left: 0;
-        z-index: 30;
+        z-index: 35;
         background: #0b3966;
+        box-shadow: 3px 0 6px -2px rgba(0,0,0,0.25);
       }
 
       /* Modals slide from bottom on phone */
@@ -740,7 +790,7 @@
   <div class="login-box">
     <div style="display:flex; justify-content:space-between; align-items:center;">
       <div class="login-badge">⏰ 12-Hour Daily Session</div>
-      <span class="local-mode-tag" id="engineStatusTag">Local Test Mode</span>
+      <span class="local-mode-tag" id="engineStatusTag" style="background:#059669;">LIVE GOOGLE SHEET ONLY</span>
     </div>
     <h2 style="color:var(--navy-dark); margin-bottom: 4px;">Sign In</h2>
     <p style="color:var(--text-muted); font-size:13px; margin-bottom: 20px;">Daily Collection Leaderboard Portal</p>
@@ -765,6 +815,10 @@
         <button type="button" class="quick-role-btn" onclick="quickFill('satish')">Satish (Admin)</button>
         <button type="button" class="quick-role-btn" onclick="quickFill('tejas')">Tejas (MIS)</button>
         <button type="button" class="quick-role-btn" onclick="quickFill('samarth')">Samarth (Admin)</button>
+      </div>
+      <div style="margin-top:6px;">
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Customer Service:</span>
+        <button type="button" class="quick-role-btn" style="background:#f0fdf4; border-color:#86efac; color:#166534; font-weight:700;" onclick="quickFill('dhruv')">🎧 Dhruv (Customer Service)</button>
       </div>
       <div style="margin-top:6px;">
         <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Managers:</span>
@@ -793,7 +847,7 @@
     <div class="user-controls">
       <div id="cloudSyncPill" class="cooldown-pill" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; cursor:pointer;" title="Sync Status - Click to configure" onclick="promptConfigureApi()">
         <span id="cloudSyncDot" class="cooldown-dot" style="background:#94a3b8;"></span>
-        <span id="cloudSyncText">🟠 Standalone Mode</span>
+        <span id="cloudSyncText">🟡 Connecting to Google Sheet...</span>
       </div>
       <div class="cooldown-pill">
         <span class="cooldown-dot"></span>
@@ -818,12 +872,13 @@
       <span class="cooldown-pill" style="background:#092e54; color:#facc15; border:1px solid #1e3a5f;">
         <span>⏰</span> <span id="currentPeriodText">Shift: Checking...</span>
       </span>
-      <button type="button" class="btn-pill" onclick="testNotificationAlert()" title="Preview how the 6:20 PM alert looks and sounds">🔔 Test 6:20 PM Alert</button>
+      <button type="button" class="btn-pill" onclick="requestNativePermissionPrompt()" title="Enable or test native Windows, Mac, Android, and iOS notifications">🔔 Test Native Notification (PC/Mobile)</button>
     </div>
 
     <div class="filter-group" id="adminControlsArea" style="display:none;">
       <select id="managerFilterSelect" class="select-manager" onchange="renderLeaderboard()">
         <option value="all">View: All Managers (Overall)</option>
+        <option value="customerservice">Customer Service (Dhruv)</option>
         <option value="ambuj">Ambuj</option>
         <option value="shravanti">Shravanti</option>
         <option value="shweta">Shweta</option>
@@ -960,6 +1015,7 @@
       <div class="form-group">
         <label>Assigned Manager</label>
         <select id="adminEditManager" required>
+          <option value="customerservice">Customer Service</option>
           <option value="ambuj">Ambuj</option>
           <option value="shravanti">Shravanti</option>
           <option value="shweta">Shweta</option>
@@ -1019,6 +1075,7 @@
       <div class="form-group">
         <label>Assigned Manager</label>
         <select id="newOfficerMgr" required>
+          <option value="customerservice">Customer Service</option>
           <option value="ambuj">Ambuj</option>
           <option value="shravanti">Shravanti</option>
           <option value="shweta">Shweta</option>
@@ -1059,7 +1116,7 @@
   // =================================================================================
   // 🔴 CONFIGURATION: GOOGLE APPS SCRIPT WEB APP URL (Hardcoded in file)
   // =================================================================================
-  var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxh58uWrwdk3eNHc1P7cO_NWu84dG5kU7b7MRXodSeGv5X49cd06uJAkUc4_P7UxWiA/exec";
+  var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXYxCygqDiy1fOeC12vsKbKy9yBuxupdZwSlyAzpfWAhKDgGwcok_3UBbNaAfZDqtG/exec";
   // =================================================================================
 
   function getApiUrl() {
@@ -1096,7 +1153,7 @@
         pill.style.color = '#94a3b8';
         pill.style.border = '1px solid #334155';
         dot.style.background = '#94a3b8';
-        txt.textContent = customMsg || '🟠 Standalone Mode';
+        txt.textContent = customMsg || '🟡 Connecting to Google Sheet...';
       }
     }
   }
@@ -1113,7 +1170,7 @@
 
   function checkLiveBackendStatus() {
     if (!LIVE_GOOGLE_WEB_APP_URL) {
-      updateSyncBadge(false, '🟠 Standalone Mode');
+      updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
       return;
     }
     updateSyncBadge(false, '🟡 Checking Sync...');
@@ -1122,14 +1179,14 @@
         if (res && (res.status === 'ok' || res.success)) {
           updateSyncBadge(true, '🟢 Live Synced');
         } else {
-          updateSyncBadge(false, '🟠 Standalone Mode');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
       })
       .catch(function(err) {
         if (err && err.message && (err.message.indexOf('Anyone') !== -1 || err.message.indexOf('Access restricted') !== -1 || err.message.indexOf('401') !== -1)) {
           updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
         } else {
-          updateSyncBadge(false, '🟠 Standalone Mode');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
       });
   }
@@ -1168,10 +1225,11 @@
         resolve(data);
       })
       .catch(function(err) {
-        if (err && err.message && (err.message.indexOf('Anyone') !== -1 || err.message.indexOf('Unauthorized') !== -1)) {
+        var msg = (err && err.message) ? err.message : '';
+        if (msg.indexOf('Anyone') !== -1 || msg.indexOf('Unauthorized') !== -1 || msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('Access restricted') !== -1) {
           updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
         } else {
-          updateSyncBadge(false, '🟠 Standalone Mode');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
         reject(err);
       });
@@ -1220,574 +1278,8 @@
 
 
   // Initial Seed Data matching screenshot
-  var DEFAULT_USERS = [
-    { username: 'satish', pass: '1234', role: 'admin', displayName: 'Satish (Admin)', managerKey: 'all' },
-    { username: 'samarth', pass: '1234', role: 'admin', displayName: 'Samarth (Admin)', managerKey: 'all' },
-    { username: 'tejas', pass: '1234', role: 'mis', displayName: 'Tejas (MIS)', managerKey: 'all' },
-    { username: 'dhruv', pass: '1234', role: 'editor', displayName: 'Dhruv (Customer Service)', managerKey: 'all' },
-    { username: 'ambuj', pass: '1234', role: 'manager', displayName: 'Ambuj (Manager)', managerKey: 'ambuj' },
-    { username: 'shravanti', pass: '1234', role: 'manager', displayName: 'Shravanti (Manager)', managerKey: 'shravanti' },
-    { username: 'shweta', pass: '1234', role: 'manager', displayName: 'Shweta (Manager)', managerKey: 'shweta' },
-    { username: 'anuraddha', pass: '1234', role: 'manager', displayName: 'Anuraddha (Manager)', managerKey: 'anuraddha' },
-    { username: 'saroj', pass: '1234', role: 'manager', displayName: 'Saroj (Manager)', managerKey: 'saroj' },
-    { username: 'poonam', pass: '1234', role: 'manager', displayName: 'Poonam (Manager)', managerKey: 'poonam' },
-    { username: 'aditi', pass: '1234', role: 'manager', displayName: 'Aditi (Manager)', managerKey: 'aditi' },
-    { username: 'omkar', pass: '1234', role: 'manager', displayName: 'Omkar (Manager)', managerKey: 'omkar' },
-    { username: 'smita', pass: '1234', role: 'manager', displayName: 'Smita (Manager)', managerKey: 'smita' }
-  ];
-
-  var DEFAULT_CALLERS = [
-    {
-        "name": "Shrusti",
-        "manager": "shravanti",
-        "target": 300000,
-        "aoy": 151000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Tushar",
-        "manager": "shravanti",
-        "target": 220000,
-        "aoy": 45000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Aarti",
-        "manager": "shravanti",
-        "target": 280000,
-        "aoy": 138560,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Jyoti",
-        "manager": "shravanti",
-        "target": 250000,
-        "aoy": 121450,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Kumar",
-        "manager": "shravanti",
-        "target": 280000,
-        "aoy": 51000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "shwetha",
-        "manager": "shravanti",
-        "target": 270000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Neena R",
-        "manager": "shravanti",
-        "target": 280000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Pooja",
-        "manager": "shravanti",
-        "target": 270000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "Amrina",
-        "manager": "shravanti",
-        "target": 220000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SUHANI G.",
-        "manager": "ambuj",
-        "target": 192000,
-        "aoy": 259622,
-        "today": 0,
-        "projection": 171371
-    },
-    {
-        "name": "DARSHANA M.",
-        "manager": "ambuj",
-        "target": 300000,
-        "aoy": 350000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "RADHAKRISHNAN",
-        "manager": "ambuj",
-        "target": 226000,
-        "aoy": 149549,
-        "today": 0,
-        "projection": 194533
-    },
-    {
-        "name": "NASIRUL M.",
-        "manager": "ambuj",
-        "target": 264000,
-        "aoy": 150024,
-        "today": 21700,
-        "projection": 98109
-    },
-    {
-        "name": "VIDYA C.",
-        "manager": "ambuj",
-        "target": 403000,
-        "aoy": 165383,
-        "today": 9091,
-        "projection": 128500
-    },
-    {
-        "name": "IRAMMA U.",
-        "manager": "ambuj",
-        "target": 390000,
-        "aoy": 116242,
-        "today": 0,
-        "projection": 52756
-    },
-    {
-        "name": "SASIKALA K.",
-        "manager": "ambuj",
-        "target": 230000,
-        "aoy": 29573,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "ROOPKALA V.",
-        "manager": "ambuj",
-        "target": 275000,
-        "aoy": 28188,
-        "today": 0,
-        "projection": 55000
-    },
-    {
-        "name": "PRANJAL R.",
-        "manager": "ambuj",
-        "target": 280000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "DEVYANI V.",
-        "manager": "ambuj",
-        "target": 280000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "RUSHIKA J.",
-        "manager": "ambuj",
-        "target": 300000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "AMBUJ T.",
-        "manager": "ambuj",
-        "target": 0,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SHALINI R.",
-        "manager": "aditi",
-        "target": 190000,
-        "aoy": 96519,
-        "today": 14000,
-        "projection": 14000
-    },
-    {
-        "name": "KIRAN S",
-        "manager": "aditi",
-        "target": 190000,
-        "aoy": 90229,
-        "today": 10000,
-        "projection": 8000
-    },
-    {
-        "name": "VARSHA R",
-        "manager": "aditi",
-        "target": 199500,
-        "aoy": 62710,
-        "today": 0,
-        "projection": 14000
-    },
-    {
-        "name": "MUKESH M.",
-        "manager": "aditi",
-        "target": 200000,
-        "aoy": 52784,
-        "today": 0,
-        "projection": 5000
-    },
-    {
-        "name": "MANISH K",
-        "manager": "aditi",
-        "target": 275000,
-        "aoy": 106289,
-        "today": 2500,
-        "projection": 17000
-    },
-    {
-        "name": "PURVA S.",
-        "manager": "aditi",
-        "target": 256800,
-        "aoy": 98019,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "URMILA T.",
-        "manager": "aditi",
-        "target": 210000,
-        "aoy": 21707,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "PRIYANKA .M",
-        "manager": "aditi",
-        "target": 200000,
-        "aoy": 22825,
-        "today": 0,
-        "projection": 5000
-    },
-    {
-        "name": "DIVYA MOHITE",
-        "manager": "aditi",
-        "target": 220000,
-        "aoy": 17792,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "ADITI GAWADE",
-        "manager": "aditi",
-        "target": 0,
-        "aoy": 20032,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "KARAN S.",
-        "manager": "omkar",
-        "target": 190000,
-        "aoy": 112146,
-        "today": 0,
-        "projection": 20000
-    },
-    {
-        "name": "PRIYA S.",
-        "manager": "omkar",
-        "target": 352000,
-        "aoy": 78110,
-        "today": 14500,
-        "projection": 60000
-    },
-    {
-        "name": "MAHESHWARI.G",
-        "manager": "omkar",
-        "target": 260000,
-        "aoy": 47674,
-        "today": 0,
-        "projection": 25000
-    },
-    {
-        "name": "KALPESH G.",
-        "manager": "omkar",
-        "target": 230000,
-        "aoy": 61425,
-        "today": 14500,
-        "projection": 60000
-    },
-    {
-        "name": "NEHA",
-        "manager": "omkar",
-        "target": 210000,
-        "aoy": 24146,
-        "today": 0,
-        "projection": 12000
-    },
-    {
-        "name": "PARTH",
-        "manager": "omkar",
-        "target": 190000,
-        "aoy": 25041,
-        "today": 0,
-        "projection": 15000
-    },
-    {
-        "name": "BLANK (OMKAR)",
-        "manager": "omkar",
-        "target": 0,
-        "aoy": 25300,
-        "today": 2000,
-        "projection": 15000
-    },
-    {
-        "name": "ABHISHEK OVALE",
-        "manager": "shweta",
-        "target": 240000,
-        "aoy": 120257,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SAGAR GAONKAR",
-        "manager": "shweta",
-        "target": 250000,
-        "aoy": 149440,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "MINAJ MULLA",
-        "manager": "shweta",
-        "target": 200000,
-        "aoy": 105331,
-        "today": 11666,
-        "projection": 0
-    },
-    {
-        "name": "VIDHYA",
-        "manager": "shweta",
-        "target": 210000,
-        "aoy": 0,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "POONAM (CALLER)",
-        "manager": "shweta",
-        "target": 230000,
-        "aoy": 13000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SHWETA",
-        "manager": "shweta",
-        "target": 0,
-        "aoy": 75070,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "KALPITA RIKAME",
-        "manager": "smita",
-        "target": 265000,
-        "aoy": 210969,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "RADHIKA GUPTA",
-        "manager": "smita",
-        "target": 220000,
-        "aoy": 157660,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "YOGITA",
-        "manager": "smita",
-        "target": 240000,
-        "aoy": 127475,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SUHANA SHAIKH",
-        "manager": "smita",
-        "target": 233000,
-        "aoy": 106933,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "PRAJAKTA TIKUDVE",
-        "manager": "smita",
-        "target": 220000,
-        "aoy": 99267,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "DIPALI PATIL",
-        "manager": "smita",
-        "target": 260000,
-        "aoy": 95948,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "JAYESH SHINDE",
-        "manager": "smita",
-        "target": 180000,
-        "aoy": 65951,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "NIDHI KADAM",
-        "manager": "smita",
-        "target": 236000,
-        "aoy": 82169,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "DEEPIKA SONAR",
-        "manager": "smita",
-        "target": 155000,
-        "aoy": 53092,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "ANKITA BAVASKAR",
-        "manager": "smita",
-        "target": 170000,
-        "aoy": 28000,
-        "today": 30000,
-        "projection": 0
-    },
-    {
-        "name": "DIPALI PATTANAIK",
-        "manager": "smita",
-        "target": 253000,
-        "aoy": 83332,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "KUNAL GHOSALKAR",
-        "manager": "smita",
-        "target": 220000,
-        "aoy": 25235,
-        "today": 20000,
-        "projection": 0
-    },
-    {
-        "name": "SIDDHARTH",
-        "manager": "smita",
-        "target": 220000,
-        "aoy": 31623,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "PURSHOTTAM",
-        "manager": "smita",
-        "target": 250000,
-        "aoy": 3150,
-        "today": 16500,
-        "projection": 0
-    },
-    {
-        "name": "SUNIL",
-        "manager": "smita",
-        "target": 300000,
-        "aoy": 10000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "BLANK (SMITA)",
-        "manager": "smita",
-        "target": 0,
-        "aoy": 49000,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "KP",
-        "manager": "poonam",
-        "target": 200000,
-        "aoy": 152200,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SCUBE",
-        "manager": "poonam",
-        "target": 200000,
-        "aoy": 118284,
-        "today": 2000,
-        "projection": 0
-    },
-    {
-        "name": "Cedittriangle",
-        "manager": "poonam",
-        "target": 500000,
-        "aoy": 198980,
-        "today": 0,
-        "projection": 0
-    },
-    {
-        "name": "SETH",
-        "manager": "poonam",
-        "target": 700001,
-        "aoy": 267088,
-        "today": 11021,
-        "projection": 0
-    },
-    {
-        "name": "Kamal Infinity",
-        "manager": "poonam",
-        "target": 0,
-        "aoy": 5573,
-        "today": 0,
-        "projection": 0
-    }
-];
-
-  function bootApp() {
-    initLocalEngine();
-    checkSession();
-    initNotificationEngine();
-  }
-
-  if (document.readyState === 'loading') {
-    window.addEventListener('DOMContentLoaded', bootApp);
-  } else {
-    bootApp();
-  }
-
-      function initLocalEngine() {
-    var CURRENT_VERSION = 'v4_shravanti_ambuj_updated';
-    if (safeStorage.getItem('shaha_teams_version') !== CURRENT_VERSION) {
-      safeStorage.setItem('shaha_local_callers', JSON.stringify(DEFAULT_CALLERS));
-      var initialSnaps = {};
-      var today = getTodayString();
-      initialSnaps[today] = JSON.parse(JSON.stringify(DEFAULT_CALLERS));
-      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(initialSnaps));
-      safeStorage.setItem('shaha_teams_version', CURRENT_VERSION);
-    }
-  }
-
-  function getTodayString() {
-    return new Date().toISOString().slice(0, 10);
-  }
-
-  // 12-Hour Session Checker
+  // STRICT LIVE MODE: Zero offline mock data. All data is fetched live from Google Sheets.
+// 12-Hour Session Checker
   function checkSession() {
     var stored = safeStorage.getItem('shaha_session');
     if (!stored) {
@@ -1848,11 +1340,12 @@
 
         var adminArea = document.getElementById('adminControlsArea');
         if (adminArea) {
-          if (currentSession.user.role === 'admin' || currentSession.user.role === 'mis') {
-            adminArea.style.display = 'flex';
-          } else {
-            adminArea.style.display = 'none';
-          }
+          var r = currentSession.user.role ? currentSession.user.role.toLowerCase() : '';
+          var canFilter = (r === 'admin' || r === 'mis' || r === 'editor' || (r === 'viewer' && currentSession.user.managerKey === 'all'));
+          adminArea.style.display = canFilter ? 'flex' : 'none';
+          // Hide + Add Caller button if not admin/mis
+          var addBtn = adminArea.querySelector('.btn-admin');
+          if (addBtn) addBtn.style.display = (r === 'admin' || r === 'mis') ? '' : 'none';
         }
       }
 
@@ -1869,21 +1362,7 @@
     }
   }
 
-    function loginLocally(match) {
-    var sess = {
-      success: true,
-      user: {
-        username: match.username,
-        displayName: match.displayName,
-        role: match.role,
-        managerKey: match.managerKey
-      },
-      expiresAt: Date.now() + (12 * 60 * 60 * 1000)
-    };
-    safeStorage.setItem('shaha_session', JSON.stringify(sess));
-    currentSession = sess;
-    showApp();
-  }
+    
 
   function quickFill(uname) {
     document.getElementById('loginUser').value = uname;
@@ -1891,9 +1370,7 @@
   }
 
   function handleLogin(e) {
-    if (e && typeof e.preventDefault === 'function') {
-      e.preventDefault();
-    }
+    if (e && e.preventDefault) e.preventDefault();
     var uInp = document.getElementById('loginUser');
     var pInp = document.getElementById('loginPass');
     if (!uInp || !pInp) return;
@@ -1909,72 +1386,47 @@
 
     if (btn) {
       btn.disabled = true;
-      btn.textContent = "Verifying...";
+      btn.textContent = "Verifying with Google Sheet...";
     }
     if (errBox) errBox.style.display = 'none';
 
-    // Safety timeout: never freeze on Verifying
-    setTimeout(function() {
-      if (btn && btn.disabled && btn.textContent === "Verifying...") {
-        btn.disabled = false;
-        btn.textContent = "Sign In";
-      }
-    }, 4000);
-
-    var apiUrl = getApiUrl();
-    if (apiUrl && apiUrl.indexOf('http') === 0) {
-      callApi('login', { username: u, password: p })
-        .then(function(res) {
-          if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
-          if (res && res.success) {
-            safeStorage.setItem('shaha_session', JSON.stringify(res));
-            currentSession = res;
-            showApp();
-          } else {
-            var match = DEFAULT_USERS.find(function(usr) { return usr.username === u && usr.pass === p; });
-            if (match) {
-              loginLocally(match);
-            } else {
-              if (errBox) {
-                errBox.textContent = (res && res.message) ? res.message : "Invalid credentials. Password is 1234";
-                errBox.style.display = 'block';
-              }
-            }
+    callApi('login', { username: u, password: p })
+      .then(function(res) {
+        if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
+        if (res && res.success) {
+          safeStorage.setItem('shaha_session', JSON.stringify(res));
+          currentSession = res;
+          showApp();
+        } else {
+          if (errBox) {
+            errBox.textContent = (res && res.message) ? res.message : "Invalid credentials. Password is 1234.";
+            errBox.style.display = 'block';
           }
-        })
-        .catch(function(err) {
-          console.warn("API login failed, checking fallback:", err);
-          if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
-          var match = DEFAULT_USERS.find(function(usr) { return usr.username === u && usr.pass === p; });
-          if (match) {
-            loginLocally(match);
-          } else {
-            if (errBox) {
-              errBox.textContent = "Offline / Credentials check: Password is 1234.";
-              errBox.style.display = 'block';
-            }
-          }
-        });
-      return;
-    }
-
-    // Local Test Authentication
-    setTimeout(function() {
-      if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
-
-      var match = DEFAULT_USERS.find(function(usr) {
-        return usr.username === u && usr.pass === p;
-      });
-
-      if (match) {
-        loginLocally(match);
-      } else {
+        }
+      })
+      .catch(function(err) {
+        if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
         if (errBox) {
-          errBox.textContent = "Invalid credentials. Try: satish, tejas, or ambuj with password: 1234";
+          var msg = (err && err.message) ? err.message : '';
+          var isAuthIssue = msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('Unauthorized') !== -1 || msg.indexOf('Anyone') !== -1 || msg.indexOf('Access restricted') !== -1;
+          if (isAuthIssue) {
+            errBox.innerHTML = "<div style='font-size:13px; font-weight:700; color:#dc2626; margin-bottom:6px;'>⚠️ Google Sheet Deployment Setup Required</div>" +
+              "<div style='font-size:11.5px; color:#334155; text-align:left; line-height:1.5; background:#fff1f2; border:1px solid #fecdd3; padding:10px; border-radius:8px;'>" +
+              "Google blocked the request because Web App access is not yet set to Anyone.<br><br>" +
+              "<b>Fix in 30 seconds:</b><br>" +
+              "1. Open your Google Sheet &rarr; <b>Extensions &rarr; Apps Script</b><br>" +
+              "2. Click blue <b>Deploy &rarr; Manage deployments</b><br>" +
+              "3. Click <b>Edit (✏️)</b> on your deployment<br>" +
+              "4. Set <b>Execute as</b> to <b>'Me'</b><br>" +
+              "5. Set <b>Who has access</b> to <b>'Anyone'</b><br>" +
+              "6. Under Version select <b>New version</b> &rarr; Click <b>Deploy</b>" +
+              "</div>";
+          } else {
+            errBox.innerHTML = "<b>Live Google Sheet Connection Error:</b><br>" + escapeHtml(msg);
+          }
           errBox.style.display = 'block';
         }
-      }
-    }, 10);
+      });
   }
 
   function logout() {
@@ -1986,145 +1438,11 @@
   // Client-Side In-Memory Cache for 0ms Instant Date Switching
   var clientDateCache = {};
 
-  function loadLocalLeaderboardData(dateStr) {
-    var loadBar = document.getElementById('tableLoadingBar');
-    if (loadBar) loadBar.innerHTML = '';
-    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-
-    if (!snapshots[dateStr]) {
-      var allDates = Object.keys(snapshots).sort();
-      var prevDate = null;
-      for (var i = 0; i < allDates.length; i++) {
-        if (allDates[i] < dateStr) prevDate = allDates[i];
-      }
-      var prevRows = (prevDate && snapshots[prevDate] && Array.isArray(snapshots[prevDate])) ? snapshots[prevDate] : null;
-      if (!prevRows) {
-        try { prevRows = JSON.parse(safeStorage.getItem('shaha_local_callers') || 'null'); } catch(e) {}
-      }
-      if (!prevRows || !Array.isArray(prevRows)) {
-        prevRows = DEFAULT_CALLERS;
-      }
-      var newRows = prevRows.map(function(c) {
-        var prevTot = (Number(c.aoy) || 0) + (Number(c.today) || 0);
-        return {
-          name: c.name,
-          manager: c.manager,
-          target: c.target,
-          aoy: prevTot,
-          today: 0,
-          projection: c.projection
-        };
-      });
-      snapshots[dateStr] = newRows;
-      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
-    }
-
-    var rawRows = snapshots[dateStr];
-    if (!rawRows || !Array.isArray(rawRows)) {
-      rawRows = DEFAULT_CALLERS;
-    }
-    var userRole = currentSession.user.role;
-    var userMgr = currentSession.user.managerKey;
-
-    var formatted = rawRows.filter(function(r) {
-      if (userRole === 'manager') {
-        return r.manager === userMgr;
-      }
-      return true;
-    }).map(function(r) {
-      var tgt = Number(r.target) || 0;
-      var aoy = Number(r.aoy) || 0;
-      var today = Number(r.today) || 0;
-      var tot = aoy + today;
-      var bal = tgt - tot;
-      var proj = Number(r.projection) || 0;
-      var pct = tgt > 0 ? (tot / tgt) * 100 : 0;
-      return {
-        officerName: r.name,
-        managerKey: r.manager,
-        target: tgt,
-        aoy: aoy,
-        today: today,
-        total: tot,
-        balance: bal,
-        projection: proj,
-        achievedPct: pct,
-        rank: 0
-      };
-    });
-
-    formatted.sort(function(a, b) {
-      if (b.achievedPct !== a.achievedPct) return b.achievedPct - a.achievedPct;
-      return b.total - a.total;
-    });
-
-    for (var k = 0; k < formatted.length; k++) {
-      formatted[k].rank = k + 1;
-    }
-
-    cachedData = {
-      dateStr: dateStr,
-      records: formatted,
-      userRole: userRole
-    };
-
-    renderLeaderboard();
-  }
+  
 
   // Load Leaderboard Data (Instant & Non-Blocking)
-  function loadLeaderboard(dateStr) {
-    selectedDateStr = dateStr;
-
-    // Show sleek top loading bar without wiping out table
-    var loadBar = document.getElementById('tableLoadingBar');
-    if (loadBar) loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
-
-    // Only show loading text in table if table is completely empty
-    var tbody = document.getElementById('tableBody');
-    if (!tbody.hasChildNodes() || tbody.innerHTML.trim() === '') {
-      tbody.innerHTML = '<tr><td colspan="10" style="padding:40px; color:#64748b;">Loading metrics for ' + dateStr + '...</td></tr>';
-    }
-
-    // Instant Cache Hit check
-    if (clientDateCache[dateStr]) {
-      cachedData = clientDateCache[dateStr];
-      renderLeaderboard();
-      if (!isAppsScript) {
-        if (loadBar) loadBar.innerHTML = '';
-        return;
-      }
-    }
-
-    var apiUrl = getApiUrl();
-    if (apiUrl && apiUrl.indexOf('http') === 0) {
-      callApi('getLeaderboard', { date: dateStr, userSession: currentSession })
-        .then(function(data) {
-          if (loadBar) loadBar.innerHTML = '';
-          if (data && data.records && data.records.length > 0) {
-            cachedData = data;
-            clientDateCache[dateStr] = data;
-            renderLeaderboard();
-          } else {
-            loadLocalLeaderboardData(dateStr);
-          }
-        })
-        .catch(function(err) {
-          console.warn("API leaderboard query warning, using local engine:", err);
-          loadLocalLeaderboardData(dateStr);
-        });
-      return;
-    }
-
-    // Instant Local Mock / Rollover Engine
-    loadLocalLeaderboardData(dateStr);
-  }
-
-
-  // -------------------------------------------------------------
-  // MOBILE VIEW SWITCHER & SEARCH FILTER
-  // -------------------------------------------------------------
-  var activeViewMode = 'table'; // 'table' or 'cards'
+    // Mobile View Switcher
+  var activeViewMode = 'table';
 
   function switchViewMode(mode) {
     activeViewMode = mode;
@@ -2147,12 +1465,43 @@
     renderLeaderboard();
   }
 
-  // Auto-detect mobile on first load
+  // Auto switch on small screen
   if (typeof window !== 'undefined' && window.innerWidth <= 768) {
     activeViewMode = 'cards';
-    setTimeout(function() {
-      switchViewMode('cards');
-    }, 0);
+    setTimeout(function() { switchViewMode('cards'); }, 0);
+  }
+
+  function loadLeaderboard(dateStr) {
+    var loadBar = document.getElementById('tableLoadingBar');
+    if (loadBar) {
+      loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
+    }
+
+    callApi('getLeaderboard', { date: dateStr, userSession: currentSession })
+      .then(function(data) {
+        if (loadBar) loadBar.innerHTML = '';
+        if (data && data.records) {
+          cachedData = data;
+          renderLeaderboard();
+        } else {
+          showLiveTableError((data && data.error) || "No records returned from Google Sheet.");
+        }
+      })
+      .catch(function(err) {
+        if (loadBar) loadBar.innerHTML = '';
+        showLiveTableError("Live connection failed: " + err.message);
+      });
+  }
+
+  function showLiveTableError(msg) {
+    var tbody = document.getElementById('tableBody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="11" style="padding:40px; color:#b91c1c; font-weight:700; background:#fef2f2; font-size:14px;">⚠️ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">🔄 Retry Live Fetch</button></td></tr>';
+    }
+    var cardsWrap = document.getElementById('mobileCardsView');
+    if (cardsWrap) {
+      cardsWrap.innerHTML = '<div style="background:#fef2f2; border:1px solid #f87171; color:#b91c1c; padding:24px; border-radius:12px; text-align:center; font-weight:700;">⚠️ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">🔄 Retry Live Fetch</button></div>';
+    }
   }
 
   function renderLeaderboard() {
@@ -2203,15 +1552,24 @@
       var pctClass = getAchievedClass(r.achievedPct);
       var rankClass = getRankClass(i + 1);
 
-      var isAdmin = (currentSession && (currentSession.user.role === 'admin' || currentSession.user.role === 'mis'));
+      var role = (currentSession && currentSession.user && currentSession.user.role) ? currentSession.user.role.toLowerCase() : 'viewer';
+      var isAdmin = (role === 'admin' || role === 'mis');
+      var isEditor = (role === 'editor');
+      var isManager = (role === 'manager');
+      var isViewer = (role === 'viewer');
+
+      // Admin full field edit
       var clickAttr = isAdmin ? ' style="cursor:pointer;" title="Click to Edit (Admin)" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')"' : '';
+      // Today edit permission: Admin, MIS, Editor can edit all; Manager can edit only their team; Viewer cannot edit
+      var canEditToday = isAdmin || isEditor || isManager;
+      var todayClickAttr = canEditToday ? ' class="cell-today" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)" title="Click to edit Today amount"' : ' style="font-weight:800; color:#b45309;"';
 
       html += '<tr>' +
         '<td>' + (i + 1) + '</td>' +
         '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' ✏️' : '') + '</td>' +
         '<td style="font-weight:700;"' + clickAttr + '>' + formatNumber(r.target) + '</td>' +
         '<td' + clickAttr + '>' + formatNumber(r.aoy) + '</td>' +
-        '<td class="cell-today" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)">' + formatNumber(r.today) + '</td>' +
+        '<td' + todayClickAttr + '>' + formatNumber(r.today) + (canEditToday ? ' ✏️' : '') + '</td>' +
         '<td style="font-weight:700;">' + formatNumber(r.total) + '</td>' +
         '<td style="color:' + (r.balance < 0 ? '#16a34a' : '#0f172a') + ';">' + formatNumber(r.balance) + '</td>' +
         '<td' + clickAttr + '>' + formatNumber(r.projection) + '</td>' +
@@ -2293,10 +1651,15 @@
             '</div>' +
           '</div>' +
 
+          (canEditToday ?
           '<div class="caller-today-action" data-name="' + escapeHtml(rec.officerName) + '" data-today="' + rec.today + '" onclick="onCellTodayClick(this)">' +
             '<span style="font-size:12px; font-weight:700; color:#92400e;">Today Collection:</span>' +
             '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(rec.today) + ' ✏️</span>' +
-          '</div>' +
+          '</div>' :
+          '<div style="background:#f8fafc; padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">' +
+            '<span style="font-size:12px; font-weight:700; color:#64748b;">Today Collection:</span>' +
+            '<span style="font-size:14px; font-weight:800; color:#0f172a; font-family:monospace;">' + formatNumber(rec.today) + '</span>' +
+          '</div>') +
         '</div>';
       }
       cardsWrap.innerHTML = cardsHtml;
@@ -2372,65 +1735,32 @@
   }
 
   function handleSaveToday(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     var btn = document.getElementById('saveTodayBtn');
     var amt = Math.max(0, parseFloat(document.getElementById('editTodayInput').value) || 0);
 
     btn.disabled = true;
-    btn.textContent = "Saving...";
+    btn.textContent = "Saving to Google Sheet...";
 
-    // Optimistic Local Update
-    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-    if (snapshots[selectedDateStr]) {
-      for (var i = 0; i < snapshots[selectedDateStr].length; i++) {
-        if (snapshots[selectedDateStr][i].name === activeEditingOfficer) {
-          snapshots[selectedDateStr][i].today = amt;
-          break;
+    callApi('updateToday', { date: selectedDateStr, officerName: activeEditingOfficer, todayAmount: amt, userSession: currentSession })
+      .then(function(res) {
+        btn.disabled = false;
+        btn.textContent = "Update Amount";
+        if (res && res.success) {
+          closeEditModal();
+          cachedData = res.data;
+          renderLeaderboard();
+        } else {
+          alert("Google Sheet Error: " + (res && res.message ? res.message : "Failed to update"));
         }
-      }
-      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
-    }
-    closeEditModal();
-    loadLeaderboard(selectedDateStr);
-
-    var apiUrl = getApiUrl();
-    if (apiUrl && apiUrl.indexOf('http') === 0) {
-      callApi('updateToday', { date: selectedDateStr, officerName: activeEditingOfficer, todayAmount: amt, userSession: currentSession })
-        .then(function(res) {
-          if (res && res.data) {
-            cachedData = res.data;
-            clientDateCache[selectedDateStr] = res.data;
-            renderLeaderboard();
-          }
-        })
-        .catch(function(err) {
-          console.warn("Background sheet sync queued:", err);
-        });
-    }
-    return;
-
-    // Local Test Mode Update
-    setTimeout(function() {
-      btn.disabled = false;
-      btn.textContent = "Update Amount";
-      var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-      if (snapshots[selectedDateStr]) {
-        for (var i = 0; i < snapshots[selectedDateStr].length; i++) {
-          if (snapshots[selectedDateStr][i].name === activeEditingOfficer) {
-            snapshots[selectedDateStr][i].today = amt;
-            break;
-          }
-        }
-        safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
-      }
-      closeEditModal();
-      loadLeaderboard(selectedDateStr);
-    }, 0);
+      })
+      .catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = "Update Amount";
+        alert("Failed to save to Google Sheet: " + err.message);
+      });
   }
 
-  // Admin Add Caller
   function openAddCallerModal() {
     document.getElementById('addCallerModal').style.display = 'flex';
   }
@@ -2440,10 +1770,10 @@
   }
 
   function handleAddCaller(e) {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     var btn = document.getElementById('saveCallerBtn');
     btn.disabled = true;
-    btn.textContent = "Adding...";
+    btn.textContent = "Adding to Google Sheet...";
 
     var name = document.getElementById('newOfficerName').value.trim().toUpperCase();
     var mgr = document.getElementById('newOfficerMgr').value;
@@ -2451,47 +1781,22 @@
     var aoy = parseFloat(document.getElementById('newOfficerAoy').value) || 0;
     var projection = parseFloat(document.getElementById('newOfficerProjection').value) || 0;
 
-    // Optimistic local add
-    var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
-    var newCaller = { name: name, manager: mgr, target: target, aoy: aoy, today: 0, projection: projection };
-    callers.push(newCaller);
-    safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
-
-    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-    if (snapshots[selectedDateStr]) {
-      snapshots[selectedDateStr].push(newCaller);
-      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
-    }
-    closeAddCallerModal();
-    loadLeaderboard(selectedDateStr);
-
-    var apiUrl = getApiUrl();
-    if (apiUrl && apiUrl.indexOf('http') === 0) {
-      callApi('adminAddCaller', { callerData: { name: name, manager: mgr, target: target, aoy: aoy, projection: projection }, userSession: currentSession })
-        .catch(function(e) { console.warn("Add caller API warning:", e); });
-    }
-    return;
-
-    // Local Test Mode Add
-    setTimeout(function() {
-      btn.disabled = false;
-      btn.textContent = "Add Caller";
-      var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
-      var newCaller = { name: name, manager: mgr, target: target, aoy: aoy, today: 0, projection: projection };
-      callers.push(newCaller);
-      safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
-
-      var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-      if (snapshots[selectedDateStr]) {
-        snapshots[selectedDateStr].push(newCaller);
-        safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
-      }
-
-      closeAddCallerModal();
-      loadLeaderboard(selectedDateStr);
-    }, 0);
+    callApi('adminAddCaller', { callerData: { name: name, manager: mgr, target: target, aoy: aoy, projection: projection }, userSession: currentSession })
+      .then(function(res) {
+        btn.disabled = false;
+        btn.textContent = "Add Caller";
+        if (res && res.success) {
+          closeAddCallerModal();
+          loadLeaderboard(selectedDateStr);
+        } else {
+          alert("Error from Google Sheet: " + (res && res.message ? res.message : "Could not add"));
+        }
+      })
+      .catch(function(err) {
+        btn.disabled = false;
+        btn.textContent = "Add Caller";
+        alert("Failed to add caller to Google Sheet: " + err.message);
+      });
   }
 
   function escapeHtml(str) {
@@ -2650,31 +1955,95 @@
   }
 
   // -------------------------------------------------------------
-  // SHIFT PERIOD NOTIFICATIONS ENGINE (10:30, 14:00, 17:00, 18:20)
+  // NATIVE OS & MOBILE NOTIFICATIONS ENGINE (PC, Android, iOS)
   // -------------------------------------------------------------
   var NOTIF_PERIODS = [
-    { key: 'morning', time: '10:30', name: '🌅 Morning Period', msg: 'Morning collection update! Please check and log opening collections.' },
-    { key: 'afternoon', time: '14:00', name: '☀️ Afternoon Period', msg: 'Post-lunch collection check! Please update today amount per caller.' },
-    { key: 'evening', time: '17:00', name: '🌇 Evening Period', msg: 'Evening push! Review pending balances and log late-day collections.' },
-    { key: 'closing', time: '18:20', name: '🚨 Before Leaving (6:20 PM)', msg: 'Shift closing call! Ensure all collection amounts are finalized before leaving.' }
+    { key: 'morning', time: '10:30', name: '🌅 Morning Collection Call', msg: 'Opening collection update! Please check and enter morning figures.' },
+    { key: 'afternoon', time: '14:00', name: '☀️ Afternoon Collection Check', msg: 'Post-lunch review! Please update Today amounts per caller.' },
+    { key: 'evening', time: '17:00', name: '🌇 Evening Collection Push', msg: 'Evening push! Review pending balances and record late receipts.' },
+    { key: 'closing', time: '18:20', name: '🚨 Final Sign-off (6:20 PM Before Leaving)', msg: 'Shift closing! Finalize all Today amounts in Google Sheet before leaving.' }
   ];
 
+  var _swReg = null;
+
   function initNotificationEngine() {
+    // Register background service worker for Android/iOS native push capability
     try {
-      if (typeof window !== 'undefined' && 'Notification' in window && window.Notification && window.Notification.permission === 'default') {
-        var p = window.Notification.requestPermission();
-        if (p && typeof p.catch === 'function') {
-          p.catch(function(){});
-        }
+      if ('serviceWorker' in navigator) {
+        var swBlob = new Blob([
+          "self.addEventListener('notificationclick', function(e) { e.notification.close(); e.waitUntil(clients.matchAll({type:'window'}).then(function(c) { if (c.length > 0) { c[0].focus(); } })); });"
+        ], { type: 'application/javascript' });
+        navigator.serviceWorker.register(URL.createObjectURL(swBlob))
+          .then(function(reg) { _swReg = reg; })
+          .catch(function() {});
       }
-    } catch(e) {
-      console.warn("Notifications unavailable in this environment:", e);
-    }
+    } catch(e) {}
+
     try {
       updateCurrentPeriodDisplay();
-      setInterval(checkScheduledNotifications, 20000);
+      setInterval(checkScheduledNotifications, 15000); // Check every 15s
       setInterval(updateCurrentPeriodDisplay, 60000);
     } catch(e) {}
+  }
+
+  function requestNativePermissionPrompt() {
+    if (!('Notification' in window)) {
+      alert("Native notifications are not supported on this browser.");
+      return;
+    }
+    if (Notification.permission === 'granted') {
+      testNotificationAlert();
+      return;
+    }
+    Notification.requestPermission().then(function(perm) {
+      if (perm === 'granted') {
+        triggerNativeOSNotification('🔔 Native Notifications Enabled!', 'You will now receive native alerts on your PC and mobile for morning, afternoon, evening, and 6:20 PM.');
+      } else {
+        alert("Notifications were blocked. Please enable them in your browser/device site settings to receive native alerts.");
+      }
+    });
+  }
+
+  function triggerNativeOSNotification(title, body) {
+    // 1. Tactile Physical Vibration (Android & mobile devices)
+    if ('vibrate' in navigator && typeof navigator.vibrate === 'function') {
+      try {
+        navigator.vibrate([250, 100, 250, 100, 400]); // Dual-pulse buzz
+      } catch(e) {}
+    }
+
+    // 2. Audible Chime
+    playNotificationChime();
+
+    // 3. Native OS Notification (Windows Action Center / Mac / Android Notification Shade / iOS)
+    if ('Notification' in window && Notification.permission === 'granted') {
+      var notifOptions = {
+        body: body,
+        icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+        badge: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+        tag: 'daily-collection-shift',
+        requireInteraction: true, // Stays pinned on Windows/Mac screen until acknowledged
+        vibrate: [250, 100, 250, 100, 400]
+      };
+
+      // Android Chrome requires ServiceWorkerRegistration.showNotification
+      if (_swReg && typeof _swReg.showNotification === 'function') {
+        _swReg.showNotification(title, notifOptions).catch(function() {
+          try { new Notification(title, notifOptions); } catch(err) {}
+        });
+      } else {
+        try {
+          var n = new Notification(title, notifOptions);
+          n.onclick = function() { window.focus(); this.close(); };
+        } catch(e) {
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.ready.then(function(r) {
+              r.showNotification(title, notifOptions);
+            });
+          }
+        }
+      }
+    }
   }
 
   function updateCurrentPeriodDisplay() {
@@ -2718,8 +2087,7 @@
   }
 
   function triggerNotificationAlert(period) {
-    playNotificationChime();
-
+    // In-app visual toast
     var toast = document.getElementById('notificationToast');
     if (toast) {
       document.getElementById('toastTitle').textContent = period.name;
@@ -2727,21 +2095,19 @@
       toast.style.display = 'block';
     }
 
-    try {
-      if (typeof window !== 'undefined' && 'Notification' in window && window.Notification && window.Notification.permission === 'granted') {
-        new window.Notification(period.name, {
-          body: period.msg,
-          icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
-        });
-      }
-    } catch (e) {}
+    // Native OS & Mobile Push
+    triggerNativeOSNotification(period.name, period.msg);
   }
 
   function testNotificationAlert() {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+      requestNativePermissionPrompt();
+      return;
+    }
     triggerNotificationAlert({
       key: 'closing',
-      name: '🚨 Before Leaving (6:20 PM Reminder)',
-      msg: 'Shift ending! Ensure all caller amounts are finalized before leaving.'
+      name: '🚨 6:20 PM Shift Closing Alert',
+      msg: 'Before Leaving: Please ensure all collection amounts are finalized in Google Sheets.'
     });
   }
 
@@ -2786,6 +2152,19 @@
       osc2.start(ctx.currentTime + 0.15);
       osc2.stop(ctx.currentTime + 0.65);
     } catch (e) {}
+  }
+
+  // ---------------------------------------------------------------------------------
+  // BOOTSTRAP APPLICATION (100% Strict Live Only)
+  // ---------------------------------------------------------------------------------
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initNotificationEngine();
+      checkSession();
+    });
+  } else {
+    initNotificationEngine();
+    checkSession();
   }
 </script>
 
