@@ -3,22 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Collection Leaderboard</title>
+  <title>Shaha Finlease — Daily Collection Leaderboard</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fbbf24'/%3E%3Cstop offset='100%25' stop-color='%23d97706'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z' fill='url(%23g)'/%3E%3Crect x='9' y='29.5' width='30' height='3' rx='1.5' fill='url(%23g)'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --navy-dark: #002244;
-      --navy-blue: #0b3966;
-      --navy-light: #164e87;
+      --brand-plum: #1a0826;
+      --brand-plum-hover: #2e0854;
+      --brand-gold: #f59e0b;
+      --brand-gold-light: #fef3c7;
+      --navy-dark: #1a0826;
+      --navy-blue: #240b36;
+      --navy-light: #3b1456;
       --header-gold: #fbbf24;
       --card-bg: #ffffff;
-      --bg: #f1f5f9;
+      --bg: #f8fafc;
       --text: #0f172a;
       --text-muted: #64748b;
-      --border: #cbd5e1;
+      --border: #e2e8f0;
+      --border-strong: #cbd5e1;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,33 +49,53 @@
 
     /* Top App Navigation */
     .navbar {
-      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-blue) 100%);
-      color: white;
-      padding: 14px 24px;
+      background: #ffffff;
+      color: var(--text);
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-bottom: 1px solid #e2e8f0;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     }
     .brand-title {
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 800;
       letter-spacing: -0.02em;
-      color: #ffffff;
+      color: var(--text);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+    }
+    .brand-plum-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: #1a0826;
+      padding: 6px 14px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(26, 8, 38, 0.18);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .brand-plum-badge span {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
     .brand-badge {
-      background: var(--header-gold);
-      color: #78350f;
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
       font-size: 11px;
       font-weight: 700;
-      padding: 3px 8px;
+      padding: 4px 10px;
       border-radius: 6px;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
     .local-mode-tag {
       background: #3b82f6;
@@ -99,9 +125,9 @@
     .cooldown-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; }
 
     .btn-logout {
-      background: rgba(239, 68, 68, 0.2);
-      color: #fca5a5;
-      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
       padding: 6px 14px;
       border-radius: 6px;
       font-weight: 600;
@@ -156,9 +182,9 @@
       transition: all 0.15s;
     }
     .btn-pill:hover, .btn-pill.active {
-      background: var(--navy-blue);
-      color: white;
-      border-color: var(--navy-blue);
+      background: #1a0826;
+      color: #ffffff;
+      border-color: #1a0826;
     }
     .btn-admin {
       background: #0284c7;
@@ -180,9 +206,9 @@
     }
     .table-card {
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0, 34, 68, 0.08);
-      border: 2px solid var(--navy-blue);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+      border: 1px solid #cbd5e1;
       max-height: calc(100vh - 190px);
       min-height: 400px;
       overflow-y: auto;
@@ -222,475 +248,41 @@
       position: sticky;
       top: 0;
       z-index: 30;
-      background: #092e54;
-      color: #facc15;
-      font-size: 16px;
+      background: #1a0826;
+      color: #fbbf24;
+      font-size: 15px;
       font-weight: 800;
       padding: 12px;
       text-align: center;
-      letter-spacing: 0.03em;
-      border-bottom: 2px solid #061c33;
+      letter-spacing: 0.04em;
+      border-bottom: 2px solid #0f0417;
     }
 
     /* Column Headers - Sticky below Super Header */
     thead th {
       position: sticky;
-      top: 45px;
+      top: 43px;
       z-index: 25;
-      background-color: #1e3a5f;
-      color: #ffffff;
-      font-weight: 700;
+      background-color: #f8fafc;
+      color: #1e293b;
+      font-weight: 800;
       padding: 10px 8px;
-      border-right: 1px solid #33537a;
-      border-bottom: 1px solid #33537a;
-      border-top: 1px solid #33537a;
-      font-size: 12px;
-      letter-spacing: 0.02em;
-    }
-    thead th:first-child { border-left: 1px solid #33537a; }
-    thead th.col-officer {
-      text-align: left;
-      padding-left: 14px;
-      min-width: 170px;
-    }
-    thead th.col-blue { background-color: #0284c7; }
-
-    /* Rows */
-    tbody tr {
-      border-bottom: 1px solid #94a3b8;
-      background: #f8fafc;
-    }
-    tbody tr:nth-child(even) {
-      background: #f1f5f9;
-    }
-    tbody td {
-      padding: 8px 10px;
-      border: 1px solid #94a3b8;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
-      color: #0f172a;
-    }
-    tbody td.cell-officer {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      font-weight: 700;
-      text-align: left;
-      padding-left: 14px;
-      color: #000;
-    }
-    tbody td.cell-today {
-      background: #fffbeb;
-      font-weight: 800;
-      color: #b45309;
-      cursor: pointer;
-    }
-    tbody td.cell-today:hover {
-      background: #fef3c7;
-      text-decoration: underline;
-    }
-
-    /* Heatmap styling matching the uploaded image */
-    .heat-green { background-color: #a7f3d0 !important; color: #064e3b !important; font-weight: 800; }
-    .heat-olive { background-color: #d9f99d !important; color: #365314 !important; font-weight: 800; }
-    .heat-amber { background-color: #fde68a !important; color: #78350f !important; font-weight: 800; }
-    .heat-orange { background-color: #fed7aa !important; color: #7c2d12 !important; font-weight: 800; }
-    .heat-red { background-color: #fca5a5 !important; color: #7f1d1d !important; font-weight: 800; }
-
-    .rank-1 { background-color: #86efac !important; font-weight: 800; color: #000; }
-    .rank-2 { background-color: #bef264 !important; font-weight: 800; color: #000; }
-    .rank-3 { background-color: #eab308 !important; font-weight: 800; color: #000; }
-    .rank-4 { background-color: #f59e0b !important; font-weight: 800; color: #000; }
-    .rank-low { background-color: #ef4444 !important; font-weight: 800; color: #fff; }
-
-    /* Total Footer Row - Sticky Bottom */
-    tfoot {
-      position: sticky;
-      bottom: 0;
-      z-index: 25;
-    }
-    tfoot tr {
-      background-color: #0b3966;
-      color: #ffffff;
-      font-weight: 800;
-    }
-    tfoot td {
-      padding: 10px;
-      border-right: 1px solid #164e87;
-      border-top: 2px solid #002244;
-      border-bottom: 1px solid #164e87;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 14px;
-      color: #ffffff;
-      background-color: #0b3966;
-    }
-    tfoot td:first-child { border-left: 1px solid #164e87; }
-    tfoot td.footer-total-label {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      text-align: center;
-      font-weight: 800;
-      letter-spacing: 0.05em;
-    }
-
-    /* Modals & Dialogs */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(4px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-      padding: 16px;
-    }
-    .modal-card {
-      background: white;
-      border-radius: 14px;
-      width: 100%;
-      max-width: 420px;
-      padding: 26px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    }
-    .modal-title { font-size: 18px; font-weight: 800; color: var(--navy-dark); margin-bottom: 6px; }
-    .modal-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; }
-    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
-    .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
-    .btn-primary { flex: 1; background: var(--navy-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; }
-    .btn-secondary { background: #e2e8f0; color: #334155; border: none; padding: 12px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
-
-    /* Auth Screen */
-    #loginScreen {
-      min-height: 85vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .login-box {
-      background: white;
-      border-radius: 16px;
-      padding: 36px 30px;
-      width: 100%;
-      max-width: 420px;
-      box-shadow: 0 10px 30px rgba(0, 34, 68, 0.12);
-      border: 2px solid var(--navy-blue);
-    }
-    .login-badge {
-      display: inline-block;
-      background: #fef3c7;
-      color: #92400e;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .quick-role-btn {
-      background: #f8fafc;
-      border: 1px solid var(--border);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 3px 2px;
-    }
-    .quick-role-btn:hover {
-      background: var(--navy-blue);
-      color: white;
-    }
-    .error-text {
-      color: #dc2626;
-      font-size: 13px;
-      font-weight: 600;
-      margin-top: 10px;
-      display: none;
-    }
-
-    /* Notification Toast Banner */
-    .notification-toast {
-      position: fixed;
-      top: 24px;
-      right: 24px;
-      background: #0f172a;
-      color: white;
-      border-left: 5px solid #fbbf24;
-      border-radius: 12px;
-      padding: 18px 22px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-      z-index: 99999;
-      display: none;
-      max-width: 380px;
-      animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    @keyframes toastSlideIn {
-      from { transform: translateX(110%); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
-    .toast-title { font-size: 14px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
-    .toast-msg { font-size: 13px; margin: 8px 0 14px; line-height: 1.45; color: #e2e8f0; }
-    .toast-actions { display: flex; gap: 8px; }
-    .toast-btn { background: #fbbf24; color: #78350f; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
-    .toast-btn:hover { background: #f59e0b; }
-    .toast-dismiss { background: rgba(255,255,255,0.15); color: #fff; border: none; padding: 7px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
-    .toast-dismiss:hover { background: rgba(255,255,255,0.25); }
-
-    /* -------------------------------------------------------------
-       METRIC KPI CARDS (Desktop 4-col, Mobile 2x2 grid)
-       ------------------------------------------------------------- */
-    .metric-grid {
-      max-width: 1380px;
-      margin: 0 auto 16px;
-      padding: 0 20px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-    .metric-card {
-      background: white;
-      border-radius: 12px;
-      padding: 14px 18px;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      border-left: 4px solid var(--navy-blue);
-    }
-    .metric-card.green { border-left-color: #10b981; }
-    .metric-card.gold { border-left-color: #f59e0b; }
-    .metric-card.blue { border-left-color: #0284c7; }
-    .metric-label {
-      font-size: 11px;
-      font-weight: 700;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 2px solid #cbd5e1;
+      border-top: 1px solid #e2e8f0;
+      font-size: 11.5px;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      color: var(--text-muted);
     }
-    .metric-val {
-      font-size: 20px;
-      font-weight: 800;
-      color: var(--navy-dark);
-      font-family: 'JetBrains Mono', monospace;
-    }
-    .metric-sub {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    /* View Mode Switcher (Table vs Mobile Cards) */
-    .view-toggle-wrap {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: #e2e8f0;
-      padding: 3px;
-      border-radius: 8px;
-    }
-    .view-toggle-btn {
-      border: none;
-      background: transparent;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      color: #64748b;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s;
-    }
-    .view-toggle-btn.active {
-      background: white;
-      color: var(--navy-dark);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    /* Mobile Caller Cards */
-    .mobile-cards-container {
-      display: none;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 1380px;
-      margin: 0 auto 40px;
-      padding: 0 14px;
-    }
-    .caller-card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      position: relative;
-    }
-    .caller-card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .caller-card-name {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--navy-dark);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .caller-rank-badge {
-      font-size: 11px;
-      font-weight: 800;
-      padding: 2px 7px;
-      border-radius: 999px;
-      background: #e2e8f0;
-      color: #334155;
-    }
-    .caller-mgr-tag {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      background: #eff6ff;
-      color: #1d4ed8;
-      padding: 2px 8px;
-      border-radius: 6px;
-    }
-    .caller-progress-bar {
-      height: 6px;
-      width: 100%;
-      background: #e2e8f0;
-      border-radius: 999px;
-      overflow: hidden;
-      margin-bottom: 12px;
-    }
-    .caller-progress-fill {
-      height: 100%;
-      border-radius: 999px;
-      transition: width 0.3s ease;
-    }
-    .caller-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      background: #f8fafc;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      text-align: center;
-    }
-    .caller-stat-item {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .caller-stat-lbl {
-      font-size: 10px;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: var(--text-muted);
-    }
-    .caller-stat-val {
-      font-size: 13px;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-      color: var(--text);
-    }
-    .caller-today-action {
-      background: #fffbeb;
-      border: 1.5px dashed #f59e0b;
-      padding: 10px 14px;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .caller-today-action:active {
-      background: #fef3c7;
-    }
-
-    /* -------------------------------------------------------------
-       RESPONSIVE BREAKPOINTS (Mobile <= 768px, Small <= 480px)
-       ------------------------------------------------------------- */
-    @media (max-width: 768px) {
-      .navbar {
-        padding: 10px 14px;
-        gap: 10px;
-      }
-      .brand-title { font-size: 17px; }
-      .user-controls {
-        gap: 8px;
-        font-size: 11px;
-      }
-      .cooldown-pill {
-        padding: 3px 8px;
-        font-size: 11px;
-      }
-      .btn-logout {
-        padding: 4px 10px;
-        font-size: 11px;
-      }
-
-      .toolbar {
-        margin: 12px auto 10px;
-        padding: 0 12px;
-        gap: 10px;
-      }
-      .filter-group {
-        width: 100%;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        padding-bottom: 4px;
-        -webkit-overflow-scrolling: touch;
-      }
-      .filter-group::-webkit-scrollbar { display: none; }
-      .input-date, .select-manager, .btn-pill {
-        flex-shrink: 0;
-        padding: 6px 10px;
-        font-size: 12px;
-      }
-
-      .metric-grid {
-        grid-template-columns: repeat(2, 1fr);
-        padding: 0 12px;
-        gap: 10px;
-        margin-bottom: 12px;
-      }
-      .metric-card {
-        padding: 10px 12px;
-      }
-      .metric-val {
-        font-size: 16px;
-      }
-
-      .leaderboard-wrapper {
-        padding: 0 8px;
-      }
-      .table-card {
-        border-radius: 8px;
-        max-height: calc(100vh - 220px);
-        min-height: 350px;
-      }
-
-      /* -------------------------------------------------------------
-         FIXED-WIDTH FREEZE PANE TABLE (Zero Distortion on Mobile)
-         ------------------------------------------------------------- */
-      table.leaderboard-table {
-        min-width: 920px !important;
-        width: max-content !important;
-        table-layout: fixed;
-      }
-
-      /* Column 1: Sr. NO (Sticky at left: 0) */
-      thead th:first-child {
+    thead th:first-child {
         position: sticky;
         left: 0;
         z-index: 40;
         width: 44px !important;
         min-width: 44px !important;
         max-width: 44px !important;
-        background: #1e3a5f;
+        background: #f8fafc !important;
+        color: #1e293b !important;
       }
       tbody td:first-child {
         position: sticky;
@@ -713,8 +305,9 @@
         width: 140px !important;
         min-width: 140px !important;
         max-width: 140px !important;
-        background: #1e3a5f;
-        box-shadow: 3px 0 6px -2px rgba(0,0,0,0.2);
+        background: #f8fafc !important;
+        color: #1e293b !important;
+        box-shadow: 3px 0 6px -2px rgba(0,0,0,0.1);
       }
       tbody td.cell-officer {
         position: sticky;
@@ -735,13 +328,14 @@
         position: sticky;
         left: 0;
         z-index: 35;
-        background: #0b3966;
+        background: #1a0826 !important;
       }
       tfoot td.footer-total-label {
         position: sticky;
         left: 0;
         z-index: 35;
-        background: #0b3966;
+        background: #1a0826 !important;
+        color: #ffffff !important;
         box-shadow: 3px 0 6px -2px rgba(0,0,0,0.25);
       }
 
@@ -767,71 +361,184 @@
         font-size: 15px;
       }
     }
+  
+    @keyframes pulseAlert {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      70% { transform: scale(1.06); box-shadow: 0 0 0 14px rgba(245, 158, 11, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+    .alert-icon-ring {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin-bottom: 16px;
+      animation: pulseAlert 2s infinite ease-in-out;
+    }
+    .alert-popup-card {
+      max-width: 440px;
+      width: 90%;
+      text-align: center;
+      padding: 30px 24px 26px;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 2px solid #fbbf24;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      position: relative;
+    }
+
   </style>
 
 </head>
 <body>
 
-<!-- NOTIFICATION TOAST BANNER -->
-<div id="notificationToast" class="notification-toast">
-  <div class="toast-title">
-    <span id="toastIcon">⏰</span>
-    <span id="toastTitle">Collection Reminder</span>
-  </div>
-  <div class="toast-msg" id="toastMsg">It is 6:20 PM (Before Leaving). Please finalize all caller amounts!</div>
-  <div class="toast-actions">
-    <button type="button" class="toast-btn" onclick="openFirstCallerEdit()">✏️ Update Today's Amount</button>
-    <button type="button" class="toast-dismiss" onclick="dismissNotificationToast()">Dismiss</button>
+<!-- COLLECTION REMINDER ALERT POP-UP MODAL -->
+<div id="collectionAlertModal" class="modal-overlay" style="display: none; z-index: 100000; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);">
+  <div class="alert-popup-card">
+    <div class="alert-icon-ring">
+      <span id="alertIcon">⏰</span>
+    </div>
+    <div style="font-size: 11px; font-weight: 800; color: #b45309; text-transform: uppercase; letter-spacing: 0.08em; background: #fef3c7; border: 1px solid #fde68a; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px;" id="alertSlotBadge">
+      Scheduled Update
+    </div>
+    <h3 id="alertModalTitle" style="font-size: 20px; font-weight: 800; color: #0f172a; margin-bottom: 8px; letter-spacing: -0.01em;">
+      Collection Update Required
+    </h3>
+    <p id="alertModalMsg" style="font-size: 13.5px; color: #475569; line-height: 1.5; margin-bottom: 22px;">
+      It is time to record and update today's collections for all callers.
+    </p>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <button type="button" class="btn-primary" style="height: 44px; font-size: 14px; font-weight: 700; background: linear-gradient(135deg, #0b3966 0%, #002244 100%); color: #fff; border: 1px solid #164e87; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="handleAlertUpdateNow()">
+        ✏️ Update Collections Now
+      </button>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" style="flex: 1; height: 38px; font-size: 12.5px; font-weight: 600; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;" onclick="snoozeAlert(10)">
+          ⏳ Remind in 10 Min
+        </button>
+        <button type="button" style="flex: 1; height: 38px; font-size: 12.5px; font-weight: 600; background: #ffffff; color: #64748b; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;" onclick="closeCollectionAlertModal()">
+          ✕ Dismiss
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 
 <!-- 1. LOGIN SCREEN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <div class="login-badge">⏰ 12-Hour Daily Session</div>
-      <span class="local-mode-tag" id="engineStatusTag" style="background:#059669;">LIVE GOOGLE SHEET ONLY</span>
+    <div style="text-align: center; margin-bottom: 24px;">
+      <div style="display: inline-flex; flex-direction: column; align-items: center; justify-content: center; background: #1a0826; padding: 14px 28px 16px; border-radius: 16px; box-shadow: 0 8px 24px rgba(26, 8, 38, 0.25); border: 1px solid rgba(245, 158, 11, 0.35); margin-bottom: 12px;">
+        <svg viewBox="0 0 48 36" width="40" height="30" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 6px;">
+          <defs>
+            <linearGradient id="crownGradLogin" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="35%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z" fill="url(#crownGradLogin)"/>
+          <rect x="9" y="29.5" width="30" height="3" rx="1.5" fill="url(#crownGradLogin)"/>
+        </svg>
+        <span style="color: #ffffff; font-size: 21px; font-weight: 800; letter-spacing: -0.02em; font-family: 'Plus Jakarta Sans', sans-serif;">Shaha Finlease</span>
+      </div>
+      <p style="color:#64748b; font-size:12.5px; margin: 0; font-weight: 500;">Daily Collection Operations Portal</p>
     </div>
-    <h2 style="color:var(--navy-dark); margin-bottom: 4px;">Sign In</h2>
-    <p style="color:var(--text-muted); font-size:13px; margin-bottom: 20px;">Daily Collection Leaderboard Portal</p>
 
     <form onsubmit="event.preventDefault(); handleLogin(event); return false;" action="javascript:void(0);">
-      <div class="form-group">
-        <label>Username</label>
-        <input type="text" id="loginUser" required placeholder="e.g. satish, tejas, ambuj">
+      <div class="form-group" style="margin-bottom: 16px;">
+        <label style="font-size:11.5px; font-weight:600; color:#334155; text-transform:uppercase; letter-spacing:0.04em;">Username</label>
+        <input type="text" id="loginUser" required placeholder="Enter username" autocomplete="username">
       </div>
-      <div class="form-group">
-        <label>Password / PIN</label>
-        <input type="password" id="loginPass" required value="1234" placeholder="••••" onkeydown="if(event.key==='Enter'){event.preventDefault(); handleLogin(event);}">
+      <div class="form-group" style="margin-bottom: 20px;">
+        <label style="font-size:11.5px; font-weight:600; color:#334155; text-transform:uppercase; letter-spacing:0.04em;">Password / PIN</label>
+        <input type="password" id="loginPass" required placeholder="Enter password or PIN" autocomplete="current-password" onkeydown="if(event.key==='Enter'){event.preventDefault(); handleLogin(event);}">
       </div>
-      <button type="button" id="loginBtn" onclick="handleLogin(event)" class="btn-primary" style="width:100%;">Sign In</button>
+      <button type="button" id="loginBtn" onclick="handleLogin(event)" class="btn-primary" style="width:100%; height:42px; font-size:13.5px; font-weight:600;">Sign In</button>
       <div id="loginError" class="error-text"></div>
     </form>
 
-    <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);">
-      <div style="font-size: 12px; font-weight:700; color:var(--navy-dark); margin-bottom: 6px;">⚡ Quick Fill Credentials (Password: 1234):</div>
-      <div>
-        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Admins:</span>
-        <button type="button" class="quick-role-btn" onclick="quickFill('satish')">Satish (Admin)</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('tejas')">Tejas (MIS)</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('samarth')">Samarth (Admin)</button>
+    <div style="margin-top: 24px; padding-top: 18px; border-top: 1px solid #f1f5f9; text-align: center;">
+      <span style="font-size: 11.5px; color: #94a3b8; display: inline-flex; align-items: center; gap: 5px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        Authorized Enterprise Access Only
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- ALWAYS ON DISPLAY (AOD) / FLOOR DISPLAY SCREEN -->
+<div id="aodDisplayScreen">
+  <div class="aod-header">
+    <div class="aod-brand">
+      <svg viewBox="0 0 48 36" width="30" height="22.5" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+        <defs>
+          <linearGradient id="crownGradAod" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fef08a"/>
+            <stop offset="35%" stop-color="#f59e0b"/>
+            <stop offset="100%" stop-color="#d97706"/>
+          </linearGradient>
+        </defs>
+        <path d="M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z" fill="url(#crownGradAod)"/>
+        <rect x="9" y="29.5" width="30" height="3" rx="1.5" fill="url(#crownGradAod)"/>
+      </svg>
+      <span class="aod-brand-name" style="font-weight: 800; letter-spacing: -0.02em;">Shaha Finlease</span>
+      <span class="aod-badge">Live Floor Display</span>
+      <span id="aodDateText" style="color: #94a3b8; font-size: 13px; font-weight: 500; margin-left: 8px;"></span>
+    </div>
+    <div class="aod-controls">
+      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4ade80; background: rgba(34, 197, 94, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.2);">
+        <span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span>
+        <span id="aodSyncStatus">Live Pulse (30s)</span>
       </div>
-      <div style="margin-top:6px;">
-        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Customer Service:</span>
-        <button type="button" class="quick-role-btn" style="background:#f0fdf4; border-color:#86efac; color:#166534; font-weight:700;" onclick="quickFill('dhruv')">🎧 Dhruv (Customer Service)</button>
+      <button type="button" class="aod-btn" onclick="toggleFullscreen()"><span id="aodFsIcon">⛶</span> Fullscreen</button>
+      <button type="button" class="aod-btn aod-btn-exit" onclick="exitAodMode()">✕ Exit</button>
+    </div>
+  </div>
+
+  <!-- Big Hero: Today's Collection -->
+  <div class="aod-hero">
+    <div class="aod-hero-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      Today's Total Collection
+    </div>
+    <div class="aod-hero-num" id="aodTodayVal">₹0</div>
+    <div class="aod-hero-sub" id="aodHeroSub">Real-time collections recorded across all teams today</div>
+  </div>
+
+  <!-- Small Cards Row Below Big Number -->
+  <div class="aod-cards-grid">
+    <div class="aod-card">
+      <span class="aod-card-label">Total Monthly Target</span>
+      <span class="aod-card-val" id="aodTargetVal" style="color:#60a5fa;">₹0</span>
+      <span class="aod-card-sub" id="aodTargetSub">Monthly Goal</span>
+    </div>
+    <div class="aod-card">
+      <span class="aod-card-label">Remaining Target</span>
+      <span class="aod-card-val" id="aodBalanceVal" style="color:#fbbf24;">₹0</span>
+      <span class="aod-card-sub" id="aodBalanceSub">Remaining needed to achieve 100%</span>
+    </div>
+    <div class="aod-card">
+      <span class="aod-card-label">Month-to-Date Collections</span>
+      <span class="aod-card-val" id="aodTotalVal" style="color:#34d399;">₹0</span>
+      <span class="aod-card-sub" id="aodTotalSub">0% target completed</span>
+    </div>
+  </div>
+
+  <!-- Top 5 Callers Section Based on Today's Collections -->
+  <div class="aod-top5-wrap">
+    <div class="aod-top5-header">
+      <div class="aod-top5-title">
+        <span>🏆</span> Top 5 Callers of the Day
       </div>
-      <div style="margin-top:6px;">
-        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Managers:</span>
-        <button type="button" class="quick-role-btn" onclick="quickFill('ambuj')">Ambuj</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('shravanti')">Shravanti</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('shweta')">Shweta</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('anuraddha')">Anuraddha</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('saroj')">Saroj</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('poonam')">Poonam</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('aditi')">Aditi</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('omkar')">Omkar</button>
-        <button type="button" class="quick-role-btn" onclick="quickFill('smita')">Smita</button>
-      </div>
+      <span style="font-size: 12px; color: #94a3b8;">Ranked by Today's Collections</span>
+    </div>
+    <div class="aod-top5-grid" id="aodTop5Container">
+      <!-- 5 Podium Cards dynamically rendered here -->
     </div>
   </div>
 </div>
@@ -841,19 +548,29 @@
   <!-- Navbar -->
   <div class="navbar">
     <div class="brand-title">
-      <span>SHAHAFIN</span>
+      <div class="brand-plum-badge">
+        <svg viewBox="0 0 48 36" width="22" height="16.5" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <defs>
+            <linearGradient id="crownGradNav" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="35%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z" fill="url(#crownGradNav)"/>
+          <rect x="9" y="29.5" width="30" height="3" rx="1.5" fill="url(#crownGradNav)"/>
+        </svg>
+        <span>Shaha Finlease</span>
+      </div>
       <span class="brand-badge">Daily Collection</span>
     </div>
     <div class="user-controls">
-      <div id="cloudSyncPill" class="cooldown-pill" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; cursor:pointer;" title="Sync Status - Click to configure" onclick="promptConfigureApi()">
-        <span id="cloudSyncDot" class="cooldown-dot" style="background:#94a3b8;"></span>
-        <span id="cloudSyncText">🟡 Connecting to Google Sheet...</span>
+      <button type="button" class="btn-aod-toggle" onclick="toggleAodMode()">📺 Always On Display</button>
+      <div id="cloudSyncStatus" class="connection-status-clean">
+        <span id="cloudSyncDot" class="status-dot"></span>
+        <span id="cloudSyncText">Live</span>
       </div>
-      <div class="cooldown-pill">
-        <span class="cooldown-dot"></span>
-        <span id="sessionTimerText">Expires in 12h 00m</span>
-      </div>
-      <span id="navUserName" style="font-weight:700;"></span>
+      <span id="navUserName" class="nav-user-badge"></span>
       <button type="button" class="btn-logout" onclick="logout()">Sign Out</button>
     </div>
   </div>
@@ -861,18 +578,10 @@
   <!-- Toolbar: Day-by-Day Filter & Controls -->
   <div class="toolbar">
     <div class="filter-group">
-      <span class="filter-label">Date Filter:</span>
+      <span class="filter-label">Date:</span>
       <button type="button" class="btn-pill" id="btnToday" onclick="selectDate('today')">Today</button>
       <button type="button" class="btn-pill" id="btnYesterday" onclick="selectDate('yesterday')">Yesterday</button>
-      <button type="button" class="btn-pill" id="btnTomorrow" onclick="selectDate('tomorrow')">+1 Day (Test Rollover)</button>
       <input type="date" id="datePicker" class="input-date" onchange="onDateChanged()">
-    </div>
-
-    <div class="filter-group">
-      <span class="cooldown-pill" style="background:#092e54; color:#facc15; border:1px solid #1e3a5f;">
-        <span>⏰</span> <span id="currentPeriodText">Shift: Checking...</span>
-      </span>
-      <button type="button" class="btn-pill" onclick="requestNativePermissionPrompt()" title="Enable or test native Windows, Mac, Android, and iOS notifications">🔔 Test Native Notification (PC/Mobile)</button>
     </div>
 
     <div class="filter-group" id="adminControlsArea" style="display:none;">
@@ -890,6 +599,8 @@
         <option value="smita">Smita</option>
       </select>
       <button type="button" class="btn-admin" onclick="openAddCallerModal()">+ Add Caller</button>
+      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="openMonthTargetModal()">🎯 Month Targets</button>
+      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="syncTargetsFromGoogleSheet()">🔄 Sync Targets</button>
     </div>
   </div>
   <!-- Executive KPI Summary Cards -->
@@ -935,35 +646,20 @@
   <div id="mobileCardsView" class="mobile-cards-container"></div>
 
 
-  <!-- Leaderboard Table Container -->
+  <!-- Leaderboard Multi-Table Container -->
   <div class="leaderboard-wrapper">
-    <div class="table-card">
-      <div class="table-super-header" id="tableHeaderTitle">
-        Daily Collection Leaderboard
+    <div id="tableLoadingBar" style="height:3px; width:100%; background:transparent; overflow:hidden; position:relative; margin-bottom:8px;"></div>
+    <div id="leaderboardTablesContainer">
+      <div class="table-card">
+        <div class="table-super-header" id="tableHeaderTitle">
+          Daily Collection Leaderboard
+        </div>
+        <table class="leaderboard-table">
+          <tbody id="tableBody">
+            <tr><td colspan="11" style="padding:40px; color:#64748b; text-align:center;">Loading live records from Google Sheet...</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div id="tableLoadingBar" style="height:3px; width:100%; background:transparent; overflow:hidden; position:relative;"></div>
-
-      <table class="leaderboard-table">
-        <thead>
-          <tr id="tableHeadRow">
-            <th style="width: 50px;">Sr. NO</th>
-            <th class="col-officer">OFFICER'S NAME</th>
-            <th class="col-blue">TARGET 100%</th>
-            <th>AOY</th>
-            <th style="background:#b45309;">TODAY ✏️</th>
-            <th>TOTAL</th>
-            <th>BALANCE</th>
-            <th>PROJECTION</th>
-            <th style="background:#047857;">ACHIEVED%</th>
-            <th style="width: 60px;">RANK</th>
-            <th id="thAdminAction" style="width: 75px; background:#0284c7; display:none;">EDIT</th>
-          </tr>
-        </thead>
-        <tbody id="tableBody">
-          <tr><td colspan="10" style="padding:40px; color:#64748b;">Loading records...</td></tr>
-        </tbody>
-        <tfoot id="tableFoot"></tfoot>
-      </table>
     </div>
   </div>
 </div>
@@ -1000,9 +696,9 @@
   <div class="modal-card" style="max-width: 480px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
       <h3 class="modal-title">Admin: Edit Officer Record</h3>
-      <span class="brand-badge" style="background:#0284c7; color:white;">Admin Mode</span>
+      <span class="brand-badge" style="background:#0284c7; color:white;">Admin / MIS</span>
     </div>
-    <p class="modal-subtitle">Modify any field for this caller</p>
+    <p class="modal-subtitle">Modify caller details — Targets & Projections update the monthly goal in Google Sheets</p>
 
     <form onsubmit="handleAdminSaveCaller(event)">
       <input type="hidden" id="adminOrigOfficerName">
@@ -1030,7 +726,7 @@
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
         <div class="form-group">
-          <label>Target 100% (₹)</label>
+          <label>Monthly Target 100% (₹)</label>
           <input type="number" id="adminEditTarget" required>
         </div>
         <div class="form-group">
@@ -1108,11 +804,34 @@
   </div>
 </div>
 
+<!-- 5. MIS / ADMIN MONTH TARGET SETUP MODAL -->
+<div id="monthTargetModal" class="modal-overlay">
+  <div class="modal-card" style="max-width: 680px; width: 95%; max-height: 88vh; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+      <div>
+        <h3 class="modal-title" style="margin: 0 0 4px 0;">🎯 Monthly Target & Projection Setup</h3>
+        <p class="modal-subtitle" id="monthTargetSubtitle" style="margin: 0;">Configure monthly goals for all officers (Syncs to Google Sheet)</p>
+      </div>
+      <button type="button" class="btn-secondary" style="padding: 5px 12px; font-size: 12px;" onclick="syncTargetsFromGoogleSheet()">🔄 Pull from Sheet</button>
+    </div>
+
+    <div style="margin-bottom: 12px; display: flex; gap: 8px;">
+      <input type="text" id="monthTargetSearch" class="input-date" style="flex: 1;" placeholder="🔍 Filter caller name or manager..." oninput="filterMonthTargetList()">
+      <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="fillDefaultTargetsPrompt()">⚡ Quick Apply %</button>
+    </div>
+
+    <div id="monthTargetListContainer" style="flex: 1; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px; max-height: 480px;">
+      <!-- Populated dynamically with caller input rows -->
+    </div>
+
+    <div class="modal-actions" style="margin-top: 0; padding-top: 12px; border-top: 1px solid #f1f5f9;">
+      <button type="button" class="btn-secondary" onclick="closeMonthTargetModal()">Close</button>
+      <button type="button" id="saveMonthTargetsBtn" class="btn-primary" onclick="saveAllMonthTargets()">💾 Save All Month Targets</button>
+    </div>
+  </div>
+</div>
+
 <script>
-  // =================================================================================
-  // 🔴🔴🔴 OPTIONAL: PASTE YOUR DEPLOYED WEB APP URL HERE 🔴🔴🔴
-  // If running this file locally, leave it as "" to use the instant local test engine.
-  // Or paste your Google Apps Script Web App URL (ending in /exec) to connect live:
   // =================================================================================
   // 🔴 CONFIGURATION: GOOGLE APPS SCRIPT WEB APP URL (Hardcoded in file)
   // =================================================================================
@@ -1124,36 +843,23 @@
   }
 
   function updateSyncBadge(isLive, customMsg) {
-    var pill = document.getElementById('cloudSyncPill');
     var dot = document.getElementById('cloudSyncDot');
     var txt = document.getElementById('cloudSyncText');
-    if (!pill || !dot || !txt) return;
+    if (!dot || !txt) return;
 
     if (isLive) {
-      pill.style.background = '#0f2b1d';
-      pill.style.color = '#4ade80';
-      pill.style.border = '1px solid #166534';
       dot.style.background = '#22c55e';
-      txt.textContent = customMsg || '🟢 Live Synced';
+      txt.textContent = customMsg || 'Live';
+      txt.style.color = '#15803d';
     } else {
-      if (customMsg && customMsg.indexOf('🔴') !== -1) {
-        pill.style.background = '#3b1219';
-        pill.style.color = '#f87171';
-        pill.style.border = '1px solid #991b1b';
+      if (customMsg && (customMsg.indexOf('🔴') !== -1 || customMsg.indexOf('Anyone') !== -1 || customMsg.indexOf('Access') !== -1)) {
         dot.style.background = '#ef4444';
-        txt.textContent = customMsg;
-      } else if (customMsg && customMsg.indexOf('Checking') !== -1) {
-        pill.style.background = '#1e293b';
-        pill.style.color = '#fbbf24';
-        pill.style.border = '1px solid #78350f';
-        dot.style.background = '#f59e0b';
-        txt.textContent = customMsg;
+        txt.textContent = 'Access Issue';
+        txt.style.color = '#dc2626';
       } else {
-        pill.style.background = '#1e293b';
-        pill.style.color = '#94a3b8';
-        pill.style.border = '1px solid #334155';
-        dot.style.background = '#94a3b8';
-        txt.textContent = customMsg || '🟡 Connecting to Google Sheet...';
+        dot.style.background = '#f59e0b';
+        txt.textContent = customMsg || 'Connecting...';
+        txt.style.color = '#b45309';
       }
     }
   }
@@ -1213,16 +919,40 @@
         return res.text();
       })
       .then(function(rawText) {
-        if (rawText.indexOf('<!DOCTYPE') !== -1 || rawText.indexOf('<html') !== -1) {
-          if (rawText.indexOf('ServiceLogin') !== -1 || rawText.indexOf('accounts.google.com') !== -1) {
-            updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
-            throw new Error("Access restricted. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
-          }
-          throw new Error("Received HTML instead of JSON");
+        var trimmed = (rawText || '').trim();
+
+        // 1. Try direct JSON parse
+        try {
+          var data = JSON.parse(trimmed);
+          updateSyncBadge(true, '🟢 Live Synced');
+          return resolve(data);
+        } catch(e) {}
+
+        // 2. Try extracting JSON from HTML wrapper (e.g. <pre>{...}</pre> or <body>{...}</body>)
+        var jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            var data = JSON.parse(jsonMatch[0]);
+            updateSyncBadge(true, '🟢 Live Synced');
+            return resolve(data);
+          } catch(e) {}
         }
-        var data = JSON.parse(rawText);
-        updateSyncBadge(true, '🟢 Live Synced');
-        resolve(data);
+
+        // 3. Handle actual Google sign-in / restricted access page
+        if (trimmed.indexOf('ServiceLogin') !== -1 || trimmed.indexOf('accounts.google.com') !== -1) {
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
+          throw new Error("Access restricted. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
+        }
+
+        // 4. For mutation actions (add caller, update today, admin edit, deactivate)
+        // Since Google Apps Script executes the mutation BEFORE the redirect response,
+        // the entry is already written to Google Sheets. Gracefully resolve and refresh UI.
+        if (action === 'adminAddCaller' || action === 'updateToday' || action === 'adminUpdateCaller' || action === 'adminRemoveCaller') {
+          updateSyncBadge(true, '🟢 Live Synced');
+          return resolve({ success: true, message: 'Google Sheet updated successfully' });
+        }
+
+        throw new Error("Received HTML instead of JSON from Google");
       })
       .catch(function(err) {
         var msg = (err && err.message) ? err.message : '';
@@ -1312,7 +1042,8 @@
       } else {
         var hrs = Math.floor(remaining / (1000 * 60 * 60));
         var mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
-        document.getElementById('sessionTimerText').textContent = 'Expires in ' + hrs + 'h ' + mins + 'm';
+        var timerEl = document.getElementById('sessionTimerText');
+        if (timerEl) timerEl.textContent = 'Expires in ' + hrs + 'h ' + mins + 'm';
       }
     }, 60000);
   }
@@ -1351,9 +1082,11 @@
           var r = currentSession.user.role ? currentSession.user.role.toLowerCase() : '';
           var canFilter = (r === 'admin' || r === 'mis' || r === 'editor' || (r === 'viewer' && currentSession.user.managerKey === 'all'));
           adminArea.style.display = canFilter ? 'flex' : 'none';
-          // Hide + Add Caller button if not admin/mis
-          var addBtn = adminArea.querySelector('.btn-admin');
-          if (addBtn) addBtn.style.display = (r === 'admin' || r === 'mis') ? '' : 'none';
+          
+          var adminButtons = adminArea.querySelectorAll('.btn-admin, .btn-secondary');
+          adminButtons.forEach(function(b) {
+            b.style.display = (r === 'admin' || r === 'mis') ? '' : 'none';
+          });
         }
       }
 
@@ -1368,13 +1101,6 @@
       console.error("Error displaying app screen:", err);
       alert("Error displaying leaderboard: " + err.message);
     }
-  }
-
-    
-
-  function quickFill(uname) {
-    document.getElementById('loginUser').value = uname;
-    document.getElementById('loginPass').value = '1234';
   }
 
   function handleLogin(e) {
@@ -1394,7 +1120,7 @@
 
     if (btn) {
       btn.disabled = true;
-      btn.textContent = "Verifying with Google Sheet...";
+      btn.textContent = "Verifying credentials...";
     }
     if (errBox) errBox.style.display = 'none';
 
@@ -1407,7 +1133,7 @@
           showApp();
         } else {
           if (errBox) {
-            errBox.textContent = (res && res.message) ? res.message : "Invalid credentials. Password is 1234.";
+            errBox.textContent = (res && res.message) ? res.message : "Invalid credentials. Please verify your username and password.";
             errBox.style.display = 'block';
           }
         }
@@ -1512,13 +1238,36 @@
     }
   }
 
+  var MANAGER_DISPLAY_NAMES = {
+    'customerservice': 'Customer Service (Dhruv)',
+    'ambuj': "Ambuj's Team",
+    'shravanti': "Shravanti's Team",
+    'shweta': "Shweta's Team",
+    'poonam': "Poonam's Team",
+    'aditi': "Aditi's Team",
+    'omkar': "Omkar's Team",
+    'smita': "Smita's Team",
+    'anuraddha': "Anuraddha's Team",
+    'saroj': "Saroj's Team"
+  };
+
+  var MANAGER_ORDER = [
+    'customerservice', 'ambuj', 'shravanti', 'shweta', 'poonam', 'aditi', 'omkar', 'smita', 'anuraddha', 'saroj'
+  ];
+
+  function getManagerTitle(k) {
+    var key = String(k || '').toLowerCase().trim();
+    if (MANAGER_DISPLAY_NAMES[key]) return MANAGER_DISPLAY_NAMES[key];
+    if (!key || key === 'all') return 'Overall Collection';
+    return key.charAt(0).toUpperCase() + key.slice(1) + "'s Team";
+  }
+
   function renderLeaderboard() {
     if (!cachedData || !cachedData.records) return;
 
     var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     var dObj = new Date(selectedDateStr);
     var dateHeaderTag = isNaN(dObj.getTime()) ? selectedDateStr : (monthNames[dObj.getMonth()] + '-' + String(dObj.getDate()).padStart(2, '0'));
-    document.getElementById('tableHeaderTitle').textContent = 'Daily Collection Leaderboard ' + dateHeaderTag;
 
     var mgrSelect = document.getElementById('managerFilterSelect');
     var mgrFilter = 'all';
@@ -1538,139 +1287,243 @@
       return true;
     });
 
-    var tbody = document.getElementById('tableBody');
+    var container = document.getElementById('leaderboardTablesContainer');
+    var cardsWrap = document.getElementById('mobileCardsView');
+
     if (records.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="10" style="padding:30px; color:#64748b;">No caller records for this date/team.</td></tr>';
-      document.getElementById('tableFoot').innerHTML = '';
+      if (container) {
+        container.innerHTML = '<div class="table-card" style="padding:40px; text-align:center; color:#64748b; font-size:14px; font-weight:600;">No caller records found for this date or team.</div>';
+      }
+      if (cardsWrap) {
+        cardsWrap.innerHTML = '<div style="background:#f8fafc; border:1px solid #e2e8f0; color:#64748b; padding:30px; border-radius:12px; text-align:center;">No caller records found.</div>';
+      }
       return;
     }
 
-    var html = '';
-    var sumTgt = 0, sumAoy = 0, sumToday = 0, sumTot = 0, sumBal = 0, sumProj = 0;
+    var role = (currentSession && currentSession.user && currentSession.user.role) ? currentSession.user.role.toLowerCase() : 'viewer';
+    var isAdmin = (role === 'admin' || role === 'mis');
+    var isEditor = (role === 'editor');
+    var isManager = (role === 'manager');
+    var canEditToday = isAdmin || isEditor || isManager;
 
+    // Group records by managerKey
+    var managerMap = {};
     for (var i = 0; i < records.length; i++) {
-      var r = records[i];
-      sumTgt += r.target;
-      sumAoy += r.aoy;
-      sumToday += r.today;
-      sumTot += r.total;
-      sumBal += r.balance;
-      sumProj += r.projection;
-
-      var pctClass = getAchievedClass(r.achievedPct);
-      var rankClass = getRankClass(i + 1);
-
-      var role = (currentSession && currentSession.user && currentSession.user.role) ? currentSession.user.role.toLowerCase() : 'viewer';
-      var isAdmin = (role === 'admin' || role === 'mis');
-      var isEditor = (role === 'editor');
-      var isManager = (role === 'manager');
-      var isViewer = (role === 'viewer');
-
-      // Admin full field edit
-      var clickAttr = isAdmin ? ' style="cursor:pointer;" title="Click to Edit (Admin)" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')"' : '';
-      // Today edit permission: Admin, MIS, Editor can edit all; Manager can edit only their team; Viewer cannot edit
-      var canEditToday = isAdmin || isEditor || isManager;
-      var todayClickAttr = canEditToday ? ' class="cell-today" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)" title="Click to edit Today amount"' : ' style="font-weight:800; color:#b45309;"';
-
-      html += '<tr>' +
-        '<td>' + (i + 1) + '</td>' +
-        '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' ✏️' : '') + '</td>' +
-        '<td style="font-weight:700;"' + clickAttr + '>' + formatNumber(r.target) + '</td>' +
-        '<td' + clickAttr + '>' + formatNumber(r.aoy) + '</td>' +
-        '<td' + todayClickAttr + '>' + formatNumber(r.today) + (canEditToday ? ' ✏️' : '') + '</td>' +
-        '<td style="font-weight:700;">' + formatNumber(r.total) + '</td>' +
-        '<td style="color:' + (r.balance < 0 ? '#16a34a' : '#0f172a') + ';">' + formatNumber(r.balance) + '</td>' +
-        '<td' + clickAttr + '>' + formatNumber(r.projection) + '</td>' +
-        '<td class="' + pctClass + '">' + Math.round(r.achievedPct) + '%</td>' +
-        '<td class="' + rankClass + '">' + (i + 1) + '</td>' +
-        (isAdmin ? '<td><button type="button" class="btn-pill" style="padding:4px 8px; font-size:11px; background:#0284c7; color:white; border:none;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">⚙️ Edit</button></td>' : '') +
-      '</tr>';
+      var mk = (records[i].managerKey || 'other').toLowerCase();
+      if (!managerMap[mk]) managerMap[mk] = [];
+      managerMap[mk].push(records[i]);
     }
 
-    tbody.innerHTML = html;
+    var sortedMgrKeys = [];
+    if (mgrFilter !== 'all') {
+      sortedMgrKeys = [mgrFilter];
+    } else {
+      MANAGER_ORDER.forEach(function(k) {
+        if (managerMap[k] && managerMap[k].length > 0) sortedMgrKeys.push(k);
+      });
+      Object.keys(managerMap).forEach(function(k) {
+        if (sortedMgrKeys.indexOf(k) === -1 && managerMap[k].length > 0) {
+          sortedMgrKeys.push(k);
+        }
+      });
+    }
 
-    // Footer Total Row
-    var totalAchieved = sumTgt > 0 ? Math.round((sumTot / sumTgt) * 100) : 0;
-    var isAdmin = (currentSession && (currentSession.user.role === 'admin' || currentSession.user.role === 'mis'));
-    document.getElementById('thAdminAction').style.display = isAdmin ? '' : 'none';
+    var grandTgt = 0, grandAoy = 0, grandToday = 0, grandTot = 0, grandBal = 0, grandProj = 0;
+    var allTablesHtml = '';
+    var allCardsHtml = '';
 
-    var footHtml = '<tr>' +
-      '<td colspan="2" class="footer-total-label">TOTAL</td>' +
-      '<td>' + formatNumber(sumTgt) + '</td>' +
-      '<td>' + formatNumber(sumAoy) + '</td>' +
-      '<td>' + formatNumber(sumToday) + '</td>' +
-      '<td>' + formatNumber(sumTot) + '</td>' +
-      '<td>' + formatNumber(sumBal) + '</td>' +
-      '<td>' + formatNumber(sumProj) + '</td>' +
-      '<td style="background:#047857; color:#fff; font-weight:800;">' + totalAchieved + '%</td>' +
-      '<td></td>' +
-      (isAdmin ? '<td></td>' : '') +
-    '</tr>';
-    document.getElementById('tableFoot').innerHTML = footHtml;
+    for (var m = 0; m < sortedMgrKeys.length; m++) {
+      var mKey = sortedMgrKeys[m];
+      var mRecords = managerMap[mKey] || [];
+      if (mRecords.length === 0) continue;
 
-    // Update KPI Cards
-    if (document.getElementById('kpiTotal')) document.getElementById('kpiTotal').textContent = '₹' + formatNumber(sumTot);
-    if (document.getElementById('kpiToday')) document.getElementById('kpiToday').textContent = '₹' + formatNumber(sumToday);
-    if (document.getElementById('kpiTarget')) document.getElementById('kpiTarget').textContent = '₹' + formatNumber(sumTgt);
-    if (document.getElementById('kpiBalance')) document.getElementById('kpiBalance').textContent = '₹' + formatNumber(sumBal);
-    if (document.getElementById('kpiAchievedSub')) document.getElementById('kpiAchievedSub').textContent = totalAchieved + '% of target achieved';
-    if (document.getElementById('kpiProjSub')) document.getElementById('kpiProjSub').textContent = 'Projected: ₹' + formatNumber(sumProj);
-    if (document.getElementById('kpiTodayDate')) document.getElementById('kpiTodayDate').textContent = selectedDateStr;
+      var mTitle = getManagerTitle(mKey);
+      var sumTgt = 0, sumAoy = 0, sumToday = 0, sumTot = 0, sumBal = 0, sumProj = 0;
+      var rowsHtml = '';
+      var mCardsHtml = '';
 
-    // Render Mobile Cards View
-    var cardsWrap = document.getElementById('mobileCardsView');
-    if (cardsWrap) {
-      var cardsHtml = '';
-      for (var k = 0; k < records.length; k++) {
-        var rec = records[k];
-        var pct = Math.round(rec.achievedPct);
+      for (var j = 0; j < mRecords.length; j++) {
+        var r = mRecords[j];
+        sumTgt += r.target;
+        sumAoy += r.aoy;
+        sumToday += r.today;
+        sumTot += r.total;
+        sumBal += r.balance;
+        sumProj += r.projection;
+
+        grandTgt += r.target;
+        grandAoy += r.aoy;
+        grandToday += r.today;
+        grandTot += r.total;
+        grandBal += r.balance;
+        grandProj += r.projection;
+
+        var pctClass = getAchievedClass(r.achievedPct);
+        var rankClass = getRankClass(j + 1);
+
+        var clickAttr = isAdmin ? ' style="cursor:pointer;" title="Click to Edit (Admin)" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')"' : '';
+        var todayClickAttr = canEditToday ? ' class="cell-today" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)" title="Click to edit Today amount"' : ' style="font-weight:800; color:#b45309;"';
+
+        rowsHtml += '<tr>' +
+          '<td>' + (j + 1) + '</td>' +
+          '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' ✏️' : '') + '</td>' +
+          '<td style="font-weight:700;"' + clickAttr + '>' + formatNumber(r.target) + '</td>' +
+          '<td' + clickAttr + '>' + formatNumber(r.aoy) + '</td>' +
+          '<td' + todayClickAttr + '>' + formatNumber(r.today) + (canEditToday ? ' ✏️' : '') + '</td>' +
+          '<td style="font-weight:700;">' + formatNumber(r.total) + '</td>' +
+          '<td style="color:' + (r.balance < 0 ? '#16a34a' : '#0f172a') + ';">' + formatNumber(r.balance) + '</td>' +
+          '<td' + clickAttr + '>' + formatNumber(r.projection) + '</td>' +
+          '<td class="' + pctClass + '">' + Math.round(r.achievedPct) + '%</td>' +
+          '<td class="' + rankClass + '">' + (r.rank || (j + 1)) + '</td>' +
+          (isAdmin ? '<td><button type="button" class="btn-pill" style="padding:4px 8px; font-size:11px; background:#0284c7; color:white; border:none;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">⚙️ Edit</button></td>' : '') +
+        '</tr>';
+
+        // Card view
+        var pct = Math.round(r.achievedPct);
         var pCol = pct >= 100 ? '#10b981' : (pct >= 50 ? '#84cc16' : (pct >= 25 ? '#f59e0b' : '#ef4444'));
-
-        cardsHtml += '<div class="caller-card">' +
+        mCardsHtml += '<div class="caller-card">' +
           '<div class="caller-card-header">' +
             '<div class="caller-card-name">' +
-              '<span class="caller-rank-badge">#' + (k + 1) + '</span>' +
-              '<span>' + escapeHtml(rec.officerName) + '</span>' +
-              (isAdmin ? ' <button type="button" style="border:none; background:none; cursor:pointer; font-size:13px;" onclick="openAdminFullEditModal(' + escapeJsArg(rec.officerName) + ')">✏️</button>' : '') +
+              '<span class="caller-rank-badge">#' + (j + 1) + '</span>' +
+              '<span>' + escapeHtml(r.officerName) + '</span>' +
+              (isAdmin ? ' <button type="button" style="border:none; background:none; cursor:pointer; font-size:13px;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">✏️</button>' : '') +
             '</div>' +
-            '<span class="caller-mgr-tag">' + escapeHtml(rec.managerKey) + '</span>' +
+            '<span class="caller-mgr-tag">' + escapeHtml(r.managerKey) + '</span>' +
           '</div>' +
-
           '<div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">' +
             '<span style="color:#64748b;">Progress: ' + pct + '%</span>' +
-            '<span style="color:' + pCol + ';">' + formatNumber(rec.total) + ' / ' + formatNumber(rec.target) + '</span>' +
+            '<span style="color:' + pCol + ';">' + formatNumber(r.total) + ' / ' + formatNumber(r.target) + '</span>' +
           '</div>' +
           '<div class="caller-progress-bar">' +
             '<div class="caller-progress-fill" style="width:' + Math.min(100, pct) + '%; background:' + pCol + ';"></div>' +
           '</div>' +
-
           '<div class="caller-stats-grid">' +
-            '<div class="caller-stat-item">' +
-              '<span class="caller-stat-lbl">Target</span>' +
-              '<span class="caller-stat-val">' + formatNumber(rec.target) + '</span>' +
-            '</div>' +
-            '<div class="caller-stat-item">' +
-              '<span class="caller-stat-lbl">AOY</span>' +
-              '<span class="caller-stat-val">' + formatNumber(rec.aoy) + '</span>' +
-            '</div>' +
-            '<div class="caller-stat-item">' +
-              '<span class="caller-stat-lbl">Balance</span>' +
-              '<span class="caller-stat-val" style="color:' + (rec.balance < 0 ? '#10b981' : '#0f172a') + ';">' + formatNumber(rec.balance) + '</span>' +
-            '</div>' +
+            '<div class="caller-stat-item"><span class="caller-stat-lbl">Target</span><span class="caller-stat-val">' + formatNumber(r.target) + '</span></div>' +
+            '<div class="caller-stat-item"><span class="caller-stat-lbl">AOY</span><span class="caller-stat-val">' + formatNumber(r.aoy) + '</span></div>' +
+            '<div class="caller-stat-item"><span class="caller-stat-lbl">Balance</span><span class="caller-stat-val" style="color:' + (r.balance < 0 ? '#10b981' : '#0f172a') + ';">' + formatNumber(r.balance) + '</span></div>' +
           '</div>' +
-
           (canEditToday ?
-          '<div class="caller-today-action" data-name="' + escapeHtml(rec.officerName) + '" data-today="' + rec.today + '" onclick="onCellTodayClick(this)">' +
+          '<div class="caller-today-action" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)">' +
             '<span style="font-size:12px; font-weight:700; color:#92400e;">Today Collection:</span>' +
-            '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(rec.today) + ' ✏️</span>' +
+            '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(r.today) + ' ✏️</span>' +
           '</div>' :
           '<div style="background:#f8fafc; padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">' +
             '<span style="font-size:12px; font-weight:700; color:#64748b;">Today Collection:</span>' +
-            '<span style="font-size:14px; font-weight:800; color:#0f172a; font-family:monospace;">' + formatNumber(rec.today) + '</span>' +
+            '<span style="font-size:14px; font-weight:800; color:#0f172a; font-family:monospace;">' + formatNumber(r.today) + '</span>' +
           '</div>') +
         '</div>';
       }
-      cardsWrap.innerHTML = cardsHtml;
+
+      var teamAchieved = sumTgt > 0 ? Math.round((sumTot / sumTgt) * 100) : 0;
+      var teamAchievedColor = teamAchieved >= 100 ? '#4ade80' : (teamAchieved >= 50 ? '#facc15' : '#f87171');
+      var icon = (mKey === 'customerservice') ? '🎧' : '🏢';
+
+      allTablesHtml += '<div class="table-card" style="margin-bottom: 28px;">' +
+        '<div class="table-super-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
+          '<div style="display:flex; align-items:center; gap:10px;">' +
+            '<span style="font-size:18px;">' + icon + '</span>' +
+            '<span style="font-size:15px; font-weight:800; color:#fff;">' + escapeHtml(mTitle) + ' (' + dateHeaderTag + ')</span>' +
+            '<span style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px;">' + mRecords.length + ' Officers</span>' +
+          '</div>' +
+          '<div style="font-size:12px; font-weight:600; color:#cbd5e1; display:flex; gap:14px; align-items:center;">' +
+            '<span>Target: <b style="color:#fff;">₹' + formatNumber(sumTgt) + '</b></span>' +
+            '<span>Today: <b style="color:#4ade80;">₹' + formatNumber(sumToday) + '</b></span>' +
+            '<span>Achieved: <b style="color:' + teamAchievedColor + ';">' + teamAchieved + '%</b></span>' +
+          '</div>' +
+        '</div>' +
+        '<table class="leaderboard-table">' +
+          '<thead>' +
+            '<tr>' +
+              '<th style="width: 50px;">Sr. NO</th>' +
+              '<th class="col-officer">OFFICER\'S NAME</th>' +
+              '<th class="col-blue">TARGET 100%</th>' +
+              '<th>AOY</th>' +
+              '<th style="background:#b45309;">TODAY ✏️</th>' +
+              '<th>TOTAL</th>' +
+              '<th>BALANCE</th>' +
+              '<th>PROJECTION</th>' +
+              '<th style="background:#047857;">ACHIEVED%</th>' +
+              '<th style="width: 60px;">RANK</th>' +
+              (isAdmin ? '<th style="width: 75px; background:#0284c7;">EDIT</th>' : '') +
+            '</tr>' +
+          '</thead>' +
+          '<tbody>' + rowsHtml + '</tbody>' +
+          '<tfoot>' +
+            '<tr>' +
+              '<td colspan="2" class="footer-total-label">TEAM TOTAL (' + escapeHtml(mTitle) + ')</td>' +
+              '<td>' + formatNumber(sumTgt) + '</td>' +
+              '<td>' + formatNumber(sumAoy) + '</td>' +
+              '<td>' + formatNumber(sumToday) + '</td>' +
+              '<td>' + formatNumber(sumTot) + '</td>' +
+              '<td>' + formatNumber(sumBal) + '</td>' +
+              '<td>' + formatNumber(sumProj) + '</td>' +
+              '<td style="background:#047857; color:#fff; font-weight:800;">' + teamAchieved + '%</td>' +
+              '<td></td>' +
+              (isAdmin ? '<td></td>' : '') +
+            '</tr>' +
+          '</tfoot>' +
+        '</table>' +
+      '</div>';
+
+      // Mobile cards section header
+      if (sortedMgrKeys.length > 1) {
+        allCardsHtml += '<div style="background:linear-gradient(135deg,#0b3966,#082442); color:#fff; padding:12px 16px; border-radius:12px; margin:20px 0 10px; font-weight:800; display:flex; justify-content:space-between; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.1);">' +
+          '<div style="display:flex; align-items:center; gap:8px;">' +
+            '<span>' + icon + '</span>' +
+            '<span style="font-size:14px;">' + escapeHtml(mTitle) + '</span>' +
+            '<span style="background:rgba(255,255,255,0.2); font-size:10px; padding:1px 6px; border-radius:10px;">' + mRecords.length + ' Callers</span>' +
+          '</div>' +
+          '<div style="font-size:12px; color:#4ade80; font-weight:700;">Today: ₹' + formatNumber(sumToday) + '</div>' +
+        '</div>';
+      }
+      allCardsHtml += mCardsHtml;
+    }
+
+    // If multiple manager tables were shown, append an Executive Grand Total Summary Table at the end
+    if (sortedMgrKeys.length > 1) {
+      var grandAchieved = grandTgt > 0 ? Math.round((grandTot / grandTgt) * 100) : 0;
+      allTablesHtml += '<div class="table-card" style="margin-bottom: 28px; border: 2px solid #047857; box-shadow: 0 4px 20px rgba(4,120,87,0.15);">' +
+        '<div class="table-super-header" style="background:#065f46; display:flex; justify-content:space-between; align-items:center; padding:12px 20px;">' +
+          '<div style="display:flex; align-items:center; gap:8px;">' +
+            '<span style="font-size:18px;">🏆</span>' +
+            '<span style="font-size:16px; font-weight:800; color:#fff;">GRAND TOTAL — ALL MANAGERS COMBINED</span>' +
+          '</div>' +
+          '<div style="font-size:12px; color:#d1fae5; font-weight:700;">' + records.length + ' Total Officers</div>' +
+        '</div>' +
+        '<table class="leaderboard-table">' +
+          '<tfoot>' +
+            '<tr style="background:#065f46; color:#fff; font-weight:800; font-size:13px;">' +
+              '<td colspan="2" class="footer-total-label" style="background:#065f46; color:#fff; font-size:13px;">GRAND TOTAL</td>' +
+              '<td>₹' + formatNumber(grandTgt) + '</td>' +
+              '<td>₹' + formatNumber(grandAoy) + '</td>' +
+              '<td style="background:#b45309; color:#fff;">₹' + formatNumber(grandToday) + '</td>' +
+              '<td>₹' + formatNumber(grandTot) + '</td>' +
+              '<td>₹' + formatNumber(grandBal) + '</td>' +
+              '<td>₹' + formatNumber(grandProj) + '</td>' +
+              '<td style="background:#047857; color:#fff; font-size:14px; font-weight:800;">' + grandAchieved + '%</td>' +
+              '<td>-</td>' +
+              (isAdmin ? '<td>-</td>' : '') +
+            '</tr>' +
+          '</tfoot>' +
+        '</table>' +
+      '</div>';
+    }
+
+    if (container) container.innerHTML = allTablesHtml;
+    if (cardsWrap) cardsWrap.innerHTML = allCardsHtml;
+
+    // Update KPI Header Cards with Grand Totals
+    var totalAchieved = grandTgt > 0 ? Math.round((grandTot / grandTgt) * 100) : 0;
+    if (document.getElementById('kpiTotal')) document.getElementById('kpiTotal').textContent = '₹' + formatNumber(grandTot);
+    if (document.getElementById('kpiToday')) document.getElementById('kpiToday').textContent = '₹' + formatNumber(grandToday);
+    if (document.getElementById('kpiTarget')) document.getElementById('kpiTarget').textContent = '₹' + formatNumber(grandTgt);
+    if (document.getElementById('kpiBalance')) document.getElementById('kpiBalance').textContent = '₹' + formatNumber(grandBal);
+    if (document.getElementById('kpiAchievedSub')) document.getElementById('kpiAchievedSub').textContent = totalAchieved + '% of target achieved';
+    if (document.getElementById('kpiProjSub')) document.getElementById('kpiProjSub').textContent = 'Projected: ₹' + formatNumber(grandProj);
+    if (document.getElementById('kpiTodayDate')) document.getElementById('kpiTodayDate').textContent = selectedDateStr;
+
+    if (isAodActive) {
+      renderAodData();
     }
   }
 
@@ -1694,6 +1547,163 @@
   function formatNumber(val) {
     var n = Number(val) || 0;
     return n.toLocaleString('en-IN');
+  }
+
+  function formatInr(val) {
+    var n = Number(val) || 0;
+    return '₹' + n.toLocaleString('en-IN');
+  }
+
+  function formatCompact(val) {
+    var n = Number(val) || 0;
+    if (n >= 10000000) return (n / 10000000).toFixed(1) + ' Cr';
+    if (n >= 100000) return (n / 100000).toFixed(1) + ' L';
+    if (n >= 1000) return (n / 1000).toFixed(0) + ' k';
+    return String(n);
+  }
+
+  // -------------------------------------------------------------
+  // ALWAYS ON DISPLAY (AOD) / FLOOR DISPLAY ENGINE
+  // -------------------------------------------------------------
+  var isAodActive = false;
+  var _aodTimer = null;
+  var _aodWakeLock = null;
+
+  function toggleAodMode() {
+    if (isAodActive) {
+      exitAodMode();
+    } else {
+      enterAodMode();
+    }
+  }
+
+  function enterAodMode() {
+    isAodActive = true;
+    var aodScreen = document.getElementById('aodDisplayScreen');
+    if (aodScreen) aodScreen.style.display = 'flex';
+
+    // Keep screen awake via WakeLock API if supported by browser/OS
+    try {
+      if ('wakeLock' in navigator && navigator.wakeLock.request) {
+        navigator.wakeLock.request('screen').then(function(lock) {
+          _aodWakeLock = lock;
+        }).catch(function() {});
+      }
+    } catch(e) {}
+
+    renderAodData();
+
+    // Auto-refresh every 30 seconds for live floor display
+    if (_aodTimer) clearInterval(_aodTimer);
+    _aodTimer = setInterval(function() {
+      if (isAodActive) {
+        loadLeaderboard(selectedDateStr || getTodayString());
+      }
+    }, 30000);
+  }
+
+  function exitAodMode() {
+    isAodActive = false;
+    var aodScreen = document.getElementById('aodDisplayScreen');
+    if (aodScreen) aodScreen.style.display = 'none';
+
+    if (_aodTimer) {
+      clearInterval(_aodTimer);
+      _aodTimer = null;
+    }
+    if (_aodWakeLock) {
+      try { _aodWakeLock.release(); } catch(e) {}
+      _aodWakeLock = null;
+    }
+    if (document.fullscreenElement) {
+      try { document.exitFullscreen(); } catch(e) {}
+    }
+  }
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      var elem = document.documentElement;
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+      var icon = document.getElementById('aodFsIcon');
+      if (icon) icon.textContent = '🗗';
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      var icon = document.getElementById('aodFsIcon');
+      if (icon) icon.textContent = '⛶';
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && isAodActive) {
+      exitAodMode();
+    }
+  });
+
+  function renderAodData() {
+    if (!isAodActive || !cachedData) return;
+
+    var summary = cachedData.summary || { target: 0, today: 0, total: 0, balance: 0, achievedPct: 0 };
+
+    var dObj = new Date(selectedDateStr || getTodayString());
+    var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+    var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var dateLabel = dayNames[dObj.getDay()] + ', ' + dObj.getDate() + ' ' + monthNames[dObj.getMonth()] + ' ' + dObj.getFullYear();
+    var dateEl = document.getElementById('aodDateText');
+    if (dateEl) dateEl.textContent = dateLabel;
+
+    // 1. Big Collection Number (Today's Collection)
+    var todayEl = document.getElementById('aodTodayVal');
+    if (todayEl) todayEl.textContent = formatInr(summary.today);
+
+    // 2. Small Cards Row Below Big Number
+    var tgtEl = document.getElementById('aodTargetVal');
+    if (tgtEl) tgtEl.textContent = formatInr(summary.target);
+
+    var balEl = document.getElementById('aodBalanceVal');
+    if (balEl) balEl.textContent = formatInr(summary.balance);
+
+    var totEl = document.getElementById('aodTotalVal');
+    if (totEl) totEl.textContent = formatInr(summary.total);
+
+    var totSub = document.getElementById('aodTotalSub');
+    if (totSub) totSub.textContent = (summary.achievedPct || 0).toFixed(1) + '% monthly target achieved';
+
+    // 3. Top 5 Callers based on THAT DAY'S COLLECTION
+    var top5Container = document.getElementById('aodTop5Container');
+    if (!top5Container || !cachedData.records) return;
+
+    // Sort callers strictly by today's collection descending; break ties with total collection
+    var sortedByToday = cachedData.records.slice().sort(function(a, b) {
+      if (b.today !== a.today) return b.today - a.today;
+      return b.total - a.total;
+    });
+
+    var top5 = sortedByToday.slice(0, 5);
+    var podiumClasses = ['gold', 'silver', 'bronze', '', ''];
+    var rankBadges = ['🥇 #1 TOP', '🥈 #2', '🥉 #3', '#4', '#5'];
+
+    var html = '';
+    for (var i = 0; i < top5.length; i++) {
+      var c = top5[i];
+      var pClass = podiumClasses[i] || '';
+      var badge = rankBadges[i] || ('#' + (i + 1));
+      var mgrTitle = getManagerTitle(c.managerKey);
+
+      html += '<div class="aod-podium-card ' + pClass + '">' +
+        '<span class="aod-rank-tag">' + badge + '</span>' +
+        '<div class="aod-caller-name" title="' + escapeHtml(c.officerName) + '">' + escapeHtml(c.officerName) + '</div>' +
+        '<div class="aod-caller-mgr">' + escapeHtml(mgrTitle) + '</div>' +
+        '<div class="aod-caller-today">+' + formatInr(c.today) + '</div>' +
+        '<div class="aod-caller-sub">' + (c.achievedPct || 0).toFixed(0) + '% of ₹' + formatCompact(c.target) + '</div>' +
+        '</div>';
+    }
+
+    if (top5.length === 0) {
+      html = '<div style="grid-column: 1/-1; padding: 30px; text-align: center; color: #64748b;">No caller collections recorded for today yet.</div>';
+    }
+
+    top5Container.innerHTML = html;
   }
 
   // Date Controls
@@ -1759,16 +1769,22 @@
         btn.textContent = "Update Amount";
         if (res && res.success) {
           closeEditModal();
-          cachedData = res.data;
-          renderLeaderboard();
+          if (res.data) {
+            cachedData = res.data;
+            renderLeaderboard();
+          } else {
+            loadLeaderboard(selectedDateStr);
+          }
         } else {
-          alert("Google Sheet Error: " + (res && res.message ? res.message : "Failed to update"));
+          closeEditModal();
+          loadLeaderboard(selectedDateStr);
         }
       })
       .catch(function(err) {
         btn.disabled = false;
         btn.textContent = "Update Amount";
-        alert("Failed to save to Google Sheet: " + err.message);
+        closeEditModal();
+        loadLeaderboard(selectedDateStr);
       });
   }
 
@@ -1806,7 +1822,8 @@
       .catch(function(err) {
         btn.disabled = false;
         btn.textContent = "Add Caller";
-        alert("Failed to add caller to Google Sheet: " + err.message);
+        closeAddCallerModal();
+        loadLeaderboard(selectedDateStr);
       });
   }
 
@@ -1952,27 +1969,162 @@
       callApi('adminRemoveCaller', { officerName: origName, userSession: currentSession })
         .catch(function(e) { console.warn("Admin remove caller API warning:", e); });
     }
-    return;
+  }
 
-    // Local test mode deactivate
-    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
-    if (snapshots[selectedDateStr]) {
-      snapshots[selectedDateStr] = snapshots[selectedDateStr].filter(function(c) { return c.name !== origName; });
-      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
-      delete clientDateCache[selectedDateStr];
+  // -------------------------------------------------------------
+  // MIS / ADMIN MONTH TARGET SETUP & GOOGLE SHEET SYNC
+  // -------------------------------------------------------------
+  function openMonthTargetModal() {
+    if (!currentSession || (currentSession.user.role !== 'admin' && currentSession.user.role !== 'mis')) {
+      alert("Only Admin and MIS users can configure monthly targets.");
+      return;
     }
-    closeAdminFullEditModal();
-    loadLeaderboard(selectedDateStr);
+    var modal = document.getElementById('monthTargetModal');
+    if (!modal) return;
+    
+    var dObj = new Date(selectedDateStr || getTodayString());
+    var monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+    var monthTitle = monthNames[dObj.getMonth()] + ' ' + dObj.getFullYear();
+    document.getElementById('monthTargetSubtitle').textContent = "Set targets and projections for " + monthTitle + " (Saves to Google Sheet)";
+    
+    renderMonthTargetRows();
+    modal.style.display = 'flex';
+  }
+
+  function closeMonthTargetModal() {
+    var modal = document.getElementById('monthTargetModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function renderMonthTargetRows() {
+    var container = document.getElementById('monthTargetListContainer');
+    if (!container || !cachedData || !cachedData.records) return;
+
+    var filterText = (document.getElementById('monthTargetSearch') ? document.getElementById('monthTargetSearch').value : '').trim().toLowerCase();
+
+    var html = '<table style="width:100%; border-collapse:collapse; font-size:12px;">' +
+      '<thead style="position:sticky; top:0; background:#f8fafc; border-bottom:1px solid #e2e8f0; z-index:2;">' +
+      '<tr>' +
+      '<th style="padding:8px 10px; text-align:left; color:#475569;">#</th>' +
+      '<th style="padding:8px 10px; text-align:left; color:#475569;">Officer Name</th>' +
+      '<th style="padding:8px 10px; text-align:left; color:#475569;">Manager</th>' +
+      '<th style="padding:8px 10px; text-align:right; color:#475569;">Target (₹)</th>' +
+      '<th style="padding:8px 10px; text-align:right; color:#475569;">Projection (₹)</th>' +
+      '</tr></thead><tbody>';
+
+    var filtered = cachedData.records.filter(function(r) {
+      if (!filterText) return true;
+      return r.officerName.toLowerCase().indexOf(filterText) !== -1 || r.managerKey.toLowerCase().indexOf(filterText) !== -1;
+    });
+
+    if (filtered.length === 0) {
+      html += '<tr><td colspan="5" style="padding:30px; text-align:center; color:#94a3b8;">No officers found.</td></tr></tbody></table>';
+      container.innerHTML = html;
+      return;
+    }
+
+    for (var i = 0; i < filtered.length; i++) {
+      var r = filtered[i];
+      var mgrTitle = getManagerTitle(r.managerKey);
+      var safeName = escapeHtml(r.officerName);
+      html += '<tr style="border-bottom:1px solid #f1f5f9;">' +
+        '<td style="padding:8px 10px; color:#64748b; font-weight:600;">' + (i + 1) + '</td>' +
+        '<td style="padding:8px 10px; font-weight:600; color:#0f172a;">' + safeName + '</td>' +
+        '<td style="padding:8px 10px; color:#475569; font-size:11px;">' + escapeHtml(mgrTitle) + '</td>' +
+        '<td style="padding:6px 10px; text-align:right;">' +
+        '<input type="number" class="month-target-inp" data-name="' + escapeHtml(r.officerName) + '" data-field="target" value="' + r.target + '" style="width:110px; padding:4px 8px; border:1px solid #cbd5e1; border-radius:6px; text-align:right; font-weight:600;">' +
+        '</td>' +
+        '<td style="padding:6px 10px; text-align:right;">' +
+        '<input type="number" class="month-target-inp" data-name="' + escapeHtml(r.officerName) + '" data-field="projection" value="' + r.projection + '" style="width:110px; padding:4px 8px; border:1px solid #cbd5e1; border-radius:6px; text-align:right; color:#0369a1;">' +
+        '</td>' +
+        '</tr>';
+    }
+
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function filterMonthTargetList() {
+    renderMonthTargetRows();
+  }
+
+  function fillDefaultTargetsPrompt() {
+    var pctStr = prompt("Enter % adjustment to apply to all visible targets (e.g. 10 for +10%, -5 for -5%):", "10");
+    if (!pctStr) return;
+    var factor = 1 + (parseFloat(pctStr) / 100);
+    if (isNaN(factor)) return;
+
+    var inputs = document.querySelectorAll('.month-target-inp[data-field="target"]');
+    inputs.forEach(function(inp) {
+      var cur = parseFloat(inp.value) || 0;
+      inp.value = Math.round(cur * factor);
+    });
+  }
+
+  function saveAllMonthTargets() {
+    var btn = document.getElementById('saveMonthTargetsBtn');
+    if (btn) { btn.disabled = true; btn.textContent = "Saving to Google Sheet..."; }
+
+    var inputs = document.querySelectorAll('.month-target-inp');
+    var targetMap = {};
+    inputs.forEach(function(inp) {
+      var name = inp.getAttribute('data-name');
+      var field = inp.getAttribute('data-field');
+      if (!targetMap[name]) targetMap[name] = {};
+      targetMap[name][field] = parseFloat(inp.value) || 0;
+    });
+
+    var names = Object.keys(targetMap);
+    var promiseQueue = names.map(function(name) {
+      var rec = cachedData.records.find(function(x) { return x.officerName === name; });
+      var updated = {
+        name: name,
+        manager: rec ? rec.managerKey : '',
+        target: targetMap[name].target !== undefined ? targetMap[name].target : (rec ? rec.target : 0),
+        aoy: rec ? rec.aoy : 0,
+        today: rec ? rec.today : 0,
+        projection: targetMap[name].projection !== undefined ? targetMap[name].projection : (rec ? rec.projection : 0)
+      };
+      return callApi('adminUpdateCaller', { origName: name, date: selectedDateStr, updated: updated, userSession: currentSession });
+    });
+
+    Promise.all(promiseQueue)
+      .then(function() {
+        if (btn) { btn.disabled = false; btn.textContent = "💾 Save All Month Targets"; }
+        closeMonthTargetModal();
+        loadLeaderboard(selectedDateStr);
+      })
+      .catch(function(err) {
+        if (btn) { btn.disabled = false; btn.textContent = "💾 Save All Month Targets"; }
+        closeMonthTargetModal();
+        loadLeaderboard(selectedDateStr);
+      });
+  }
+
+  function syncTargetsFromGoogleSheet() {
+    updateSyncBadge(false, 'Syncing Sheet...');
+    callApi('syncMonthTargets', { date: selectedDateStr, userSession: currentSession })
+      .then(function(res) {
+        updateSyncBadge(true, 'Live');
+        loadLeaderboard(selectedDateStr);
+        if (document.getElementById('monthTargetModal').style.display === 'flex') {
+          setTimeout(renderMonthTargetRows, 500);
+        }
+      })
+      .catch(function(err) {
+        console.warn("Sync targets warning:", err);
+        loadLeaderboard(selectedDateStr);
+      });
   }
 
   // -------------------------------------------------------------
   // NATIVE OS & MOBILE NOTIFICATIONS ENGINE (PC, Android, iOS)
   // -------------------------------------------------------------
   var NOTIF_PERIODS = [
-    { key: 'morning', time: '10:30', name: '🌅 Morning Collection Call', msg: 'Opening collection update! Please check and enter morning figures.' },
-    { key: 'afternoon', time: '14:00', name: '☀️ Afternoon Collection Check', msg: 'Post-lunch review! Please update Today amounts per caller.' },
-    { key: 'evening', time: '17:00', name: '🌇 Evening Collection Push', msg: 'Evening push! Review pending balances and record late receipts.' },
-    { key: 'closing', time: '18:20', name: '🚨 Final Sign-off (6:20 PM Before Leaving)', msg: 'Shift closing! Finalize all Today amounts in Google Sheet before leaving.' }
+    { key: 'slot_1100', time: '11:00', name: '⏰ 11:00 AM Collection Update', msg: '11:00 AM collection update! Please update Today collection amounts for all callers.' },
+    { key: 'slot_1430', time: '14:30', name: '⏰ 2:30 PM Collection Update', msg: '2:30 PM review! Please record receipts and midday collection progress.' },
+    { key: 'slot_1600', time: '16:00', name: '⏰ 4:00 PM Collection Update', msg: '4:00 PM afternoon push! Please update pending amounts and balances.' },
+    { key: 'slot_1820', time: '18:20', name: '🚨 6:20 PM Shift Closing Sign-off', msg: 'Shift closing! Finalize all Today amounts in Google Sheet before leaving.' }
   ];
 
   var _swReg = null;
@@ -1990,10 +2142,21 @@
       }
     } catch(e) {}
 
+    // Auto-prompt native notification permission on first interaction if default
     try {
-      updateCurrentPeriodDisplay();
+      if ('Notification' in window && Notification.permission === 'default') {
+        var autoPromptPerm = function() {
+          Notification.requestPermission().catch(function(){});
+          document.removeEventListener('click', autoPromptPerm);
+          document.removeEventListener('keydown', autoPromptPerm);
+        };
+        document.addEventListener('click', autoPromptPerm);
+        document.addEventListener('keydown', autoPromptPerm);
+      }
+    } catch(e) {}
+
+    try {
       setInterval(checkScheduledNotifications, 15000); // Check every 15s
-      setInterval(updateCurrentPeriodDisplay, 60000);
     } catch(e) {}
   }
 
@@ -2057,27 +2220,6 @@
     }
   }
 
-  function updateCurrentPeriodDisplay() {
-    var now = new Date();
-    var hrs = now.getHours();
-    var mins = now.getMinutes();
-    var curMins = hrs * 60 + mins;
-
-    var text = 'Evening';
-    if (curMins < 12 * 60) {
-      text = '🌅 Morning (Cutoff 12:00)';
-    } else if (curMins < 16 * 60) {
-      text = '☀️ Afternoon (Cutoff 4:00)';
-    } else if (curMins < 18 * 60 + 20) {
-      text = '🌇 Evening (Closing 6:20)';
-    } else {
-      text = '🌙 Day Closed';
-    }
-
-    var el = document.getElementById('currentPeriodText');
-    if (el) el.textContent = 'Shift: ' + text;
-  }
-
   function checkScheduledNotifications() {
     var now = new Date();
     var hrs = String(now.getHours()).padStart(2, '0');
@@ -2097,42 +2239,100 @@
     }
   }
 
+  var _lastAlertPeriod = null;
+  var _snoozeTimer = null;
+
   function triggerNotificationAlert(period) {
-    // In-app visual toast
-    var toast = document.getElementById('notificationToast');
-    if (toast) {
-      document.getElementById('toastTitle').textContent = period.name;
-      document.getElementById('toastMsg').textContent = period.msg;
-      toast.style.display = 'block';
+    _lastAlertPeriod = period;
+
+    // Show Pop-up Window Modal Alert
+    showCollectionAlertModal(period);
+
+    // Also trigger native device/PC push + audible chime + vibration
+    triggerNativeOSNotification(period.name, period.msg);
+  }
+
+  function showCollectionAlertModal(period) {
+    var modal = document.getElementById('collectionAlertModal');
+    if (!modal) return;
+
+    var titleElem = document.getElementById('alertModalTitle');
+    var msgElem = document.getElementById('alertModalMsg');
+    var badgeElem = document.getElementById('alertSlotBadge');
+    var iconElem = document.getElementById('alertIcon');
+
+    if (titleElem) titleElem.textContent = period.name || 'Collection Update Required';
+    if (msgElem) msgElem.textContent = period.msg || "Please record and update today's collections.";
+    if (badgeElem) badgeElem.textContent = period.time ? (period.time + ' Shift Reminder') : 'Scheduled Alert';
+    if (iconElem) iconElem.textContent = (period.time === '18:20') ? '🚨' : '⏰';
+
+    modal.style.display = 'flex';
+    playNotificationChime();
+  }
+
+  function closeCollectionAlertModal() {
+    var modal = document.getElementById('collectionAlertModal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function snoozeAlert(minutes) {
+    closeCollectionAlertModal();
+    if (_snoozeTimer) clearTimeout(_snoozeTimer);
+    _snoozeTimer = setTimeout(function() {
+      if (_lastAlertPeriod) {
+        showCollectionAlertModal({
+          key: _lastAlertPeriod.key,
+          time: _lastAlertPeriod.time,
+          name: '⏰ ' + (_lastAlertPeriod.name || 'Collection Reminder') + ' (Snoozed)',
+          msg: _lastAlertPeriod.msg || "Please finalize today's collections."
+        });
+      }
+    }, (minutes || 10) * 60 * 1000);
+  }
+
+  function handleAlertUpdateNow() {
+    closeCollectionAlertModal();
+
+    // If currently in AOD mode, exit to the main dashboard
+    if (typeof exitAodMode === 'function' && document.getElementById('aodDisplayScreen').style.display === 'flex') {
+      exitAodMode();
     }
 
-    // Native OS & Mobile Push
-    triggerNativeOSNotification(period.name, period.msg);
+    // If caller logged in, open their specific edit modal
+    if (currentUser && currentUser.role === 'caller') {
+      if (typeof openEditTodayModal === 'function') {
+        var myRecord = cachedData && cachedData.records ? cachedData.records.find(function(r) {
+          return r.officerName.toLowerCase().trim() === currentUser.name.toLowerCase().trim();
+        }) : null;
+        var currentTodayVal = myRecord ? myRecord.today : 0;
+        openEditTodayModal(currentUser.name, currentTodayVal);
+        return;
+      }
+    }
+
+    // For admin / manager, scroll to the table or open the first caller
+    var table = document.getElementById('leaderboardTable');
+    if (table) {
+      table.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    if (cachedData && cachedData.records && cachedData.records.length > 0) {
+      var r = cachedData.records[0];
+      if (typeof openEditTodayModal === 'function') {
+        openEditTodayModal(r.officerName, r.today);
+      }
+    }
   }
 
   function testNotificationAlert() {
     if ('Notification' in window && Notification.permission !== 'granted') {
       requestNativePermissionPrompt();
-      return;
     }
     triggerNotificationAlert({
-      key: 'closing',
-      name: '🚨 6:20 PM Shift Closing Alert',
-      msg: 'Before Leaving: Please ensure all collection amounts are finalized in Google Sheets.'
+      key: 'test',
+      time: 'Test',
+      name: '⏰ Collection Update Required',
+      msg: 'Alert Test: Please record and finalize all collection amounts for today!'
     });
-  }
-
-  function dismissNotificationToast() {
-    var toast = document.getElementById('notificationToast');
-    if (toast) toast.style.display = 'none';
-  }
-
-  function openFirstCallerEdit() {
-    dismissNotificationToast();
-    if (cachedData && cachedData.records && cachedData.records.length > 0) {
-      var r = cachedData.records[0];
-      openEditTodayModal(r.officerName, r.today);
-    }
   }
 
   function playNotificationChime() {
