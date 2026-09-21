@@ -435,7 +435,290 @@
     .toast-btn:hover { background: #f59e0b; }
     .toast-dismiss { background: rgba(255,255,255,0.15); color: #fff; border: none; padding: 7px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
     .toast-dismiss:hover { background: rgba(255,255,255,0.25); }
+
+    /* -------------------------------------------------------------
+       METRIC KPI CARDS (Desktop 4-col, Mobile 2x2 grid)
+       ------------------------------------------------------------- */
+    .metric-grid {
+      max-width: 1380px;
+      margin: 0 auto 16px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .metric-card {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border-left: 4px solid var(--navy-blue);
+    }
+    .metric-card.green { border-left-color: #10b981; }
+    .metric-card.gold { border-left-color: #f59e0b; }
+    .metric-card.blue { border-left-color: #0284c7; }
+    .metric-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+    }
+    .metric-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .metric-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* View Mode Switcher (Table vs Mobile Cards) */
+    .view-toggle-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: #e2e8f0;
+      padding: 3px;
+      border-radius: 8px;
+    }
+    .view-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .view-toggle-btn.active {
+      background: white;
+      color: var(--navy-dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Mobile Caller Cards */
+    .mobile-cards-container {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 1380px;
+      margin: 0 auto 40px;
+      padding: 0 14px;
+    }
+    .caller-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      position: relative;
+    }
+    .caller-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .caller-card-name {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .caller-rank-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .caller-mgr-tag {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #eff6ff;
+      color: #1d4ed8;
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .caller-progress-bar {
+      height: 6px;
+      width: 100%;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .caller-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    .caller-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .caller-stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .caller-stat-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .caller-stat-val {
+      font-size: 13px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text);
+    }
+    .caller-today-action {
+      background: #fffbeb;
+      border: 1.5px dashed #f59e0b;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+    .caller-today-action:active {
+      background: #fef3c7;
+    }
+
+    /* -------------------------------------------------------------
+       RESPONSIVE BREAKPOINTS (Mobile <= 768px, Small <= 480px)
+       ------------------------------------------------------------- */
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 10px 14px;
+        gap: 10px;
+      }
+      .brand-title { font-size: 17px; }
+      .user-controls {
+        gap: 8px;
+        font-size: 11px;
+      }
+      .cooldown-pill {
+        padding: 3px 8px;
+        font-size: 11px;
+      }
+      .btn-logout {
+        padding: 4px 10px;
+        font-size: 11px;
+      }
+
+      .toolbar {
+        margin: 12px auto 10px;
+        padding: 0 12px;
+        gap: 10px;
+      }
+      .filter-group {
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .filter-group::-webkit-scrollbar { display: none; }
+      .input-date, .select-manager, .btn-pill {
+        flex-shrink: 0;
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 12px;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      .metric-card {
+        padding: 10px 12px;
+      }
+      .metric-val {
+        font-size: 16px;
+      }
+
+      .leaderboard-wrapper {
+        padding: 0 8px;
+      }
+      .table-card {
+        border-radius: 8px;
+        max-height: calc(100vh - 220px);
+        min-height: 350px;
+      }
+
+      /* Sticky Caller Name Column on Mobile */
+      thead th.col-officer, tbody td.cell-officer {
+        position: sticky;
+        left: 0;
+        z-index: 15;
+        background: #ffffff;
+        box-shadow: 2px 0 6px rgba(0,0,0,0.06);
+      }
+      tbody tr:nth-child(even) td.cell-officer {
+        background: #f1f5f9;
+      }
+      thead th.col-officer {
+        z-index: 35;
+        background: #1e3a5f;
+      }
+      tfoot td.footer-total-label {
+        position: sticky;
+        left: 0;
+        z-index: 30;
+        background: #0b3966;
+      }
+
+      /* Modals slide from bottom on phone */
+      .modal-overlay {
+        align-items: flex-end;
+        padding: 0;
+      }
+      .modal-card {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+        max-width: 100%;
+        padding: 22px 18px 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+      .metric-val {
+        font-size: 15px;
+      }
+    }
   </style>
+
 </head>
 <body>
 
@@ -554,6 +837,48 @@
       <button type="button" class="btn-admin" onclick="openAddCallerModal()">+ Add Caller</button>
     </div>
   </div>
+  <!-- Executive KPI Summary Cards -->
+  <div class="metric-grid">
+    <div class="metric-card green">
+      <span class="metric-label">Total Collection</span>
+      <span class="metric-val" id="kpiTotal">₹0</span>
+      <span class="metric-sub" id="kpiAchievedSub">0% of target achieved</span>
+    </div>
+    <div class="metric-card gold">
+      <span class="metric-label">Today's Collection</span>
+      <span class="metric-val" id="kpiToday" style="color:#b45309;">₹0</span>
+      <span class="metric-sub" id="kpiTodayDate">Today</span>
+    </div>
+    <div class="metric-card blue">
+      <span class="metric-label">Total Target</span>
+      <span class="metric-val" id="kpiTarget">₹0</span>
+      <span class="metric-sub">Monthly Goal</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Remaining Balance</span>
+      <span class="metric-val" id="kpiBalance">₹0</span>
+      <span class="metric-sub" id="kpiProjSub">Projected: ₹0</span>
+    </div>
+  </div>
+
+  <!-- Mobile View Controls & Search Bar -->
+  <div class="toolbar" style="margin-top:0; margin-bottom:10px;">
+    <div style="flex:1; max-width:360px; min-width:200px;">
+      <input type="text" id="callerSearchInput" class="input-date" style="width:100%;" placeholder="🔍 Search caller name or manager..." oninput="renderLeaderboard()">
+    </div>
+    <div class="view-toggle-wrap">
+      <button type="button" class="view-toggle-btn active" id="btnViewTable" onclick="switchViewMode('table')">
+        <span>📊</span> <span>Table</span>
+      </button>
+      <button type="button" class="view-toggle-btn" id="btnViewCards" onclick="switchViewMode('cards')">
+        <span>📱</span> <span>Cards</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Card List Container -->
+  <div id="mobileCardsView" class="mobile-cards-container"></div>
+
 
   <!-- Leaderboard Table Container -->
   <div class="leaderboard-wrapper">
@@ -736,13 +1061,13 @@
   // =================================================================================
   // 👉 Deploy your Code.gs as Web App (Deploy > New deployment > Web app > Anyone)
   // 👉 Paste the deployment URL below:
-  var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/a/macros/shahafinlease.com/s/AKfycbyvL3PeK287TiiRrGIW0v-v7JvhSGijStUv1Fb7EmOwBAGmrhJmqZo2LXNwhVBYFgIL/exec"; 
+  var LIVE_GOOGLE_WEB_APP_URL = ""; 
   // 👉 If left blank or unreachable, the dashboard runs 100% offline in instant standalone mode!
   // =================================================================================
 
-  function getApiUrl() {
+    function getApiUrl() {
     var stored = safeStorage.getItem('shaha_custom_api_url');
-    if (stored && stored.trim().indexOf('http') === 0) return stored.trim();
+    if (stored !== null) return stored.trim();
     return (LIVE_GOOGLE_WEB_APP_URL || '').trim();
   }
 
@@ -759,24 +1084,55 @@
       dot.style.background = '#22c55e';
       txt.textContent = customMsg || '🟢 Live Synced';
     } else {
-      var hasUrl = !!getApiUrl();
-      pill.style.background = '#1e293b';
-      pill.style.color = hasUrl ? '#fbbf24' : '#94a3b8';
-      pill.style.border = hasUrl ? '1px solid #78350f' : '1px solid #334155';
-      dot.style.background = hasUrl ? '#f59e0b' : '#94a3b8';
-      txt.textContent = customMsg || (hasUrl ? '🟡 Reconnecting...' : '🟠 Standalone Mode');
+      var url = getApiUrl();
+      var isOrgRestricted = url.indexOf('/a/macros/') !== -1;
+      
+      if (customMsg) {
+        pill.style.background = '#3b1219';
+        pill.style.color = '#f87171';
+        pill.style.border = '1px solid #991b1b';
+        dot.style.background = '#ef4444';
+        txt.textContent = customMsg;
+      } else if (isOrgRestricted) {
+        pill.style.background = '#3b1219';
+        pill.style.color = '#f87171';
+        pill.style.border = '1px solid #991b1b';
+        dot.style.background = '#ef4444';
+        txt.textContent = '🔴 Set Access to "Anyone"';
+      } else if (url) {
+        pill.style.background = '#1e293b';
+        pill.style.color = '#fbbf24';
+        pill.style.border = '1px solid #78350f';
+        dot.style.background = '#f59e0b';
+        txt.textContent = '🟡 Reconnecting...';
+      } else {
+        pill.style.background = '#1e293b';
+        pill.style.color = '#94a3b8';
+        pill.style.border = '1px solid #334155';
+        dot.style.background = '#94a3b8';
+        txt.textContent = '🟠 Standalone Mode';
+      }
     }
   }
 
   function promptConfigureApi() {
     var current = getApiUrl();
-    var val = prompt("Enter your Google Apps Script Web App URL to sync live with Google Sheets:\\n(Leave blank to use Standalone Offline Mode)", current);
+    var isOrgRestricted = current.indexOf('/a/macros/') !== -1;
+    
+    var msg = "GOOGLE SHEET API CONFIGURATION:\n\nPaste your Apps Script Web App URL below:\n(Make sure 'Who has access' is set to 'Anyone')\nOr leave blank for Standalone Mode:";
+      
+    var val = prompt(msg, current);
     if (val !== null) {
       safeStorage.setItem('shaha_custom_api_url', val.trim());
-      updateSyncBadge(!!val.trim());
+      updateSyncBadge(false);
       if (val.trim()) {
-        loadLeaderboard(selectedDateStr);
+        callApi('ping', {})
+          .then(function() { alert("Connected successfully to Google Sheet!"); })
+          .catch(function() { 
+            alert("Could not connect to this URL. Verify that 'Who has access' is set to 'Anyone' in your Apps Script deployment."); 
+          });
       }
+      loadLeaderboard(selectedDateStr);
     }
   }
 
@@ -786,25 +1142,41 @@
       if (!apiUrl || apiUrl.indexOf('http') !== 0) {
         return reject(new Error("No live API URL configured"));
       }
+      
+      if (apiUrl.indexOf('/a/macros/') !== -1) {
+        updateSyncBadge(false, '🔴 Set Access to "Anyone"');
+        console.warn("API URL is restricted to Google Workspace domain. Please set 'Who has access' to 'Anyone' in Deploy settings.");
+      }
+
       var fullData = Object.assign({ action: action }, payload || {});
       
-      // We use text/plain to eliminate browser CORS preflight OPTIONS check
       fetch(apiUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(fullData)
       })
       .then(function(res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.json();
+        return res.text();
       })
-      .then(function(data) {
+      .then(function(rawText) {
+        if (rawText.indexOf('<!DOCTYPE') !== -1 || rawText.indexOf('<html') !== -1) {
+          if (rawText.indexOf('ServiceLogin') !== -1 || rawText.indexOf('accounts.google.com') !== -1) {
+            updateSyncBadge(false, '🔴 Set Access to "Anyone"');
+            throw new Error("Access restricted by Google Workspace. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
+          }
+          throw new Error("Received HTML instead of JSON: " + rawText.slice(0, 80));
+        }
+        var data = JSON.parse(rawText);
         updateSyncBadge(true);
         resolve(data);
       })
       .catch(function(err) {
         console.warn("API Call Warning (" + action + "):", err.message);
-        updateSyncBadge(false);
+        if (err.message && err.message.indexOf('Anyone') !== -1) {
+          updateSyncBadge(false, '🔴 Set Access to "Anyone"');
+        } else {
+          updateSyncBadge(false);
+        }
         reject(err);
       });
     });
@@ -1752,6 +2124,41 @@
     loadLocalLeaderboardData(dateStr);
   }
 
+
+  // -------------------------------------------------------------
+  // MOBILE VIEW SWITCHER & SEARCH FILTER
+  // -------------------------------------------------------------
+  var activeViewMode = 'table'; // 'table' or 'cards'
+
+  function switchViewMode(mode) {
+    activeViewMode = mode;
+    var btnTable = document.getElementById('btnViewTable');
+    var btnCards = document.getElementById('btnViewCards');
+    var tableWrap = document.querySelector('.leaderboard-wrapper');
+    var cardsWrap = document.getElementById('mobileCardsView');
+
+    if (mode === 'cards') {
+      if (btnCards) btnCards.classList.add('active');
+      if (btnTable) btnTable.classList.remove('active');
+      if (tableWrap) tableWrap.style.display = 'none';
+      if (cardsWrap) cardsWrap.style.display = 'flex';
+    } else {
+      if (btnTable) btnTable.classList.add('active');
+      if (btnCards) btnCards.classList.remove('active');
+      if (tableWrap) tableWrap.style.display = 'block';
+      if (cardsWrap) cardsWrap.style.display = 'none';
+    }
+    renderLeaderboard();
+  }
+
+  // Auto-detect mobile on first load
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+    activeViewMode = 'cards';
+    setTimeout(function() {
+      switchViewMode('cards');
+    }, 0);
+  }
+
   function renderLeaderboard() {
     if (!cachedData || !cachedData.records) return;
 
@@ -1766,9 +2173,16 @@
       mgrFilter = mgrSelect.value || 'all';
     }
 
+    var searchTxt = (document.getElementById('callerSearchInput') ? document.getElementById('callerSearchInput').value : '').trim().toLowerCase();
+
     var records = cachedData.records.filter(function(r) {
-      if (!mgrFilter || mgrFilter === 'all') return true;
-      return r.managerKey === mgrFilter;
+      if (mgrFilter && mgrFilter !== 'all' && r.managerKey !== mgrFilter) return false;
+      if (searchTxt) {
+        var matchName = r.officerName.toLowerCase().indexOf(searchTxt) !== -1;
+        var matchMgr = r.managerKey.toLowerCase().indexOf(searchTxt) !== -1;
+        if (!matchName && !matchMgr) return false;
+      }
+      return true;
     });
 
     var tbody = document.getElementById('tableBody');
@@ -1831,6 +2245,66 @@
       (isAdmin ? '<td></td>' : '') +
     '</tr>';
     document.getElementById('tableFoot').innerHTML = footHtml;
+
+    // Update KPI Cards
+    if (document.getElementById('kpiTotal')) document.getElementById('kpiTotal').textContent = '₹' + formatNumber(sumTot);
+    if (document.getElementById('kpiToday')) document.getElementById('kpiToday').textContent = '₹' + formatNumber(sumToday);
+    if (document.getElementById('kpiTarget')) document.getElementById('kpiTarget').textContent = '₹' + formatNumber(sumTgt);
+    if (document.getElementById('kpiBalance')) document.getElementById('kpiBalance').textContent = '₹' + formatNumber(sumBal);
+    if (document.getElementById('kpiAchievedSub')) document.getElementById('kpiAchievedSub').textContent = totalAchieved + '% of target achieved';
+    if (document.getElementById('kpiProjSub')) document.getElementById('kpiProjSub').textContent = 'Projected: ₹' + formatNumber(sumProj);
+    if (document.getElementById('kpiTodayDate')) document.getElementById('kpiTodayDate').textContent = selectedDateStr;
+
+    // Render Mobile Cards View
+    var cardsWrap = document.getElementById('mobileCardsView');
+    if (cardsWrap) {
+      var cardsHtml = '';
+      for (var k = 0; k < records.length; k++) {
+        var rec = records[k];
+        var pct = Math.round(rec.achievedPct);
+        var pCol = pct >= 100 ? '#10b981' : (pct >= 50 ? '#84cc16' : (pct >= 25 ? '#f59e0b' : '#ef4444'));
+
+        cardsHtml += '<div class="caller-card">' +
+          '<div class="caller-card-header">' +
+            '<div class="caller-card-name">' +
+              '<span class="caller-rank-badge">#' + (k + 1) + '</span>' +
+              '<span>' + escapeHtml(rec.officerName) + '</span>' +
+              (isAdmin ? ' <button type="button" style="border:none; background:none; cursor:pointer; font-size:13px;" onclick="openAdminFullEditModal(' + escapeJsArg(rec.officerName) + ')">✏️</button>' : '') +
+            '</div>' +
+            '<span class="caller-mgr-tag">' + escapeHtml(rec.managerKey) + '</span>' +
+          '</div>' +
+
+          '<div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; margin-bottom:4px;">' +
+            '<span style="color:#64748b;">Progress: ' + pct + '%</span>' +
+            '<span style="color:' + pCol + ';">' + formatNumber(rec.total) + ' / ' + formatNumber(rec.target) + '</span>' +
+          '</div>' +
+          '<div class="caller-progress-bar">' +
+            '<div class="caller-progress-fill" style="width:' + Math.min(100, pct) + '%; background:' + pCol + ';"></div>' +
+          '</div>' +
+
+          '<div class="caller-stats-grid">' +
+            '<div class="caller-stat-item">' +
+              '<span class="caller-stat-lbl">Target</span>' +
+              '<span class="caller-stat-val">' + formatNumber(rec.target) + '</span>' +
+            '</div>' +
+            '<div class="caller-stat-item">' +
+              '<span class="caller-stat-lbl">AOY</span>' +
+              '<span class="caller-stat-val">' + formatNumber(rec.aoy) + '</span>' +
+            '</div>' +
+            '<div class="caller-stat-item">' +
+              '<span class="caller-stat-lbl">Balance</span>' +
+              '<span class="caller-stat-val" style="color:' + (rec.balance < 0 ? '#10b981' : '#0f172a') + ';">' + formatNumber(rec.balance) + '</span>' +
+            '</div>' +
+          '</div>' +
+
+          '<div class="caller-today-action" data-name="' + escapeHtml(rec.officerName) + '" data-today="' + rec.today + '" onclick="onCellTodayClick(this)">' +
+            '<span style="font-size:12px; font-weight:700; color:#92400e;">Today Collection:</span>' +
+            '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(rec.today) + ' ✏️</span>' +
+          '</div>' +
+        '</div>';
+      }
+      cardsWrap.innerHTML = cardsHtml;
+    }
   }
 
   // Formatting & Heatmaps matching screenshot
