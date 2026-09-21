@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shaha Finlease â€” Daily Collection Leaderboard</title>
+  <title>Shaha Finlease — Daily Collection Leaderboard</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 36'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%23fbbf24'/%3E%3Cstop offset='100%25' stop-color='%23d97706'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z' fill='url(%23g)'/%3E%3Crect x='9' y='29.5' width='30' height='3' rx='1.5' fill='url(%23g)'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1195,7 +1195,7 @@
 <div id="collectionAlertModal" class="modal-overlay" style="display: none; z-index: 100000; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px);">
   <div class="alert-popup-card">
     <div class="alert-icon-ring">
-      <span id="alertIcon">â°</span>
+      <span id="alertIcon">⏰</span>
     </div>
     <div style="font-size: 11px; font-weight: 800; color: #b45309; text-transform: uppercase; letter-spacing: 0.08em; background: #fef3c7; border: 1px solid #fde68a; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px;" id="alertSlotBadge">
       Scheduled Update
@@ -1208,14 +1208,14 @@
     </p>
     <div style="display: flex; flex-direction: column; gap: 10px;">
       <button type="button" class="btn-primary" style="height: 44px; font-size: 14px; font-weight: 700; background: linear-gradient(135deg, #0b3966 0%, #002244 100%); color: #fff; border: 1px solid #164e87; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;" onclick="handleAlertUpdateNow()">
-        âœï¸ Update Collections Now
+        ✏️ Update Collections Now
       </button>
       <div style="display: flex; gap: 10px;">
         <button type="button" style="flex: 1; height: 38px; font-size: 12.5px; font-weight: 600; background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; cursor: pointer;" onclick="snoozeAlert(10)">
-          â³ Remind in 10 Min
+          ⏳ Remind in 10 Min
         </button>
         <button type="button" style="flex: 1; height: 38px; font-size: 12.5px; font-weight: 600; background: #ffffff; color: #64748b; border: 1px solid #e2e8f0; border-radius: 8px; cursor: pointer;" onclick="closeCollectionAlertModal()">
-          âœ• Dismiss
+          ✕ Dismiss
         </button>
       </div>
     </div>
@@ -1292,8 +1292,8 @@
         <span class="aod-pulse-dot"></span>
         <span id="aodSyncStatus">Live Pulse (30s)</span>
       </div>
-      <button type="button" class="aod-btn" onclick="toggleFullscreen()"><span id="aodFsIcon">â›¶</span> Fullscreen</button>
-      <button type="button" class="aod-btn aod-btn-exit" onclick="exitAodMode()">âœ• Exit</button>
+      <button type="button" class="aod-btn" onclick="toggleFullscreen()"><span id="aodFsIcon">⛶</span> Fullscreen</button>
+      <button type="button" class="aod-btn aod-btn-exit" onclick="exitAodMode()">✕ Exit</button>
     </div>
   </div>
 
@@ -1303,7 +1303,7 @@
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
       Today's Total Collection
     </div>
-    <div class="aod-hero-num" id="aodTodayVal">â‚¹0</div>
+    <div class="aod-hero-num" id="aodTodayVal">₹0</div>
     <div class="aod-hero-sub" id="aodHeroSub">Real-time collections recorded across all teams today</div>
   </div>
 
@@ -1311,17 +1311,17 @@
   <div class="aod-cards-grid">
     <div class="aod-card blue">
       <span class="aod-card-label">Total Monthly Target</span>
-      <span class="aod-card-val" id="aodTargetVal" style="color:#0369a1;">â‚¹0</span>
+      <span class="aod-card-val" id="aodTargetVal" style="color:#0369a1;">₹0</span>
       <span class="aod-card-sub" id="aodTargetSub">Monthly Goal</span>
     </div>
     <div class="aod-card gold">
       <span class="aod-card-label">Remaining Target</span>
-      <span class="aod-card-val" id="aodBalanceVal" style="color:#b45309;">â‚¹0</span>
+      <span class="aod-card-val" id="aodBalanceVal" style="color:#b45309;">₹0</span>
       <span class="aod-card-sub" id="aodBalanceSub">Remaining needed to achieve 100%</span>
     </div>
     <div class="aod-card green">
       <span class="aod-card-label">Month-to-Date Collections</span>
-      <span class="aod-card-val" id="aodTotalVal" style="color:#047857;">â‚¹0</span>
+      <span class="aod-card-val" id="aodTotalVal" style="color:#047857;">₹0</span>
       <span class="aod-card-sub" id="aodTotalSub">0% target completed</span>
     </div>
   </div>
@@ -1330,7 +1330,7 @@
   <div class="aod-top5-wrap">
     <div class="aod-top5-header">
       <div class="aod-top5-title">
-        <span>ðŸ†</span> Top 5 Callers of the Day
+        <span>🏆</span> Top 5 Callers of the Day
       </div>
       <span style="font-size: 12.5px; color: #64748b; font-weight: 600;">Ranked by Today's Collections</span>
     </div>
@@ -1362,7 +1362,7 @@
       <span class="brand-badge">Daily Collection</span>
     </div>
     <div class="user-controls">
-      <button type="button" class="btn-aod-toggle" onclick="toggleAodMode()">ðŸ“º Always On Display</button>
+      <button type="button" class="btn-aod-toggle" onclick="toggleAodMode()">📺 Always On Display</button>
       <div id="cloudSyncStatus" class="connection-status-clean">
         <span id="cloudSyncDot" class="status-dot"></span>
         <span id="cloudSyncText">Live</span>
@@ -1397,45 +1397,45 @@
         <option value="smita">Smita</option>
       </select>
       <button type="button" class="btn-admin" onclick="openAddCallerModal()">+ Add Caller</button>
-      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="openMonthTargetModal()">ðŸŽ¯ Month Targets</button>
-      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="syncTargetsFromGoogleSheet()">ðŸ”„ Sync Targets</button>
+      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="openMonthTargetModal()">🎯 Month Targets</button>
+      <button type="button" class="btn-secondary" style="font-size:12px; padding:6px 12px;" onclick="syncTargetsFromGoogleSheet()">🔄 Sync Targets</button>
     </div>
   </div>
   <!-- Executive KPI Summary Cards -->
   <div class="metric-grid">
     <div class="metric-card green">
       <span class="metric-label">Total Collection</span>
-      <span class="metric-val" id="kpiTotal">â‚¹0</span>
+      <span class="metric-val" id="kpiTotal">₹0</span>
       <span class="metric-sub" id="kpiAchievedSub">0% of target achieved</span>
     </div>
     <div class="metric-card gold">
       <span class="metric-label">Today's Collection</span>
-      <span class="metric-val" id="kpiToday" style="color:#b45309;">â‚¹0</span>
+      <span class="metric-val" id="kpiToday" style="color:#b45309;">₹0</span>
       <span class="metric-sub" id="kpiTodayDate">Today</span>
     </div>
     <div class="metric-card blue">
       <span class="metric-label">Total Target</span>
-      <span class="metric-val" id="kpiTarget">â‚¹0</span>
+      <span class="metric-val" id="kpiTarget">₹0</span>
       <span class="metric-sub">Monthly Goal</span>
     </div>
     <div class="metric-card">
       <span class="metric-label">Remaining Balance</span>
-      <span class="metric-val" id="kpiBalance">â‚¹0</span>
-      <span class="metric-sub" id="kpiProjSub">Projected: â‚¹0</span>
+      <span class="metric-val" id="kpiBalance">₹0</span>
+      <span class="metric-sub" id="kpiProjSub">Projected: ₹0</span>
     </div>
   </div>
 
   <!-- Mobile View Controls & Search Bar -->
   <div class="toolbar" style="margin-top:0; margin-bottom:10px;">
     <div style="flex:1; max-width:360px; min-width:200px;">
-      <input type="text" id="callerSearchInput" class="input-date" style="width:100%;" placeholder="ðŸ” Search caller name or manager..." oninput="renderLeaderboard()">
+      <input type="text" id="callerSearchInput" class="input-date" style="width:100%;" placeholder="🔍 Search caller name or manager..." oninput="renderLeaderboard()">
     </div>
     <div class="view-toggle-wrap">
       <button type="button" class="view-toggle-btn active" id="btnViewTable" onclick="switchViewMode('table')">
-        <span>ðŸ“Š</span> <span>Table</span>
+        <span>📊</span> <span>Table</span>
       </button>
       <button type="button" class="view-toggle-btn" id="btnViewCards" onclick="switchViewMode('cards')">
-        <span>ðŸ“±</span> <span>Cards</span>
+        <span>📱</span> <span>Cards</span>
       </button>
     </div>
   </div>
@@ -1470,7 +1470,7 @@
 
     <form onsubmit="handleSaveToday(event)">
       <div class="form-group">
-        <label>Today Collection Amount (â‚¹)</label>
+        <label>Today Collection Amount (₹)</label>
         <input type="number" step="1" id="editTodayInput" required placeholder="e.g. 25000">
       </div>
       <div style="display:flex; gap:6px; margin-bottom:16px;">
@@ -1495,7 +1495,7 @@
       <h3 class="modal-title">Admin: Edit Officer Record</h3>
       <span class="brand-badge" style="background:#0284c7; color:white;">Admin / MIS</span>
     </div>
-    <p class="modal-subtitle">Modify caller details â€” Targets & Projections update the monthly goal in Google Sheets</p>
+    <p class="modal-subtitle">Modify caller details — Targets & Projections update the monthly goal in Google Sheets</p>
 
     <form onsubmit="handleAdminSaveCaller(event)">
       <input type="hidden" id="adminOrigOfficerName">
@@ -1523,22 +1523,22 @@
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
         <div class="form-group">
-          <label>Monthly Target 100% (â‚¹)</label>
+          <label>Monthly Target 100% (₹)</label>
           <input type="number" id="adminEditTarget" required>
         </div>
         <div class="form-group">
-          <label>AOY (As Of Yesterday) (â‚¹)</label>
+          <label>AOY (As Of Yesterday) (₹)</label>
           <input type="number" id="adminEditAoy" required>
         </div>
       </div>
 
       <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
         <div class="form-group">
-          <label>Today Collection (â‚¹)</label>
+          <label>Today Collection (₹)</label>
           <input type="number" id="adminEditToday" required>
         </div>
         <div class="form-group">
-          <label>Projection (â‚¹)</label>
+          <label>Projection (₹)</label>
           <input type="number" id="adminEditProjection" required>
         </div>
       </div>
@@ -1581,15 +1581,15 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Target 100% (â‚¹)</label>
+        <label>Target 100% (₹)</label>
         <input type="number" id="newOfficerTarget" required placeholder="250000">
       </div>
       <div class="form-group">
-        <label>Opening AOY (â‚¹)</label>
+        <label>Opening AOY (₹)</label>
         <input type="number" id="newOfficerAoy" value="0">
       </div>
       <div class="form-group">
-        <label>Projection (â‚¹)</label>
+        <label>Projection (₹)</label>
         <input type="number" id="newOfficerProjection" value="0">
       </div>
 
@@ -1606,15 +1606,15 @@
   <div class="modal-card" style="max-width: 680px; width: 95%; max-height: 88vh; display: flex; flex-direction: column;">
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
       <div>
-        <h3 class="modal-title" style="margin: 0 0 4px 0;">ðŸŽ¯ Monthly Target & Projection Setup</h3>
+        <h3 class="modal-title" style="margin: 0 0 4px 0;">🎯 Monthly Target & Projection Setup</h3>
         <p class="modal-subtitle" id="monthTargetSubtitle" style="margin: 0;">Configure monthly goals for all officers (Syncs to Google Sheet)</p>
       </div>
-      <button type="button" class="btn-secondary" style="padding: 5px 12px; font-size: 12px;" onclick="syncTargetsFromGoogleSheet()">ðŸ”„ Pull from Sheet</button>
+      <button type="button" class="btn-secondary" style="padding: 5px 12px; font-size: 12px;" onclick="syncTargetsFromGoogleSheet()">🔄 Pull from Sheet</button>
     </div>
 
     <div style="margin-bottom: 12px; display: flex; gap: 8px;">
-      <input type="text" id="monthTargetSearch" class="input-date" style="flex: 1;" placeholder="ðŸ” Filter caller name or manager..." oninput="filterMonthTargetList()">
-      <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="fillDefaultTargetsPrompt()">âš¡ Quick Apply %</button>
+      <input type="text" id="monthTargetSearch" class="input-date" style="flex: 1;" placeholder="🔍 Filter caller name or manager..." oninput="filterMonthTargetList()">
+      <button type="button" class="btn-secondary" style="font-size: 12px; padding: 6px 12px;" onclick="fillDefaultTargetsPrompt()">⚡ Quick Apply %</button>
     </div>
 
     <div id="monthTargetListContainer" style="flex: 1; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 16px; max-height: 480px;">
@@ -1623,14 +1623,14 @@
 
     <div class="modal-actions" style="margin-top: 0; padding-top: 12px; border-top: 1px solid #f1f5f9;">
       <button type="button" class="btn-secondary" onclick="closeMonthTargetModal()">Close</button>
-      <button type="button" id="saveMonthTargetsBtn" class="btn-primary" onclick="saveAllMonthTargets()">ðŸ’¾ Save All Month Targets</button>
+      <button type="button" id="saveMonthTargetsBtn" class="btn-primary" onclick="saveAllMonthTargets()">💾 Save All Month Targets</button>
     </div>
   </div>
 </div>
 
 <script>
   // =================================================================================
-  // ðŸ”´ CONFIGURATION: GOOGLE APPS SCRIPT WEB APP URL (Production v6 Hardcoded)
+  // 🔴 CONFIGURATION: GOOGLE APPS SCRIPT WEB APP URL (Production v6 Hardcoded)
   // =================================================================================
   var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx2vPpPIHOL05SRkZUKy1GyL_9YDJ8iTmKOaHc_CnL6jh6Ep5EP9y9imYpUpk7hEW8j/exec"; // v6 Production Deployment
   // =================================================================================
@@ -1649,7 +1649,7 @@
       txt.textContent = customMsg || 'Live';
       txt.style.color = '#15803d';
     } else {
-      if (customMsg && (customMsg.indexOf('ðŸ”´') !== -1 || customMsg.indexOf('Anyone') !== -1 || customMsg.indexOf('Access') !== -1)) {
+      if (customMsg && (customMsg.indexOf('🔴') !== -1 || customMsg.indexOf('Anyone') !== -1 || customMsg.indexOf('Access') !== -1)) {
         dot.style.background = '#ef4444';
         txt.textContent = 'Access Issue';
         txt.style.color = '#dc2626';
@@ -1664,35 +1664,35 @@
   function promptConfigureApi() {
     var isLive = (document.getElementById('cloudSyncText') && document.getElementById('cloudSyncText').textContent.indexOf('Live') !== -1);
     if (isLive) {
-      alert("âœ… Google Sheet Connection: ACTIVE\n\nAll collection numbers sync directly to your Google Sheet in real-time.");
+      alert("✅ Google Sheet Connection: ACTIVE\n\nAll collection numbers sync directly to your Google Sheet in real-time.");
     } else {
-      alert("â„¹ï¸ Status: STANDALONE MODE\n\nThe dashboard is working normally in offline/demo mode with all 65 callers.\n\nTo enable live Google Sheet sync, set 'Who has access: Anyone' in your Apps Script deployment.");
+      alert("ℹ️ Status: STANDALONE MODE\n\nThe dashboard is working normally in offline/demo mode with all 65 callers.\n\nTo enable live Google Sheet sync, set 'Who has access: Anyone' in your Apps Script deployment.");
       checkLiveBackendStatus();
     }
   }
 
   function checkLiveBackendStatus() {
     if (!LIVE_GOOGLE_WEB_APP_URL) {
-      updateSyncBadge(false, 'ðŸŸ¡ Connecting to Google Sheet...');
+      updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
       return;
     }
-    updateSyncBadge(false, 'ðŸŸ¡ Checking Sync...');
-    // Use GET ping â€” always works with GAS doGet handler
+    updateSyncBadge(false, '🟡 Checking Sync...');
+    // Use GET ping — always works with GAS doGet handler
     fetch(LIVE_GOOGLE_WEB_APP_URL + '?action=ping', { method: 'GET' })
       .then(function(res) { return res.json(); })
       .then(function(res) {
         if (res && (res.status === 'ok' || res.success)) {
-          updateSyncBadge(true, 'ðŸŸ¢ Live Synced');
+          updateSyncBadge(true, '🟢 Live Synced');
         } else {
-          updateSyncBadge(false, 'ðŸŸ¡ Connecting to Google Sheet...');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
       })
       .catch(function(err) {
         var msg = (err && err.message) ? err.message : '';
         if (msg.indexOf('Anyone') !== -1 || msg.indexOf('401') !== -1) {
-          updateSyncBadge(false, 'ðŸ”´ Sheet Needs Access: Anyone');
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
         } else {
-          updateSyncBadge(false, 'ðŸŸ¡ Connecting to Google Sheet...');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
       });
   }
@@ -1733,7 +1733,7 @@
       fetchPromise
       .then(function(res) {
         if (res.status === 401 || res.status === 403) {
-          updateSyncBadge(false, 'ðŸ”´ Sheet Needs Access: Anyone');
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
           throw new Error("HTTP " + res.status + " Unauthorized. Deployment needs 'Who has access: Anyone'.");
         }
         return res.text();
@@ -1744,7 +1744,7 @@
         // 1. Try direct JSON parse
         try {
           var data = JSON.parse(trimmed);
-          updateSyncBadge(true, 'ðŸŸ¢ Live Synced');
+          updateSyncBadge(true, '🟢 Live Synced');
           return resolve(data);
         } catch(e) {}
 
@@ -1753,14 +1753,14 @@
         if (jsonMatch) {
           try {
             var data = JSON.parse(jsonMatch[0]);
-            updateSyncBadge(true, 'ðŸŸ¢ Live Synced');
+            updateSyncBadge(true, '🟢 Live Synced');
             return resolve(data);
           } catch(e) {}
         }
 
         // 3. Handle actual Google sign-in / restricted access page
         if (trimmed.indexOf('ServiceLogin') !== -1 || trimmed.indexOf('accounts.google.com') !== -1) {
-          updateSyncBadge(false, 'ðŸ”´ Sheet Needs Access: Anyone');
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
           throw new Error("Access restricted. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
         }
 
@@ -1768,7 +1768,7 @@
         // Since Google Apps Script executes the mutation BEFORE the redirect response,
         // the entry is already written to Google Sheets. Gracefully resolve and refresh UI.
         if (action === 'adminAddCaller' || action === 'updateToday' || action === 'adminUpdateCaller' || action === 'adminRemoveCaller') {
-          updateSyncBadge(true, 'ðŸŸ¢ Live Synced');
+          updateSyncBadge(true, '🟢 Live Synced');
           return resolve({ success: true, message: 'Google Sheet updated successfully' });
         }
 
@@ -1777,9 +1777,9 @@
       .catch(function(err) {
         var msg = (err && err.message) ? err.message : '';
         if (msg.indexOf('Anyone') !== -1 || msg.indexOf('Unauthorized') !== -1 || msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('Access restricted') !== -1) {
-          updateSyncBadge(false, 'ðŸ”´ Sheet Needs Access: Anyone');
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
         } else {
-          updateSyncBadge(false, 'ðŸŸ¡ Connecting to Google Sheet...');
+          updateSyncBadge(false, '🟡 Connecting to Google Sheet...');
         }
         reject(err);
       });
@@ -1981,13 +1981,13 @@
           var msg = (err && err.message) ? err.message : '';
           var isAuthIssue = msg.indexOf('Failed to fetch') !== -1 || msg.indexOf('Unauthorized') !== -1 || msg.indexOf('Anyone') !== -1 || msg.indexOf('Access restricted') !== -1;
           if (isAuthIssue) {
-            errBox.innerHTML = "<div style='font-size:13px; font-weight:700; color:#dc2626; margin-bottom:6px;'>âš ï¸ Google Sheet Deployment Setup Required</div>" +
+            errBox.innerHTML = "<div style='font-size:13px; font-weight:700; color:#dc2626; margin-bottom:6px;'>⚠️ Google Sheet Deployment Setup Required</div>" +
               "<div style='font-size:11.5px; color:#334155; text-align:left; line-height:1.5; background:#fff1f2; border:1px solid #fecdd3; padding:10px; border-radius:8px;'>" +
               "Google blocked the request because Web App access is not yet set to Anyone.<br><br>" +
               "<b>Fix in 30 seconds:</b><br>" +
               "1. Open your Google Sheet &rarr; <b>Extensions &rarr; Apps Script</b><br>" +
               "2. Click blue <b>Deploy &rarr; Manage deployments</b><br>" +
-              "3. Click <b>Edit (âœï¸)</b> on your deployment<br>" +
+              "3. Click <b>Edit (✏️)</b> on your deployment<br>" +
               "4. Set <b>Execute as</b> to <b>'Me'</b><br>" +
               "5. Set <b>Who has access</b> to <b>'Anyone'</b><br>" +
               "6. Under Version select <b>New version</b> &rarr; Click <b>Deploy</b>" +
@@ -2045,7 +2045,7 @@
   function loadLeaderboard(dateStr) {
     var loadBar = document.getElementById('tableLoadingBar');
 
-    // â”€â”€ Optimistic Instant Render (localStorage cache) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ── Optimistic Instant Render (localStorage cache) ─────────────────────────
     // If we have previously fetched data for this date, render it immediately
     // so the user sees something useful instead of a blank loading bar.
     var cacheKey = 'shaha_lb_' + dateStr;
@@ -2058,7 +2058,7 @@
           renderLeaderboard();
           // Show a subtle "Refreshing..." badge instead of full loading bar
           if (loadBar) {
-            loadBar.innerHTML = '<span style="font-size:11px;color:#64748b;padding:4px 10px;background:#f1f5f9;border-radius:20px;display:inline-block;">ðŸ”„ Refreshing data...</span>';
+            loadBar.innerHTML = '<span style="font-size:11px;color:#64748b;padding:4px 10px;background:#f1f5f9;border-radius:20px;display:inline-block;">🔄 Refreshing data...</span>';
           }
         }
       } catch(e) {}
@@ -2068,7 +2068,7 @@
         loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
       }
     }
-    // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ───────────────────────────────────────────────────────────────────────────
 
     callApi('getLeaderboard', { date: dateStr, userSession: currentSession })
       .then(function(data) {
@@ -2084,9 +2084,9 @@
       })
       .catch(function(err) {
         if (loadBar) loadBar.innerHTML = '';
-        // If we already rendered stale data, don't wipe it â€” just show error badge
+        // If we already rendered stale data, don't wipe it — just show error badge
         if (staleRaw) {
-          if (loadBar) loadBar.innerHTML = '<span style="font-size:11px;color:#b91c1c;padding:4px 10px;background:#fef2f2;border-radius:20px;display:inline-block;">âš ï¸ Could not refresh â€” showing last saved data</span>';
+          if (loadBar) loadBar.innerHTML = '<span style="font-size:11px;color:#b91c1c;padding:4px 10px;background:#fef2f2;border-radius:20px;display:inline-block;">⚠️ Could not refresh — showing last saved data</span>';
         } else {
           showLiveTableError("Live connection failed: " + err.message);
         }
@@ -2096,11 +2096,11 @@
   function showLiveTableError(msg) {
     var tbody = document.getElementById('tableBody');
     if (tbody) {
-      tbody.innerHTML = '<tr><td colspan="11" style="padding:40px; color:#b91c1c; font-weight:700; background:#fef2f2; font-size:14px;">âš ï¸ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">ðŸ”„ Retry Live Fetch</button></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="11" style="padding:40px; color:#b91c1c; font-weight:700; background:#fef2f2; font-size:14px;">⚠️ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">🔄 Retry Live Fetch</button></td></tr>';
     }
     var cardsWrap = document.getElementById('mobileCardsView');
     if (cardsWrap) {
-      cardsWrap.innerHTML = '<div style="background:#fef2f2; border:1px solid #f87171; color:#b91c1c; padding:24px; border-radius:12px; text-align:center; font-weight:700;">âš ï¸ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">ðŸ”„ Retry Live Fetch</button></div>';
+      cardsWrap.innerHTML = '<div style="background:#fef2f2; border:1px solid #f87171; color:#b91c1c; padding:24px; border-radius:12px; text-align:center; font-weight:700;">⚠️ Live Google Sheet Error:<br><span style="font-weight:400; color:#475569;">' + escapeHtml(msg) + '</span><br><button type="button" class="btn-primary" style="margin-top:14px; max-width:200px;" onclick="loadLeaderboard(selectedDateStr)">🔄 Retry Live Fetch</button></div>';
     }
   }
 
@@ -2232,16 +2232,16 @@
 
         rowsHtml += '<tr>' +
           '<td>' + (j + 1) + '</td>' +
-          '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' âœï¸' : '') + '</td>' +
+          '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' ✏️' : '') + '</td>' +
           '<td style="font-weight:700;"' + clickAttr + '>' + formatNumber(r.target) + '</td>' +
           '<td' + clickAttr + '>' + formatNumber(r.aoy) + '</td>' +
-          '<td' + todayClickAttr + '>' + formatNumber(r.today) + (canEditToday ? ' âœï¸' : '') + '</td>' +
+          '<td' + todayClickAttr + '>' + formatNumber(r.today) + (canEditToday ? ' ✏️' : '') + '</td>' +
           '<td style="font-weight:700;">' + formatNumber(r.total) + '</td>' +
           '<td style="color:' + (r.balance < 0 ? '#16a34a' : '#0f172a') + ';">' + formatNumber(r.balance) + '</td>' +
           '<td' + clickAttr + '>' + formatNumber(r.projection) + '</td>' +
           '<td class="' + pctClass + '">' + Math.round(r.achievedPct) + '%</td>' +
           '<td class="' + rankClass + '">' + (r.rank || (j + 1)) + '</td>' +
-          (isAdmin ? '<td><button type="button" class="btn-pill" style="padding:4px 8px; font-size:11px; background:#0284c7; color:white; border:none;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">âš™ï¸ Edit</button></td>' : '') +
+          (isAdmin ? '<td><button type="button" class="btn-pill" style="padding:4px 8px; font-size:11px; background:#0284c7; color:white; border:none;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">⚙️ Edit</button></td>' : '') +
         '</tr>';
 
         // Card view
@@ -2252,7 +2252,7 @@
             '<div class="caller-card-name">' +
               '<span class="caller-rank-badge">#' + (j + 1) + '</span>' +
               '<span>' + escapeHtml(r.officerName) + '</span>' +
-              (isAdmin ? ' <button type="button" style="border:none; background:none; cursor:pointer; font-size:13px;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">âœï¸</button>' : '') +
+              (isAdmin ? ' <button type="button" style="border:none; background:none; cursor:pointer; font-size:13px;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">✏️</button>' : '') +
             '</div>' +
             '<span class="caller-mgr-tag">' + escapeHtml(r.managerKey) + '</span>' +
           '</div>' +
@@ -2271,7 +2271,7 @@
           (canEditToday ?
           '<div class="caller-today-action" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)">' +
             '<span style="font-size:12px; font-weight:700; color:#92400e;">Today Collection:</span>' +
-            '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(r.today) + ' âœï¸</span>' +
+            '<span style="font-size:14px; font-weight:800; color:#b45309; font-family:monospace;">' + formatNumber(r.today) + ' ✏️</span>' +
           '</div>' :
           '<div style="background:#f8fafc; padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">' +
             '<span style="font-size:12px; font-weight:700; color:#64748b;">Today Collection:</span>' +
@@ -2282,7 +2282,7 @@
 
       var teamAchieved = sumTgt > 0 ? Math.round((sumTot / sumTgt) * 100) : 0;
       var teamAchievedColor = teamAchieved >= 100 ? '#4ade80' : (teamAchieved >= 50 ? '#facc15' : '#f87171');
-      var icon = (mKey === 'customerservice') ? 'ðŸŽ§' : 'ðŸ¢';
+      var icon = (mKey === 'customerservice') ? '🎧' : '🏢';
 
       allTablesHtml += '<div class="table-card" style="margin-bottom: 28px;">' +
         '<div class="table-super-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
@@ -2292,8 +2292,8 @@
             '<span style="background:rgba(255,255,255,0.18); color:#fff; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px;">' + mRecords.length + ' Officers</span>' +
           '</div>' +
           '<div style="font-size:12px; font-weight:600; color:#cbd5e1; display:flex; gap:14px; align-items:center;">' +
-            '<span>Target: <b style="color:#fff;">â‚¹' + formatNumber(sumTgt) + '</b></span>' +
-            '<span>Today: <b style="color:#4ade80;">â‚¹' + formatNumber(sumToday) + '</b></span>' +
+            '<span>Target: <b style="color:#fff;">₹' + formatNumber(sumTgt) + '</b></span>' +
+            '<span>Today: <b style="color:#4ade80;">₹' + formatNumber(sumToday) + '</b></span>' +
             '<span>Achieved: <b style="color:' + teamAchievedColor + ';">' + teamAchieved + '%</b></span>' +
           '</div>' +
         '</div>' +
@@ -2304,7 +2304,7 @@
               '<th class="col-officer">OFFICER\'S NAME</th>' +
               '<th class="col-blue">TARGET 100%</th>' +
               '<th>AOY</th>' +
-              '<th style="background:#b45309;">TODAY âœï¸</th>' +
+              '<th style="background:#b45309;">TODAY ✏️</th>' +
               '<th>TOTAL</th>' +
               '<th>BALANCE</th>' +
               '<th>PROJECTION</th>' +
@@ -2339,7 +2339,7 @@
             '<span style="font-size:14px;">' + escapeHtml(mTitle) + '</span>' +
             '<span style="background:rgba(255,255,255,0.2); font-size:10px; padding:1px 6px; border-radius:10px;">' + mRecords.length + ' Callers</span>' +
           '</div>' +
-          '<div style="font-size:12px; color:#4ade80; font-weight:700;">Today: â‚¹' + formatNumber(sumToday) + '</div>' +
+          '<div style="font-size:12px; color:#4ade80; font-weight:700;">Today: ₹' + formatNumber(sumToday) + '</div>' +
         '</div>';
       }
       allCardsHtml += mCardsHtml;
@@ -2351,8 +2351,8 @@
       allTablesHtml += '<div class="table-card" style="margin-bottom: 28px; border: 2px solid #047857; box-shadow: 0 4px 20px rgba(4,120,87,0.15);">' +
         '<div class="table-super-header" style="background:#065f46; display:flex; justify-content:space-between; align-items:center; padding:12px 20px;">' +
           '<div style="display:flex; align-items:center; gap:8px;">' +
-            '<span style="font-size:18px;">ðŸ†</span>' +
-            '<span style="font-size:16px; font-weight:800; color:#fff;">GRAND TOTAL â€” ALL MANAGERS COMBINED</span>' +
+            '<span style="font-size:18px;">🏆</span>' +
+            '<span style="font-size:16px; font-weight:800; color:#fff;">GRAND TOTAL — ALL MANAGERS COMBINED</span>' +
           '</div>' +
           '<div style="font-size:12px; color:#d1fae5; font-weight:700;">' + records.length + ' Total Officers</div>' +
         '</div>' +
@@ -2360,12 +2360,12 @@
           '<tfoot>' +
             '<tr style="background:#065f46; color:#fff; font-weight:800; font-size:13px;">' +
               '<td colspan="2" class="footer-total-label" style="background:#065f46; color:#fff; font-size:13px;">GRAND TOTAL</td>' +
-              '<td>â‚¹' + formatNumber(grandTgt) + '</td>' +
-              '<td>â‚¹' + formatNumber(grandAoy) + '</td>' +
-              '<td style="background:#b45309; color:#fff;">â‚¹' + formatNumber(grandToday) + '</td>' +
-              '<td>â‚¹' + formatNumber(grandTot) + '</td>' +
-              '<td>â‚¹' + formatNumber(grandBal) + '</td>' +
-              '<td>â‚¹' + formatNumber(grandProj) + '</td>' +
+              '<td>₹' + formatNumber(grandTgt) + '</td>' +
+              '<td>₹' + formatNumber(grandAoy) + '</td>' +
+              '<td style="background:#b45309; color:#fff;">₹' + formatNumber(grandToday) + '</td>' +
+              '<td>₹' + formatNumber(grandTot) + '</td>' +
+              '<td>₹' + formatNumber(grandBal) + '</td>' +
+              '<td>₹' + formatNumber(grandProj) + '</td>' +
               '<td style="background:#047857; color:#fff; font-size:14px; font-weight:800;">' + grandAchieved + '%</td>' +
               '<td>-</td>' +
               (isAdmin ? '<td>-</td>' : '') +
@@ -2380,12 +2380,12 @@
 
     // Update KPI Header Cards with Grand Totals
     var totalAchieved = grandTgt > 0 ? Math.round((grandTot / grandTgt) * 100) : 0;
-    if (document.getElementById('kpiTotal')) document.getElementById('kpiTotal').textContent = 'â‚¹' + formatNumber(grandTot);
-    if (document.getElementById('kpiToday')) document.getElementById('kpiToday').textContent = 'â‚¹' + formatNumber(grandToday);
-    if (document.getElementById('kpiTarget')) document.getElementById('kpiTarget').textContent = 'â‚¹' + formatNumber(grandTgt);
-    if (document.getElementById('kpiBalance')) document.getElementById('kpiBalance').textContent = 'â‚¹' + formatNumber(grandBal);
+    if (document.getElementById('kpiTotal')) document.getElementById('kpiTotal').textContent = '₹' + formatNumber(grandTot);
+    if (document.getElementById('kpiToday')) document.getElementById('kpiToday').textContent = '₹' + formatNumber(grandToday);
+    if (document.getElementById('kpiTarget')) document.getElementById('kpiTarget').textContent = '₹' + formatNumber(grandTgt);
+    if (document.getElementById('kpiBalance')) document.getElementById('kpiBalance').textContent = '₹' + formatNumber(grandBal);
     if (document.getElementById('kpiAchievedSub')) document.getElementById('kpiAchievedSub').textContent = totalAchieved + '% of target achieved';
-    if (document.getElementById('kpiProjSub')) document.getElementById('kpiProjSub').textContent = 'Projected: â‚¹' + formatNumber(grandProj);
+    if (document.getElementById('kpiProjSub')) document.getElementById('kpiProjSub').textContent = 'Projected: ₹' + formatNumber(grandProj);
     if (document.getElementById('kpiTodayDate')) document.getElementById('kpiTodayDate').textContent = selectedDateStr;
 
     if (isAodActive) {
@@ -2417,7 +2417,7 @@
 
   function formatInr(val) {
     var n = Number(val) || 0;
-    return 'â‚¹' + n.toLocaleString('en-IN');
+    return '₹' + n.toLocaleString('en-IN');
   }
 
   function formatCompact(val) {
@@ -2492,11 +2492,11 @@
       if (elem.requestFullscreen) elem.requestFullscreen();
       else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
       var icon = document.getElementById('aodFsIcon');
-      if (icon) icon.textContent = 'ðŸ——';
+      if (icon) icon.textContent = '🗗';
     } else {
       if (document.exitFullscreen) document.exitFullscreen();
       var icon = document.getElementById('aodFsIcon');
-      if (icon) icon.textContent = 'â›¶';
+      if (icon) icon.textContent = '⛶';
     }
   }
 
@@ -2547,7 +2547,7 @@
 
     var top5 = sortedByToday.slice(0, 5);
     var podiumClasses = ['gold', 'silver', 'bronze', '', ''];
-    var rankBadges = ['ðŸ¥‡ #1 TOP', 'ðŸ¥ˆ #2', 'ðŸ¥‰ #3', '#4', '#5'];
+    var rankBadges = ['🥇 #1 TOP', '🥈 #2', '🥉 #3', '#4', '#5'];
 
     var html = '';
     for (var i = 0; i < top5.length; i++) {
@@ -2561,7 +2561,7 @@
         '<div class="aod-caller-name" title="' + escapeHtml(c.officerName) + '">' + escapeHtml(c.officerName) + '</div>' +
         '<div class="aod-caller-mgr">' + escapeHtml(mgrTitle) + '</div>' +
         '<div class="aod-caller-today">+' + formatInr(c.today) + '</div>' +
-        '<div class="aod-caller-sub">' + (c.achievedPct || 0).toFixed(0) + '% of â‚¹' + formatCompact(c.target) + '</div>' +
+        '<div class="aod-caller-sub">' + (c.achievedPct || 0).toFixed(0) + '% of ₹' + formatCompact(c.target) + '</div>' +
         '</div>';
     }
 
@@ -2889,8 +2889,8 @@
       '<th style="padding:8px 10px; text-align:left; color:#475569;">#</th>' +
       '<th style="padding:8px 10px; text-align:left; color:#475569;">Officer Name</th>' +
       '<th style="padding:8px 10px; text-align:left; color:#475569;">Manager</th>' +
-      '<th style="padding:8px 10px; text-align:right; color:#475569;">Target (â‚¹)</th>' +
-      '<th style="padding:8px 10px; text-align:right; color:#475569;">Projection (â‚¹)</th>' +
+      '<th style="padding:8px 10px; text-align:right; color:#475569;">Target (₹)</th>' +
+      '<th style="padding:8px 10px; text-align:right; color:#475569;">Projection (₹)</th>' +
       '</tr></thead><tbody>';
 
     var filtered = cachedData.records.filter(function(r) {
@@ -2971,12 +2971,12 @@
 
     Promise.all(promiseQueue)
       .then(function() {
-        if (btn) { btn.disabled = false; btn.textContent = "ðŸ’¾ Save All Month Targets"; }
+        if (btn) { btn.disabled = false; btn.textContent = "💾 Save All Month Targets"; }
         closeMonthTargetModal();
         loadLeaderboard(selectedDateStr);
       })
       .catch(function(err) {
-        if (btn) { btn.disabled = false; btn.textContent = "ðŸ’¾ Save All Month Targets"; }
+        if (btn) { btn.disabled = false; btn.textContent = "💾 Save All Month Targets"; }
         closeMonthTargetModal();
         loadLeaderboard(selectedDateStr);
       });
@@ -3002,10 +3002,10 @@
   // NATIVE OS & MOBILE NOTIFICATIONS ENGINE (PC, Android, iOS)
   // -------------------------------------------------------------
   var NOTIF_PERIODS = [
-    { key: 'slot_1100', time: '11:00', name: 'â° 11:00 AM Collection Update', msg: '11:00 AM collection update! Please update Today collection amounts for all callers.' },
-    { key: 'slot_1430', time: '14:30', name: 'â° 2:30 PM Collection Update', msg: '2:30 PM review! Please record receipts and midday collection progress.' },
-    { key: 'slot_1600', time: '16:00', name: 'â° 4:00 PM Collection Update', msg: '4:00 PM afternoon push! Please update pending amounts and balances.' },
-    { key: 'slot_1820', time: '18:20', name: 'ðŸš¨ 6:20 PM Shift Closing Sign-off', msg: 'Shift closing! Finalize all Today amounts in Google Sheet before leaving.' }
+    { key: 'slot_1100', time: '11:00', name: '⏰ 11:00 AM Collection Update', msg: '11:00 AM collection update! Please update Today collection amounts for all callers.' },
+    { key: 'slot_1430', time: '14:30', name: '⏰ 2:30 PM Collection Update', msg: '2:30 PM review! Please record receipts and midday collection progress.' },
+    { key: 'slot_1600', time: '16:00', name: '⏰ 4:00 PM Collection Update', msg: '4:00 PM afternoon push! Please update pending amounts and balances.' },
+    { key: 'slot_1820', time: '18:20', name: '🚨 6:20 PM Shift Closing Sign-off', msg: 'Shift closing! Finalize all Today amounts in Google Sheet before leaving.' }
   ];
 
   var _swReg = null;
@@ -3052,7 +3052,7 @@
     }
     Notification.requestPermission().then(function(perm) {
       if (perm === 'granted') {
-        triggerNativeOSNotification('ðŸ”” Native Notifications Enabled!', 'You will now receive native alerts on your PC and mobile for morning, afternoon, evening, and 6:20 PM.');
+        triggerNativeOSNotification('🔔 Native Notifications Enabled!', 'You will now receive native alerts on your PC and mobile for morning, afternoon, evening, and 6:20 PM.');
       } else {
         alert("Notifications were blocked. Please enable them in your browser/device site settings to receive native alerts.");
       }
@@ -3145,7 +3145,7 @@
     if (titleElem) titleElem.textContent = period.name || 'Collection Update Required';
     if (msgElem) msgElem.textContent = period.msg || "Please record and update today's collections.";
     if (badgeElem) badgeElem.textContent = period.time ? (period.time + ' Shift Reminder') : 'Scheduled Alert';
-    if (iconElem) iconElem.textContent = (period.time === '18:20') ? 'ðŸš¨' : 'â°';
+    if (iconElem) iconElem.textContent = (period.time === '18:20') ? '🚨' : '⏰';
 
     modal.style.display = 'flex';
     playNotificationChime();
@@ -3164,7 +3164,7 @@
         showCollectionAlertModal({
           key: _lastAlertPeriod.key,
           time: _lastAlertPeriod.time,
-          name: 'â° ' + (_lastAlertPeriod.name || 'Collection Reminder') + ' (Snoozed)',
+          name: '⏰ ' + (_lastAlertPeriod.name || 'Collection Reminder') + ' (Snoozed)',
           msg: _lastAlertPeriod.msg || "Please finalize today's collections."
         });
       }
@@ -3211,7 +3211,7 @@
     triggerNotificationAlert({
       key: 'test',
       time: 'Test',
-      name: 'â° Collection Update Required',
+      name: '⏰ Collection Update Required',
       msg: 'Alert Test: Please record and finalize all collection amounts for today!'
     });
   }
