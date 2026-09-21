@@ -1057,17 +1057,12 @@
   // If running this file locally, leave it as "" to use the instant local test engine.
   // Or paste your Google Apps Script Web App URL (ending in /exec) to connect live:
   // =================================================================================
-  // 🔴 CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE 🔴
+  // 🔴 CONFIGURATION: GOOGLE APPS SCRIPT WEB APP URL (Hardcoded in file)
   // =================================================================================
-  // 👉 Deploy your Code.gs as Web App (Deploy > New deployment > Web app > Anyone)
-  // 👉 Paste the deployment URL below:
-  var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwXYxCygqDiy1fOeC12vsKbKy9yBuxupdZwSlyAzpfWAhKDgGwcok_3UBbNaAfZDqtG/exec"; 
-  // 👉 If left blank or unreachable, the dashboard runs 100% offline in instant standalone mode!
+  var LIVE_GOOGLE_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxh58uWrwdk3eNHc1P7cO_NWu84dG5kU7b7MRXodSeGv5X49cd06uJAkUc4_P7UxWiA/exec";
   // =================================================================================
 
-    function getApiUrl() {
-    var stored = safeStorage.getItem('shaha_custom_api_url');
-    if (stored !== null) return stored.trim();
+  function getApiUrl() {
     return (LIVE_GOOGLE_WEB_APP_URL || '').trim();
   }
 
@@ -1084,56 +1079,59 @@
       dot.style.background = '#22c55e';
       txt.textContent = customMsg || '🟢 Live Synced';
     } else {
-      var url = getApiUrl();
-      var isOrgRestricted = url.indexOf('/a/macros/') !== -1;
-      
-      if (customMsg) {
+      if (customMsg && customMsg.indexOf('🔴') !== -1) {
         pill.style.background = '#3b1219';
         pill.style.color = '#f87171';
         pill.style.border = '1px solid #991b1b';
         dot.style.background = '#ef4444';
         txt.textContent = customMsg;
-      } else if (isOrgRestricted) {
-        pill.style.background = '#3b1219';
-        pill.style.color = '#f87171';
-        pill.style.border = '1px solid #991b1b';
-        dot.style.background = '#ef4444';
-        txt.textContent = '🔴 Set Access to "Anyone"';
-      } else if (url) {
+      } else if (customMsg && customMsg.indexOf('Checking') !== -1) {
         pill.style.background = '#1e293b';
         pill.style.color = '#fbbf24';
         pill.style.border = '1px solid #78350f';
         dot.style.background = '#f59e0b';
-        txt.textContent = '🟡 Reconnecting...';
+        txt.textContent = customMsg;
       } else {
         pill.style.background = '#1e293b';
         pill.style.color = '#94a3b8';
         pill.style.border = '1px solid #334155';
         dot.style.background = '#94a3b8';
-        txt.textContent = '🟠 Standalone Mode';
+        txt.textContent = customMsg || '🟠 Standalone Mode';
       }
     }
   }
 
   function promptConfigureApi() {
-    var current = getApiUrl();
-    var isOrgRestricted = current.indexOf('/a/macros/') !== -1;
-    
-    var msg = "GOOGLE SHEET API CONFIGURATION:\n\nPaste your Apps Script Web App URL below:\n(Make sure 'Who has access' is set to 'Anyone')\nOr leave blank for Standalone Mode:";
-      
-    var val = prompt(msg, current);
-    if (val !== null) {
-      safeStorage.setItem('shaha_custom_api_url', val.trim());
-      updateSyncBadge(false);
-      if (val.trim()) {
-        callApi('ping', {})
-          .then(function() { alert("Connected successfully to Google Sheet!"); })
-          .catch(function() { 
-            alert("Could not connect to this URL. Verify that 'Who has access' is set to 'Anyone' in your Apps Script deployment."); 
-          });
-      }
-      loadLeaderboard(selectedDateStr);
+    var isLive = (document.getElementById('cloudSyncText') && document.getElementById('cloudSyncText').textContent.indexOf('Live') !== -1);
+    if (isLive) {
+      alert("✅ Google Sheet Connection: ACTIVE\n\nAll collection numbers sync directly to your Google Sheet in real-time.");
+    } else {
+      alert("ℹ️ Status: STANDALONE MODE\n\nThe dashboard is working normally in offline/demo mode with all 65 callers.\n\nTo enable live Google Sheet sync, set 'Who has access: Anyone' in your Apps Script deployment.");
+      checkLiveBackendStatus();
     }
+  }
+
+  function checkLiveBackendStatus() {
+    if (!LIVE_GOOGLE_WEB_APP_URL) {
+      updateSyncBadge(false, '🟠 Standalone Mode');
+      return;
+    }
+    updateSyncBadge(false, '🟡 Checking Sync...');
+    callApi('ping', {})
+      .then(function(res) {
+        if (res && (res.status === 'ok' || res.success)) {
+          updateSyncBadge(true, '🟢 Live Synced');
+        } else {
+          updateSyncBadge(false, '🟠 Standalone Mode');
+        }
+      })
+      .catch(function(err) {
+        if (err && err.message && (err.message.indexOf('Anyone') !== -1 || err.message.indexOf('Access restricted') !== -1 || err.message.indexOf('401') !== -1)) {
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
+        } else {
+          updateSyncBadge(false, '🟠 Standalone Mode');
+        }
+      });
   }
 
   function callApi(action, payload) {
@@ -1141,11 +1139,6 @@
       var apiUrl = getApiUrl();
       if (!apiUrl || apiUrl.indexOf('http') !== 0) {
         return reject(new Error("No live API URL configured"));
-      }
-      
-      if (apiUrl.indexOf('/a/macros/') !== -1) {
-        updateSyncBadge(false, '🔴 Set Access to "Anyone"');
-        console.warn("API URL is restricted to Google Workspace domain. Please set 'Who has access' to 'Anyone' in Deploy settings.");
       }
 
       var fullData = Object.assign({ action: action }, payload || {});
@@ -1156,26 +1149,29 @@
         body: JSON.stringify(fullData)
       })
       .then(function(res) {
+        if (res.status === 401 || res.status === 403) {
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
+          throw new Error("HTTP " + res.status + " Unauthorized. Deployment needs 'Who has access: Anyone'.");
+        }
         return res.text();
       })
       .then(function(rawText) {
         if (rawText.indexOf('<!DOCTYPE') !== -1 || rawText.indexOf('<html') !== -1) {
           if (rawText.indexOf('ServiceLogin') !== -1 || rawText.indexOf('accounts.google.com') !== -1) {
-            updateSyncBadge(false, '🔴 Set Access to "Anyone"');
-            throw new Error("Access restricted by Google Workspace. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
+            updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
+            throw new Error("Access restricted. In Apps Script: Deploy > Manage deployments > Edit > Who has access: Anyone.");
           }
-          throw new Error("Received HTML instead of JSON: " + rawText.slice(0, 80));
+          throw new Error("Received HTML instead of JSON");
         }
         var data = JSON.parse(rawText);
-        updateSyncBadge(true);
+        updateSyncBadge(true, '🟢 Live Synced');
         resolve(data);
       })
       .catch(function(err) {
-        console.warn("API Call Warning (" + action + "):", err.message);
-        if (err.message && err.message.indexOf('Anyone') !== -1) {
-          updateSyncBadge(false, '🔴 Set Access to "Anyone"');
+        if (err && err.message && (err.message.indexOf('Anyone') !== -1 || err.message.indexOf('Unauthorized') !== -1)) {
+          updateSyncBadge(false, '🔴 Sheet Needs Access: Anyone');
         } else {
-          updateSyncBadge(false);
+          updateSyncBadge(false, '🟠 Standalone Mode');
         }
         reject(err);
       });
