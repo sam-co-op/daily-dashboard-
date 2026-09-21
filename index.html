@@ -549,27 +549,35 @@
     }
 
     /* -------------------------------------------------------------
-       ALWAYS ON DISPLAY (AOD) / FLOOR DISPLAY MODE (Strictly hidden)
+       ALWAYS ON DISPLAY (AOD) / FLOOR DISPLAY MODE (White Theme)
+       Spatial Depth, Floating Elevation & Glassmorphism Design
        ------------------------------------------------------------- */
     #aodDisplayScreen {
       position: fixed;
       inset: 0;
-      background: #080c14;
-      color: #f8fafc;
+      background: radial-gradient(circle at 50% 0%, #fffbf0 0%, #f8fafc 45%, #f1f5f9 100%);
+      color: #0f172a;
       z-index: 99999;
       display: none;
       flex-direction: column;
       overflow-y: auto;
-      padding: 24px 32px;
+      padding: 24px 36px;
       box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
+
+    /* Floating Glass Header */
     .aod-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 14px 24px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 18px;
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 10px 30px -5px rgba(26, 8, 38, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
       margin-bottom: 24px;
     }
     .aod-brand {
@@ -577,21 +585,15 @@
       align-items: center;
       gap: 12px;
     }
-    .aod-brand-name {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: #fff;
-    }
     .aod-badge {
-      background: rgba(34, 197, 94, 0.15);
-      border: 1px solid rgba(34, 197, 94, 0.3);
-      color: #4ade80;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #15803d;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
       letter-spacing: 0.05em;
     }
     .aod-controls {
@@ -599,124 +601,196 @@
       align-items: center;
       gap: 12px;
     }
-    .aod-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      color: #cbd5e1;
+    .aod-pulse-indicator {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #15803d;
+      background: #f0fdf4;
       padding: 6px 14px;
-      border-radius: 8px;
-      font-size: 12.5px;
+      border-radius: 20px;
+      border: 1px solid #bbf7d0;
+    }
+    .aod-pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: aodPulse 2s infinite;
+    }
+    @keyframes aodPulse {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .aod-btn {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #334155;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.15s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .aod-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      color: #fff;
+      background: #f8fafc;
+      border-color: #94a3b8;
+      color: #0f172a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.06);
     }
     .aod-btn-exit {
-      background: #dc2626;
-      border-color: #ef4444;
-      color: #fff;
+      background: #fff1f2;
+      border-color: #fecdd3;
+      color: #e11d48;
     }
     .aod-btn-exit:hover {
-      background: #b91c1c;
+      background: #ffe4e6;
+      border-color: #fda4af;
+      color: #be123c;
+      transform: translateY(-1px);
     }
 
-    /* Big Collection Hero Section */
+    /* Big Collection Hero Section (Floating White Glass Slab) */
     .aod-hero {
       text-align: center;
-      padding: 24px 20px 32px;
-      background: radial-gradient(circle at 50% 30%, rgba(34, 197, 94, 0.14) 0%, rgba(15, 23, 42, 0) 70%);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 38px 24px 42px;
+      background: linear-gradient(180deg, #ffffff 0%, #fffdf8 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(245, 158, 11, 0.28);
+      box-shadow: 0 24px 55px -12px rgba(26, 8, 38, 0.08), 0 4px 16px rgba(0, 0, 0, 0.02);
       margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      will-change: transform;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .aod-hero::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70%;
+      height: 75%;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.07) 0%, rgba(255, 255, 255, 0) 70%);
+      pointer-events: none;
     }
     .aod-hero-label {
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #34d399;
-      margin-bottom: 8px;
+      color: #b45309;
+      background: #fef3c7;
+      border: 1px solid #fde68a;
+      padding: 5px 16px;
+      border-radius: 20px;
+      margin-bottom: 12px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 7px;
+      box-shadow: 0 2px 6px rgba(245, 158, 11, 0.1);
     }
     .aod-hero-num {
-      font-size: clamp(48px, 7vw, 92px);
+      font-size: clamp(52px, 8vw, 98px);
       font-weight: 900;
-      color: #ffffff;
+      color: #1a0826;
       font-family: 'JetBrains Mono', monospace;
-      letter-spacing: -0.03em;
-      line-height: 1.1;
-      text-shadow: 0 0 40px rgba(52, 211, 153, 0.25);
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin: 8px 0;
+      text-shadow: 0 4px 20px rgba(26, 8, 38, 0.06);
     }
     .aod-hero-sub {
-      font-size: 13.5px;
-      color: #94a3b8;
-      margin-top: 10px;
+      font-size: 14.5px;
+      color: #64748b;
+      margin-top: 8px;
+      font-weight: 500;
     }
 
     /* Small Cards Row Below Big Number */
     .aod-cards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      gap: 18px;
       margin-bottom: 28px;
     }
     @media (max-width: 768px) {
       .aod-cards-grid { grid-template-columns: 1fr; }
     }
     .aod-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 14px;
-      padding: 18px 20px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 22px 24px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      box-shadow: 0 10px 30px -5px rgba(26, 8, 38, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+      border-left: 5px solid #1a0826;
+      will-change: transform;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
     }
+    .aod-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px -8px rgba(26, 8, 38, 0.08);
+    }
+    .aod-card.blue { border-left-color: #0284c7; }
+    .aod-card.gold { border-left-color: #f59e0b; }
+    .aod-card.green { border-left-color: #10b981; }
     .aod-card-label {
       font-size: 11.5px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: #94a3b8;
-    }
-    .aod-card-val {
-      font-size: 26px;
-      font-weight: 800;
-      font-family: 'JetBrains Mono', monospace;
-      color: #f1f5f9;
-    }
-    .aod-card-sub {
-      font-size: 12px;
       color: #64748b;
     }
+    .aod-card-val {
+      font-size: 28px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      letter-spacing: -0.02em;
+      color: #1a0826;
+    }
+    .aod-card-sub {
+      font-size: 12.5px;
+      color: #94a3b8;
+      font-weight: 500;
+    }
 
-    /* Top 5 Callers Section */
+    /* Top 5 Callers Section (Antigravity Floating Podium) */
     .aod-top5-wrap {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      border-radius: 16px;
-      padding: 22px 24px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 12px 36px -6px rgba(26, 8, 38, 0.05), 0 2px 8px rgba(0,0,0,0.02);
     }
     .aod-top5-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #f1f5f9;
     }
     .aod-top5-title {
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 15px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #f8fafc;
+      letter-spacing: 0.06em;
+      color: #1a0826;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -724,7 +798,7 @@
     .aod-top5-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
+      gap: 16px;
     }
     @media (max-width: 1024px) {
       .aod-top5-grid { grid-template-columns: repeat(2, 1fr); }
@@ -733,67 +807,83 @@
       .aod-top5-grid { grid-template-columns: 1fr; }
     }
     .aod-podium-card {
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 16px 14px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px 16px;
       display: flex;
       flex-direction: column;
       position: relative;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+      will-change: transform;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .aod-podium-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 32px -6px rgba(26, 8, 38, 0.09);
     }
     .aod-podium-card.gold {
-      border-color: rgba(234, 179, 8, 0.4);
-      background: linear-gradient(180deg, rgba(234, 179, 8, 0.1) 0%, rgba(255,255,255,0.03) 100%);
+      background: linear-gradient(180deg, #fffbeb 0%, #ffffff 100%);
+      border: 1.5px solid #f59e0b;
+      box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.2);
     }
     .aod-podium-card.silver {
-      border-color: rgba(203, 213, 225, 0.4);
-      background: linear-gradient(180deg, rgba(203, 213, 225, 0.1) 0%, rgba(255,255,255,0.03) 100%);
+      background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+      border: 1.5px solid #94a3b8;
+      box-shadow: 0 6px 18px -4px rgba(148, 163, 184, 0.2);
     }
     .aod-podium-card.bronze {
-      border-color: rgba(217, 119, 6, 0.4);
-      background: linear-gradient(180deg, rgba(217, 119, 6, 0.1) 0%, rgba(255,255,255,0.03) 100%);
+      background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+      border: 1.5px solid #d97706;
+      box-shadow: 0 6px 18px -4px rgba(217, 119, 6, 0.18);
     }
     .aod-rank-tag {
       font-size: 11px;
       font-weight: 800;
-      padding: 2px 8px;
+      padding: 3px 9px;
       border-radius: 20px;
       display: inline-block;
       align-self: flex-start;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
-    .aod-podium-card.gold .aod-rank-tag { background: #eab308; color: #000; }
-    .aod-podium-card.silver .aod-rank-tag { background: #cbd5e1; color: #000; }
-    .aod-podium-card.bronze .aod-rank-tag { background: #b45309; color: #fff; }
-    .aod-podium-card:not(.gold):not(.silver):not(.bronze) .aod-rank-tag { background: rgba(255,255,255,0.1); color: #94a3b8; }
+    .aod-podium-card.gold .aod-rank-tag { background: #f59e0b; color: #ffffff; box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35); }
+    .aod-podium-card.silver .aod-rank-tag { background: #475569; color: #ffffff; }
+    .aod-podium-card.bronze .aod-rank-tag { background: #d97706; color: #ffffff; }
+    .aod-podium-card:not(.gold):not(.silver):not(.bronze) .aod-rank-tag { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
     
     .aod-caller-name {
-      font-size: 14px;
-      font-weight: 700;
-      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-bottom: 2px;
     }
     .aod-caller-mgr {
-      font-size: 11px;
-      color: #94a3b8;
-      margin-bottom: 12px;
+      font-size: 11.5px;
+      color: #64748b;
+      font-weight: 600;
+      margin-bottom: 14px;
     }
     .aod-caller-today {
-      font-size: 18px;
-      font-weight: 800;
-      color: #34d399;
+      font-size: 20px;
+      font-weight: 900;
+      color: #047857;
       font-family: 'JetBrains Mono', monospace;
       margin-top: auto;
+      letter-spacing: -0.02em;
+    }
+    .aod-podium-card.gold .aod-caller-today {
+      color: #b45309;
     }
     .aod-caller-sub {
-      font-size: 11px;
-      color: #64748b;
-      margin-top: 2px;
+      font-size: 11.5px;
+      color: #94a3b8;
+      margin-top: 3px;
+      font-weight: 600;
     }
     .btn-aod-toggle {
       background: #f8fafc;
@@ -1180,24 +1270,26 @@
 <div id="aodDisplayScreen" style="display: none;">
   <div class="aod-header">
     <div class="aod-brand">
-      <svg viewBox="0 0 48 36" width="30" height="22.5" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
-        <defs>
-          <linearGradient id="crownGradAod" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fef08a"/>
-            <stop offset="35%" stop-color="#f59e0b"/>
-            <stop offset="100%" stop-color="#d97706"/>
-          </linearGradient>
-        </defs>
-        <path d="M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z" fill="url(#crownGradAod)"/>
-        <rect x="9" y="29.5" width="30" height="3" rx="1.5" fill="url(#crownGradAod)"/>
-      </svg>
-      <span class="aod-brand-name" style="font-weight: 800; letter-spacing: -0.02em;">Shaha Finlease</span>
+      <div class="brand-plum-badge" style="display: inline-flex; align-items: center; gap: 8px; background: #1a0826; padding: 6px 14px; border-radius: 10px; border: 1px solid rgba(245, 158, 11, 0.35); box-shadow: 0 4px 12px rgba(26, 8, 38, 0.12);">
+        <svg viewBox="0 0 48 36" width="26" height="19.5" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0;">
+          <defs>
+            <linearGradient id="crownGradAod" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#fef08a"/>
+              <stop offset="35%" stop-color="#f59e0b"/>
+              <stop offset="100%" stop-color="#d97706"/>
+            </linearGradient>
+          </defs>
+          <path d="M10 27 L6 12 L17 20 L24 5 L31 20 L42 12 L38 27 Z" fill="url(#crownGradAod)"/>
+          <rect x="9" y="29.5" width="30" height="3" rx="1.5" fill="url(#crownGradAod)"/>
+        </svg>
+        <span style="color: #ffffff; font-weight: 800; font-size: 16px; letter-spacing: -0.02em;">Shaha Finlease</span>
+      </div>
       <span class="aod-badge">Live Floor Display</span>
-      <span id="aodDateText" style="color: #94a3b8; font-size: 13px; font-weight: 500; margin-left: 8px;"></span>
+      <span id="aodDateText" style="color: #64748b; font-size: 13.5px; font-weight: 600; margin-left: 4px;"></span>
     </div>
     <div class="aod-controls">
-      <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #4ade80; background: rgba(34, 197, 94, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(34, 197, 94, 0.2);">
-        <span style="width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block;"></span>
+      <div class="aod-pulse-indicator">
+        <span class="aod-pulse-dot"></span>
         <span id="aodSyncStatus">Live Pulse (30s)</span>
       </div>
       <button type="button" class="aod-btn" onclick="toggleFullscreen()"><span id="aodFsIcon">⛶</span> Fullscreen</button>
@@ -1205,10 +1297,10 @@
     </div>
   </div>
 
-  <!-- Big Hero: Today's Collection -->
+  <!-- Big Hero: Today's Collection (Antigravity Floating Slab) -->
   <div class="aod-hero">
     <div class="aod-hero-label">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
       Today's Total Collection
     </div>
     <div class="aod-hero-num" id="aodTodayVal">₹0</div>
@@ -1217,19 +1309,19 @@
 
   <!-- Small Cards Row Below Big Number -->
   <div class="aod-cards-grid">
-    <div class="aod-card">
+    <div class="aod-card blue">
       <span class="aod-card-label">Total Monthly Target</span>
-      <span class="aod-card-val" id="aodTargetVal" style="color:#60a5fa;">₹0</span>
+      <span class="aod-card-val" id="aodTargetVal" style="color:#0369a1;">₹0</span>
       <span class="aod-card-sub" id="aodTargetSub">Monthly Goal</span>
     </div>
-    <div class="aod-card">
+    <div class="aod-card gold">
       <span class="aod-card-label">Remaining Target</span>
-      <span class="aod-card-val" id="aodBalanceVal" style="color:#fbbf24;">₹0</span>
+      <span class="aod-card-val" id="aodBalanceVal" style="color:#b45309;">₹0</span>
       <span class="aod-card-sub" id="aodBalanceSub">Remaining needed to achieve 100%</span>
     </div>
-    <div class="aod-card">
+    <div class="aod-card green">
       <span class="aod-card-label">Month-to-Date Collections</span>
-      <span class="aod-card-val" id="aodTotalVal" style="color:#34d399;">₹0</span>
+      <span class="aod-card-val" id="aodTotalVal" style="color:#047857;">₹0</span>
       <span class="aod-card-sub" id="aodTotalSub">0% target completed</span>
     </div>
   </div>
@@ -1240,7 +1332,7 @@
       <div class="aod-top5-title">
         <span>🏆</span> Top 5 Callers of the Day
       </div>
-      <span style="font-size: 12px; color: #94a3b8;">Ranked by Today's Collections</span>
+      <span style="font-size: 12.5px; color: #64748b; font-weight: 600;">Ranked by Today's Collections</span>
     </div>
     <div class="aod-top5-grid" id="aodTop5Container">
       <!-- 5 Podium Cards dynamically rendered here -->
@@ -1282,11 +1374,12 @@
 
   <!-- Toolbar: Day-by-Day Filter & Controls -->
   <div class="toolbar">
-    <div class="filter-group">
+    <div class="filter-group" id="dateControlsArea">
       <span class="filter-label">Date:</span>
       <button type="button" class="btn-pill" id="btnToday" onclick="selectDate('today')">Today</button>
       <button type="button" class="btn-pill" id="btnYesterday" onclick="selectDate('yesterday')">Yesterday</button>
       <input type="date" id="datePicker" class="input-date" onchange="onDateChanged()">
+      <span id="dateLockedNotice" style="display:none; font-size:12px; font-weight:600; color:#64748b; background:#f1f5f9; padding:4px 10px; border-radius:6px; border:1px solid #e2e8f0;">Today's Shift (Locked)</span>
     </div>
 
     <div class="filter-group" id="adminControlsArea" style="display:none;">
@@ -1782,8 +1875,10 @@
         if (navName) navName.textContent = currentSession.user.displayName;
 
         var adminArea = document.getElementById('adminControlsArea');
+        var r = currentSession.user.role ? currentSession.user.role.toLowerCase() : '';
+        var isManagerOrAbove = (r === 'admin' || r === 'mis' || r === 'editor' || r === 'manager');
+
         if (adminArea) {
-          var r = currentSession.user.role ? currentSession.user.role.toLowerCase() : '';
           var canFilter = (r === 'admin' || r === 'mis' || r === 'editor' || (r === 'viewer' && currentSession.user.managerKey === 'all'));
           adminArea.style.display = canFilter ? 'flex' : 'none';
           
@@ -1791,6 +1886,21 @@
           adminButtons.forEach(function(b) {
             b.style.display = (r === 'admin' || r === 'mis') ? '' : 'none';
           });
+        }
+
+        // Option A: Restrict date picker access to Managers and Admins only
+        var btnYesterday = document.getElementById('btnYesterday');
+        var datePicker = document.getElementById('datePicker');
+        var dateNotice = document.getElementById('dateLockedNotice');
+
+        if (!isManagerOrAbove) {
+          if (btnYesterday) btnYesterday.style.display = 'none';
+          if (datePicker) datePicker.style.display = 'none';
+          if (dateNotice) dateNotice.style.display = 'inline-block';
+        } else {
+          if (btnYesterday) btnYesterday.style.display = '';
+          if (datePicker) datePicker.style.display = '';
+          if (dateNotice) dateNotice.style.display = 'none';
         }
       }
 
@@ -2412,6 +2522,12 @@
 
   // Date Controls
   function selectDate(type) {
+    var r = (currentSession && currentSession.user && currentSession.user.role) ? currentSession.user.role.toLowerCase() : '';
+    var isManagerOrAbove = (r === 'admin' || r === 'mis' || r === 'editor' || r === 'manager');
+    if (!isManagerOrAbove && type !== 'today') {
+      alert("Date access is restricted to Managers and Admins. You are currently viewing Today's live records.");
+      return;
+    }
     var d = new Date();
     if (type === 'yesterday') {
       d.setDate(d.getDate() - 1);
@@ -2427,7 +2543,16 @@
   }
 
   function onDateChanged() {
+    var r = (currentSession && currentSession.user && currentSession.user.role) ? currentSession.user.role.toLowerCase() : '';
+    var isManagerOrAbove = (r === 'admin' || r === 'mis' || r === 'editor' || r === 'manager');
+    var today = getTodayString();
     var val = document.getElementById('datePicker').value;
+    if (!isManagerOrAbove && val !== today) {
+      alert("Date access is restricted to Managers and Admins. Reverting to Today's shift.");
+      document.getElementById('datePicker').value = today;
+      loadLeaderboard(today);
+      return;
+    }
     if (val) loadLeaderboard(val);
   }
 
