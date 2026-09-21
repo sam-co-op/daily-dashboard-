@@ -2021,15 +2021,39 @@
 
   function loadLeaderboard(dateStr) {
     var loadBar = document.getElementById('tableLoadingBar');
-    if (loadBar) {
-      loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
+
+    // ── Optimistic Instant Render (localStorage cache) ─────────────────────────
+    // If we have previously fetched data for this date, render it immediately
+    // so the user sees something useful instead of a blank loading bar.
+    var cacheKey = 'shaha_lb_' + dateStr;
+    var staleRaw = safeStorage.getItem(cacheKey);
+    if (staleRaw) {
+      try {
+        var staleData = JSON.parse(staleRaw);
+        if (staleData && staleData.records) {
+          cachedData = staleData;
+          renderLeaderboard();
+          // Show a subtle "Refreshing..." badge instead of full loading bar
+          if (loadBar) {
+            loadBar.innerHTML = '<span style="font-size:11px;color:#64748b;padding:4px 10px;background:#f1f5f9;border-radius:20px;display:inline-block;">🔄 Refreshing data...</span>';
+          }
+        }
+      } catch(e) {}
+    } else {
+      // No cache: show full shimmer bar
+      if (loadBar) {
+        loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
+      }
     }
+    // ───────────────────────────────────────────────────────────────────────────
 
     callApi('getLeaderboard', { date: dateStr, userSession: currentSession })
       .then(function(data) {
         if (loadBar) loadBar.innerHTML = '';
         if (data && data.records) {
           cachedData = data;
+          // Persist to localStorage so next load is instant
+          try { safeStorage.setItem(cacheKey, JSON.stringify(data)); } catch(e) {}
           renderLeaderboard();
         } else {
           showLiveTableError((data && data.error) || "No records returned from Google Sheet.");
@@ -2037,7 +2061,12 @@
       })
       .catch(function(err) {
         if (loadBar) loadBar.innerHTML = '';
-        showLiveTableError("Live connection failed: " + err.message);
+        // If we already rendered stale data, don't wipe it — just show error badge
+        if (staleRaw) {
+          if (loadBar) loadBar.innerHTML = '<span style="font-size:11px;color:#b91c1c;padding:4px 10px;background:#fef2f2;border-radius:20px;display:inline-block;">⚠️ Could not refresh — showing last saved data</span>';
+        } else {
+          showLiveTableError("Live connection failed: " + err.message);
+        }
       });
   }
 
