@@ -1,0 +1,2323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Collection Leaderboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --navy-dark: #002244;
+      --navy-blue: #0b3966;
+      --navy-light: #164e87;
+      --header-gold: #fbbf24;
+      --card-bg: #ffffff;
+      --bg: #f1f5f9;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body, button, input, select, textarea {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .font-mono, .cell-today, .input-date, .cooldown-pill {
+      font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace;
+    }
+    @keyframes shimmerLoad {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(250%); }
+    }
+    .loading-shimmer-bar {
+      height: 3px;
+      width: 40%;
+      background: linear-gradient(90deg, #38bdf8, #2563eb, #38bdf8);
+      border-radius: 2px;
+      animation: shimmerLoad 1s infinite ease-in-out;
+    }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* Top App Navigation */
+    .navbar {
+      background: linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-blue) 100%);
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .brand-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: var(--header-gold);
+      color: #78350f;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+    .local-mode-tag {
+      background: #3b82f6;
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .user-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+    }
+    .cooldown-pill {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .cooldown-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; }
+
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.2);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-logout:hover { background: #ef4444; color: white; }
+
+    /* Action Toolbar (Date Filter & Team Scoping) */
+    .toolbar {
+      max-width: 1380px;
+      margin: 20px auto 14px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--navy-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .input-date, .select-manager {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      outline: none;
+    }
+    .btn-pill {
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-pill:hover, .btn-pill.active {
+      background: var(--navy-blue);
+      color: white;
+      border-color: var(--navy-blue);
+    }
+    .btn-admin {
+      background: #0284c7;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-admin:hover { background: #0369a1; }
+
+    /* Leaderboard Container */
+    .leaderboard-wrapper {
+      max-width: 1380px;
+      margin: 0 auto 40px;
+      padding: 0 20px;
+    }
+    .table-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0, 34, 68, 0.08);
+      border: 2px solid var(--navy-blue);
+      max-height: calc(100vh - 190px);
+      min-height: 400px;
+      overflow-y: auto;
+      overflow-x: auto;
+      position: relative;
+    }
+
+    /* Sleek Modern Scrollbars */
+    .table-card::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .table-card::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 4px;
+    }
+    .table-card::-webkit-scrollbar-thumb {
+      background: #94a3b8;
+      border-radius: 4px;
+    }
+    .table-card::-webkit-scrollbar-thumb:hover {
+      background: #64748b;
+    }
+
+    /* Table Styles matching user screenshot */
+    table.leaderboard-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      font-size: 13px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    
+    /* Super Header - Sticky at Top */
+    .table-super-header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: #092e54;
+      color: #facc15;
+      font-size: 16px;
+      font-weight: 800;
+      padding: 12px;
+      text-align: center;
+      letter-spacing: 0.03em;
+      border-bottom: 2px solid #061c33;
+    }
+
+    /* Column Headers - Sticky below Super Header */
+    thead th {
+      position: sticky;
+      top: 45px;
+      z-index: 25;
+      background-color: #1e3a5f;
+      color: #ffffff;
+      font-weight: 700;
+      padding: 10px 8px;
+      border-right: 1px solid #33537a;
+      border-bottom: 1px solid #33537a;
+      border-top: 1px solid #33537a;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+    thead th:first-child { border-left: 1px solid #33537a; }
+    thead th.col-officer {
+      text-align: left;
+      padding-left: 14px;
+      min-width: 170px;
+    }
+    thead th.col-blue { background-color: #0284c7; }
+
+    /* Rows */
+    tbody tr {
+      border-bottom: 1px solid #94a3b8;
+      background: #f8fafc;
+    }
+    tbody tr:nth-child(even) {
+      background: #f1f5f9;
+    }
+    tbody td {
+      padding: 8px 10px;
+      border: 1px solid #94a3b8;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #0f172a;
+    }
+    tbody td.cell-officer {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      text-align: left;
+      padding-left: 14px;
+      color: #000;
+    }
+    tbody td.cell-today {
+      background: #fffbeb;
+      font-weight: 800;
+      color: #b45309;
+      cursor: pointer;
+    }
+    tbody td.cell-today:hover {
+      background: #fef3c7;
+      text-decoration: underline;
+    }
+
+    /* Heatmap styling matching the uploaded image */
+    .heat-green { background-color: #a7f3d0 !important; color: #064e3b !important; font-weight: 800; }
+    .heat-olive { background-color: #d9f99d !important; color: #365314 !important; font-weight: 800; }
+    .heat-amber { background-color: #fde68a !important; color: #78350f !important; font-weight: 800; }
+    .heat-orange { background-color: #fed7aa !important; color: #7c2d12 !important; font-weight: 800; }
+    .heat-red { background-color: #fca5a5 !important; color: #7f1d1d !important; font-weight: 800; }
+
+    .rank-1 { background-color: #86efac !important; font-weight: 800; color: #000; }
+    .rank-2 { background-color: #bef264 !important; font-weight: 800; color: #000; }
+    .rank-3 { background-color: #eab308 !important; font-weight: 800; color: #000; }
+    .rank-4 { background-color: #f59e0b !important; font-weight: 800; color: #000; }
+    .rank-low { background-color: #ef4444 !important; font-weight: 800; color: #fff; }
+
+    /* Total Footer Row - Sticky Bottom */
+    tfoot {
+      position: sticky;
+      bottom: 0;
+      z-index: 25;
+    }
+    tfoot tr {
+      background-color: #0b3966;
+      color: #ffffff;
+      font-weight: 800;
+    }
+    tfoot td {
+      padding: 10px;
+      border-right: 1px solid #164e87;
+      border-top: 2px solid #002244;
+      border-bottom: 1px solid #164e87;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: #ffffff;
+      background-color: #0b3966;
+    }
+    tfoot td:first-child { border-left: 1px solid #164e87; }
+    tfoot td.footer-total-label {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      text-align: center;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+    }
+
+    /* Modals & Dialogs */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 16px;
+    }
+    .modal-card {
+      background: white;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 420px;
+      padding: 26px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .modal-title { font-size: 18px; font-weight: 800; color: var(--navy-dark); margin-bottom: 6px; }
+    .modal-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 6px; text-transform: uppercase; }
+    .form-group input, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
+    .btn-primary { flex: 1; background: var(--navy-blue); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 700; font-size: 14px; cursor: pointer; }
+    .btn-secondary { background: #e2e8f0; color: #334155; border: none; padding: 12px 18px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+    /* Auth Screen */
+    #loginScreen {
+      min-height: 85vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .login-box {
+      background: white;
+      border-radius: 16px;
+      padding: 36px 30px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 10px 30px rgba(0, 34, 68, 0.12);
+      border: 2px solid var(--navy-blue);
+    }
+    .login-badge {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .quick-role-btn {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      margin: 3px 2px;
+    }
+    .quick-role-btn:hover {
+      background: var(--navy-blue);
+      color: white;
+    }
+    .error-text {
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* Notification Toast Banner */
+    .notification-toast {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      background: #0f172a;
+      color: white;
+      border-left: 5px solid #fbbf24;
+      border-radius: 12px;
+      padding: 18px 22px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      z-index: 99999;
+      display: none;
+      max-width: 380px;
+      animation: toastSlideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes toastSlideIn {
+      from { transform: translateX(110%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    .toast-title { font-size: 14px; font-weight: 800; color: #fbbf24; display: flex; align-items: center; gap: 8px; }
+    .toast-msg { font-size: 13px; margin: 8px 0 14px; line-height: 1.45; color: #e2e8f0; }
+    .toast-actions { display: flex; gap: 8px; }
+    .toast-btn { background: #fbbf24; color: #78350f; border: none; padding: 7px 14px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .toast-btn:hover { background: #f59e0b; }
+    .toast-dismiss { background: rgba(255,255,255,0.15); color: #fff; border: none; padding: 7px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+    .toast-dismiss:hover { background: rgba(255,255,255,0.25); }
+  </style>
+</head>
+<body>
+
+<!-- NOTIFICATION TOAST BANNER -->
+<div id="notificationToast" class="notification-toast">
+  <div class="toast-title">
+    <span id="toastIcon">⏰</span>
+    <span id="toastTitle">Collection Reminder</span>
+  </div>
+  <div class="toast-msg" id="toastMsg">It is 6:20 PM (Before Leaving). Please finalize all caller amounts!</div>
+  <div class="toast-actions">
+    <button type="button" class="toast-btn" onclick="openFirstCallerEdit()">✏️ Update Today's Amount</button>
+    <button type="button" class="toast-dismiss" onclick="dismissNotificationToast()">Dismiss</button>
+  </div>
+</div>
+
+<!-- 1. LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="login-badge">⏰ 12-Hour Daily Session</div>
+      <span class="local-mode-tag" id="engineStatusTag">Local Test Mode</span>
+    </div>
+    <h2 style="color:var(--navy-dark); margin-bottom: 4px;">Sign In</h2>
+    <p style="color:var(--text-muted); font-size:13px; margin-bottom: 20px;">Daily Collection Leaderboard Portal</p>
+
+    <form onsubmit="event.preventDefault(); handleLogin(event); return false;" action="javascript:void(0);">
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" id="loginUser" required placeholder="e.g. satish, tejas, ambuj">
+      </div>
+      <div class="form-group">
+        <label>Password / PIN</label>
+        <input type="password" id="loginPass" required value="1234" placeholder="••••" onkeydown="if(event.key==='Enter'){event.preventDefault(); handleLogin(event);}">
+      </div>
+      <button type="button" id="loginBtn" onclick="handleLogin(event)" class="btn-primary" style="width:100%;">Sign In</button>
+      <div id="loginError" class="error-text"></div>
+    </form>
+
+    <div style="margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--border);">
+      <div style="font-size: 12px; font-weight:700; color:var(--navy-dark); margin-bottom: 6px;">⚡ Quick Fill Credentials (Password: 1234):</div>
+      <div>
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Admins:</span>
+        <button type="button" class="quick-role-btn" onclick="quickFill('satish')">Satish (Admin)</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('tejas')">Tejas (MIS)</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('samarth')">Samarth (Admin)</button>
+      </div>
+      <div style="margin-top:6px;">
+        <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Managers:</span>
+        <button type="button" class="quick-role-btn" onclick="quickFill('ambuj')">Ambuj</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('shravanti')">Shravanti</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('shweta')">Shweta</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('anuraddha')">Anuraddha</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('saroj')">Saroj</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('poonam')">Poonam</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('aditi')">Aditi</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('omkar')">Omkar</button>
+        <button type="button" class="quick-role-btn" onclick="quickFill('smita')">Smita</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2. LEADERBOARD APP SCREEN -->
+<div id="appScreen" style="display:none;">
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="brand-title">
+      <span>SHAHAFIN</span>
+      <span class="brand-badge">Daily Collection</span>
+    </div>
+    <div class="user-controls">
+      <div id="cloudSyncPill" class="cooldown-pill" style="background:#1e293b; color:#94a3b8; border:1px solid #334155; cursor:pointer;" title="Sync Status - Click to configure" onclick="promptConfigureApi()">
+        <span id="cloudSyncDot" class="cooldown-dot" style="background:#94a3b8;"></span>
+        <span id="cloudSyncText">🟠 Standalone Mode</span>
+      </div>
+      <div class="cooldown-pill">
+        <span class="cooldown-dot"></span>
+        <span id="sessionTimerText">Expires in 12h 00m</span>
+      </div>
+      <span id="navUserName" style="font-weight:700;"></span>
+      <button type="button" class="btn-logout" onclick="logout()">Sign Out</button>
+    </div>
+  </div>
+
+  <!-- Toolbar: Day-by-Day Filter & Controls -->
+  <div class="toolbar">
+    <div class="filter-group">
+      <span class="filter-label">Date Filter:</span>
+      <button type="button" class="btn-pill" id="btnToday" onclick="selectDate('today')">Today</button>
+      <button type="button" class="btn-pill" id="btnYesterday" onclick="selectDate('yesterday')">Yesterday</button>
+      <button type="button" class="btn-pill" id="btnTomorrow" onclick="selectDate('tomorrow')">+1 Day (Test Rollover)</button>
+      <input type="date" id="datePicker" class="input-date" onchange="onDateChanged()">
+    </div>
+
+    <div class="filter-group">
+      <span class="cooldown-pill" style="background:#092e54; color:#facc15; border:1px solid #1e3a5f;">
+        <span>⏰</span> <span id="currentPeriodText">Shift: Checking...</span>
+      </span>
+      <button type="button" class="btn-pill" onclick="testNotificationAlert()" title="Preview how the 6:20 PM alert looks and sounds">🔔 Test 6:20 PM Alert</button>
+    </div>
+
+    <div class="filter-group" id="adminControlsArea" style="display:none;">
+      <select id="managerFilterSelect" class="select-manager" onchange="renderLeaderboard()">
+        <option value="all">View: All Managers (Overall)</option>
+        <option value="ambuj">Ambuj</option>
+        <option value="shravanti">Shravanti</option>
+        <option value="shweta">Shweta</option>
+        <option value="anuraddha">Anuraddha</option>
+        <option value="saroj">Saroj</option>
+        <option value="poonam">Poonam</option>
+        <option value="aditi">Aditi</option>
+        <option value="omkar">Omkar</option>
+        <option value="smita">Smita</option>
+      </select>
+      <button type="button" class="btn-admin" onclick="openAddCallerModal()">+ Add Caller</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard Table Container -->
+  <div class="leaderboard-wrapper">
+    <div class="table-card">
+      <div class="table-super-header" id="tableHeaderTitle">
+        Daily Collection Leaderboard
+      </div>
+      <div id="tableLoadingBar" style="height:3px; width:100%; background:transparent; overflow:hidden; position:relative;"></div>
+
+      <table class="leaderboard-table">
+        <thead>
+          <tr id="tableHeadRow">
+            <th style="width: 50px;">Sr. NO</th>
+            <th class="col-officer">OFFICER'S NAME</th>
+            <th class="col-blue">TARGET 100%</th>
+            <th>AOY</th>
+            <th style="background:#b45309;">TODAY ✏️</th>
+            <th>TOTAL</th>
+            <th>BALANCE</th>
+            <th>PROJECTION</th>
+            <th style="background:#047857;">ACHIEVED%</th>
+            <th style="width: 60px;">RANK</th>
+            <th id="thAdminAction" style="width: 75px; background:#0284c7; display:none;">EDIT</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="10" style="padding:40px; color:#64748b;">Loading records...</td></tr>
+        </tbody>
+        <tfoot id="tableFoot"></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 3. EDIT TODAY AMOUNT MODAL -->
+<div id="editTodayModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3 class="modal-title">Update Today's Collection</h3>
+    <p class="modal-subtitle" id="editModalSubtitle">Officer Name</p>
+
+    <form onsubmit="handleSaveToday(event)">
+      <div class="form-group">
+        <label>Today Collection Amount (₹)</label>
+        <input type="number" step="1" id="editTodayInput" required placeholder="e.g. 25000">
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:16px;">
+        <button type="button" class="btn-pill" onclick="adjustAmount(5000)">+5,000</button>
+        <button type="button" class="btn-pill" onclick="adjustAmount(10000)">+10,000</button>
+        <button type="button" class="btn-pill" onclick="adjustAmount(25000)">+25,000</button>
+        <button type="button" class="btn-pill" onclick="setZero()">Reset 0</button>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+        <button type="submit" id="saveTodayBtn" class="btn-primary">Update Amount</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+
+<!-- 5. ADMIN FULL ROW EDIT MODAL -->
+<div id="adminFullEditModal" class="modal-overlay">
+  <div class="modal-card" style="max-width: 480px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+      <h3 class="modal-title">Admin: Edit Officer Record</h3>
+      <span class="brand-badge" style="background:#0284c7; color:white;">Admin Mode</span>
+    </div>
+    <p class="modal-subtitle">Modify any field for this caller</p>
+
+    <form onsubmit="handleAdminSaveCaller(event)">
+      <input type="hidden" id="adminOrigOfficerName">
+      
+      <div class="form-group">
+        <label>Officer Name</label>
+        <input type="text" id="adminEditName" required>
+      </div>
+
+      <div class="form-group">
+        <label>Assigned Manager</label>
+        <select id="adminEditManager" required>
+          <option value="ambuj">Ambuj</option>
+          <option value="shravanti">Shravanti</option>
+          <option value="shweta">Shweta</option>
+          <option value="anuraddha">Anuraddha</option>
+          <option value="saroj">Saroj</option>
+          <option value="poonam">Poonam</option>
+          <option value="aditi">Aditi</option>
+          <option value="omkar">Omkar</option>
+          <option value="smita">Smita</option>
+        </select>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label>Target 100% (₹)</label>
+          <input type="number" id="adminEditTarget" required>
+        </div>
+        <div class="form-group">
+          <label>AOY (As Of Yesterday) (₹)</label>
+          <input type="number" id="adminEditAoy" required>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+        <div class="form-group">
+          <label>Today Collection (₹)</label>
+          <input type="number" id="adminEditToday" required>
+        </div>
+        <div class="form-group">
+          <label>Projection (₹)</label>
+          <input type="number" id="adminEditProjection" required>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <button type="button" class="btn-secondary" onclick="closeAdminFullEditModal()">Cancel</button>
+        <div style="display:flex; gap:8px;">
+          <button type="button" class="btn-secondary" style="background:#fee2e2; color:#dc2626;" onclick="handleAdminDeactivate()">Deactivate</button>
+          <button type="submit" id="adminSaveBtn" class="btn-primary" style="background:#0284c7;">Save All Changes</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- 4. ADMIN ADD CALLER MODAL -->
+<div id="addCallerModal" class="modal-overlay">
+  <div class="modal-card">
+    <h3 class="modal-title">Add Collection Officer</h3>
+    <p class="modal-subtitle">Add a new caller to the leaderboard</p>
+
+    <form onsubmit="handleAddCaller(event)">
+      <div class="form-group">
+        <label>Officer's Full Name</label>
+        <input type="text" id="newOfficerName" required placeholder="e.g. RAHUL S.">
+      </div>
+      <div class="form-group">
+        <label>Assigned Manager</label>
+        <select id="newOfficerMgr" required>
+          <option value="ambuj">Ambuj</option>
+          <option value="shravanti">Shravanti</option>
+          <option value="shweta">Shweta</option>
+          <option value="anuraddha">Anuraddha</option>
+          <option value="saroj">Saroj</option>
+          <option value="poonam">Poonam</option>
+          <option value="aditi">Aditi</option>
+          <option value="omkar">Omkar</option>
+          <option value="smita">Smita</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Target 100% (₹)</label>
+        <input type="number" id="newOfficerTarget" required placeholder="250000">
+      </div>
+      <div class="form-group">
+        <label>Opening AOY (₹)</label>
+        <input type="number" id="newOfficerAoy" value="0">
+      </div>
+      <div class="form-group">
+        <label>Projection (₹)</label>
+        <input type="number" id="newOfficerProjection" value="0">
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" onclick="closeAddCallerModal()">Cancel</button>
+        <button type="submit" id="saveCallerBtn" class="btn-primary">Add Caller</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  // =================================================================================
+  // 🔴🔴🔴 OPTIONAL: PASTE YOUR DEPLOYED WEB APP URL HERE 🔴🔴🔴
+  // If running this file locally, leave it as "" to use the instant local test engine.
+  // Or paste your Google Apps Script Web App URL (ending in /exec) to connect live:
+  // =================================================================================
+  // 🔴 CONFIGURATION: PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE 🔴
+  // =================================================================================
+  // 👉 Deploy your Code.gs as Web App (Deploy > New deployment > Web app > Anyone)
+  // 👉 Paste the deployment URL below:
+  var LIVE_GOOGLE_WEB_APP_URL = ""; 
+  // 👉 If left blank or unreachable, the dashboard runs 100% offline in instant standalone mode!
+  // =================================================================================
+
+  function getApiUrl() {
+    var stored = safeStorage.getItem('shaha_custom_api_url');
+    if (stored && stored.trim().indexOf('http') === 0) return stored.trim();
+    return (LIVE_GOOGLE_WEB_APP_URL || '').trim();
+  }
+
+  function updateSyncBadge(isLive, customMsg) {
+    var pill = document.getElementById('cloudSyncPill');
+    var dot = document.getElementById('cloudSyncDot');
+    var txt = document.getElementById('cloudSyncText');
+    if (!pill || !dot || !txt) return;
+
+    if (isLive) {
+      pill.style.background = '#0f2b1d';
+      pill.style.color = '#4ade80';
+      pill.style.border = '1px solid #166534';
+      dot.style.background = '#22c55e';
+      txt.textContent = customMsg || '🟢 Live Synced';
+    } else {
+      var hasUrl = !!getApiUrl();
+      pill.style.background = '#1e293b';
+      pill.style.color = hasUrl ? '#fbbf24' : '#94a3b8';
+      pill.style.border = hasUrl ? '1px solid #78350f' : '1px solid #334155';
+      dot.style.background = hasUrl ? '#f59e0b' : '#94a3b8';
+      txt.textContent = customMsg || (hasUrl ? '🟡 Reconnecting...' : '🟠 Standalone Mode');
+    }
+  }
+
+  function promptConfigureApi() {
+    var current = getApiUrl();
+    var val = prompt("Enter your Google Apps Script Web App URL to sync live with Google Sheets:\\n(Leave blank to use Standalone Offline Mode)", current);
+    if (val !== null) {
+      safeStorage.setItem('shaha_custom_api_url', val.trim());
+      updateSyncBadge(!!val.trim());
+      if (val.trim()) {
+        loadLeaderboard(selectedDateStr);
+      }
+    }
+  }
+
+  function callApi(action, payload) {
+    return new Promise(function(resolve, reject) {
+      var apiUrl = getApiUrl();
+      if (!apiUrl || apiUrl.indexOf('http') !== 0) {
+        return reject(new Error("No live API URL configured"));
+      }
+      var fullData = Object.assign({ action: action }, payload || {});
+      
+      // We use text/plain to eliminate browser CORS preflight OPTIONS check
+      fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(fullData)
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        updateSyncBadge(true);
+        resolve(data);
+      })
+      .catch(function(err) {
+        console.warn("API Call Warning (" + action + "):", err.message);
+        updateSyncBadge(false);
+        reject(err);
+      });
+    });
+  }
+
+// -------------------------------------------------------------
+  // CLIENT STATE & LOCAL DATABASE (For 100% Instant Offline Testing)
+  // -------------------------------------------------------------
+  var currentSession = null;
+  var cachedData = null;
+  var selectedDateStr = '';
+  var activeEditingOfficer = null;
+
+  var isAppsScript = (typeof google !== 'undefined' && google.script && google.script.run);
+  // Bulletproof Storage (Absorbs SecurityError in sandboxed iframes & Incognito)
+  var safeStorage = {
+    _mem: {},
+    getItem: function(k) {
+      try {
+        if (typeof window !== 'undefined' && window['local' + 'Storage']) {
+          return window['local' + 'Storage'].getItem(k);
+        }
+      } catch(e) {}
+      return this._mem[k] || null;
+    },
+    setItem: function(k, v) {
+      try {
+        if (typeof window !== 'undefined' && window['local' + 'Storage']) {
+          window['local' + 'Storage'].setItem(k, v);
+          return;
+        }
+      } catch(e) {}
+      this._mem[k] = String(v);
+    },
+    removeItem: function(k) {
+      try {
+        if (typeof window !== 'undefined' && window['local' + 'Storage']) {
+          window['local' + 'Storage'].removeItem(k);
+          return;
+        }
+      } catch(e) {}
+      delete this._mem[k];
+    }
+  };
+
+
+  // Initial Seed Data matching screenshot
+  var DEFAULT_USERS = [
+    { username: 'satish', pass: '1234', role: 'admin', displayName: 'Satish (Admin)', managerKey: 'all' },
+    { username: 'samarth', pass: '1234', role: 'admin', displayName: 'Samarth (Admin)', managerKey: 'all' },
+    { username: 'tejas', pass: '1234', role: 'mis', displayName: 'Tejas (MIS)', managerKey: 'all' },
+    { username: 'dhruv', pass: '1234', role: 'editor', displayName: 'Dhruv (Customer Service)', managerKey: 'all' },
+    { username: 'ambuj', pass: '1234', role: 'manager', displayName: 'Ambuj (Manager)', managerKey: 'ambuj' },
+    { username: 'shravanti', pass: '1234', role: 'manager', displayName: 'Shravanti (Manager)', managerKey: 'shravanti' },
+    { username: 'shweta', pass: '1234', role: 'manager', displayName: 'Shweta (Manager)', managerKey: 'shweta' },
+    { username: 'anuraddha', pass: '1234', role: 'manager', displayName: 'Anuraddha (Manager)', managerKey: 'anuraddha' },
+    { username: 'saroj', pass: '1234', role: 'manager', displayName: 'Saroj (Manager)', managerKey: 'saroj' },
+    { username: 'poonam', pass: '1234', role: 'manager', displayName: 'Poonam (Manager)', managerKey: 'poonam' },
+    { username: 'aditi', pass: '1234', role: 'manager', displayName: 'Aditi (Manager)', managerKey: 'aditi' },
+    { username: 'omkar', pass: '1234', role: 'manager', displayName: 'Omkar (Manager)', managerKey: 'omkar' },
+    { username: 'smita', pass: '1234', role: 'manager', displayName: 'Smita (Manager)', managerKey: 'smita' }
+  ];
+
+  var DEFAULT_CALLERS = [
+    {
+        "name": "Shrusti",
+        "manager": "shravanti",
+        "target": 300000,
+        "aoy": 151000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Tushar",
+        "manager": "shravanti",
+        "target": 220000,
+        "aoy": 45000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Aarti",
+        "manager": "shravanti",
+        "target": 280000,
+        "aoy": 138560,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Jyoti",
+        "manager": "shravanti",
+        "target": 250000,
+        "aoy": 121450,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Kumar",
+        "manager": "shravanti",
+        "target": 280000,
+        "aoy": 51000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "shwetha",
+        "manager": "shravanti",
+        "target": 270000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Neena R",
+        "manager": "shravanti",
+        "target": 280000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Pooja",
+        "manager": "shravanti",
+        "target": 270000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "Amrina",
+        "manager": "shravanti",
+        "target": 220000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SUHANI G.",
+        "manager": "ambuj",
+        "target": 192000,
+        "aoy": 259622,
+        "today": 0,
+        "projection": 171371
+    },
+    {
+        "name": "DARSHANA M.",
+        "manager": "ambuj",
+        "target": 300000,
+        "aoy": 350000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "RADHAKRISHNAN",
+        "manager": "ambuj",
+        "target": 226000,
+        "aoy": 149549,
+        "today": 0,
+        "projection": 194533
+    },
+    {
+        "name": "NASIRUL M.",
+        "manager": "ambuj",
+        "target": 264000,
+        "aoy": 150024,
+        "today": 21700,
+        "projection": 98109
+    },
+    {
+        "name": "VIDYA C.",
+        "manager": "ambuj",
+        "target": 403000,
+        "aoy": 165383,
+        "today": 9091,
+        "projection": 128500
+    },
+    {
+        "name": "IRAMMA U.",
+        "manager": "ambuj",
+        "target": 390000,
+        "aoy": 116242,
+        "today": 0,
+        "projection": 52756
+    },
+    {
+        "name": "SASIKALA K.",
+        "manager": "ambuj",
+        "target": 230000,
+        "aoy": 29573,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "ROOPKALA V.",
+        "manager": "ambuj",
+        "target": 275000,
+        "aoy": 28188,
+        "today": 0,
+        "projection": 55000
+    },
+    {
+        "name": "PRANJAL R.",
+        "manager": "ambuj",
+        "target": 280000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "DEVYANI V.",
+        "manager": "ambuj",
+        "target": 280000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "RUSHIKA J.",
+        "manager": "ambuj",
+        "target": 300000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "AMBUJ T.",
+        "manager": "ambuj",
+        "target": 0,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SHALINI R.",
+        "manager": "aditi",
+        "target": 190000,
+        "aoy": 96519,
+        "today": 14000,
+        "projection": 14000
+    },
+    {
+        "name": "KIRAN S",
+        "manager": "aditi",
+        "target": 190000,
+        "aoy": 90229,
+        "today": 10000,
+        "projection": 8000
+    },
+    {
+        "name": "VARSHA R",
+        "manager": "aditi",
+        "target": 199500,
+        "aoy": 62710,
+        "today": 0,
+        "projection": 14000
+    },
+    {
+        "name": "MUKESH M.",
+        "manager": "aditi",
+        "target": 200000,
+        "aoy": 52784,
+        "today": 0,
+        "projection": 5000
+    },
+    {
+        "name": "MANISH K",
+        "manager": "aditi",
+        "target": 275000,
+        "aoy": 106289,
+        "today": 2500,
+        "projection": 17000
+    },
+    {
+        "name": "PURVA S.",
+        "manager": "aditi",
+        "target": 256800,
+        "aoy": 98019,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "URMILA T.",
+        "manager": "aditi",
+        "target": 210000,
+        "aoy": 21707,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "PRIYANKA .M",
+        "manager": "aditi",
+        "target": 200000,
+        "aoy": 22825,
+        "today": 0,
+        "projection": 5000
+    },
+    {
+        "name": "DIVYA MOHITE",
+        "manager": "aditi",
+        "target": 220000,
+        "aoy": 17792,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "ADITI GAWADE",
+        "manager": "aditi",
+        "target": 0,
+        "aoy": 20032,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "KARAN S.",
+        "manager": "omkar",
+        "target": 190000,
+        "aoy": 112146,
+        "today": 0,
+        "projection": 20000
+    },
+    {
+        "name": "PRIYA S.",
+        "manager": "omkar",
+        "target": 352000,
+        "aoy": 78110,
+        "today": 14500,
+        "projection": 60000
+    },
+    {
+        "name": "MAHESHWARI.G",
+        "manager": "omkar",
+        "target": 260000,
+        "aoy": 47674,
+        "today": 0,
+        "projection": 25000
+    },
+    {
+        "name": "KALPESH G.",
+        "manager": "omkar",
+        "target": 230000,
+        "aoy": 61425,
+        "today": 14500,
+        "projection": 60000
+    },
+    {
+        "name": "NEHA",
+        "manager": "omkar",
+        "target": 210000,
+        "aoy": 24146,
+        "today": 0,
+        "projection": 12000
+    },
+    {
+        "name": "PARTH",
+        "manager": "omkar",
+        "target": 190000,
+        "aoy": 25041,
+        "today": 0,
+        "projection": 15000
+    },
+    {
+        "name": "BLANK (OMKAR)",
+        "manager": "omkar",
+        "target": 0,
+        "aoy": 25300,
+        "today": 2000,
+        "projection": 15000
+    },
+    {
+        "name": "ABHISHEK OVALE",
+        "manager": "shweta",
+        "target": 240000,
+        "aoy": 120257,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SAGAR GAONKAR",
+        "manager": "shweta",
+        "target": 250000,
+        "aoy": 149440,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "MINAJ MULLA",
+        "manager": "shweta",
+        "target": 200000,
+        "aoy": 105331,
+        "today": 11666,
+        "projection": 0
+    },
+    {
+        "name": "VIDHYA",
+        "manager": "shweta",
+        "target": 210000,
+        "aoy": 0,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "POONAM (CALLER)",
+        "manager": "shweta",
+        "target": 230000,
+        "aoy": 13000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SHWETA",
+        "manager": "shweta",
+        "target": 0,
+        "aoy": 75070,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "KALPITA RIKAME",
+        "manager": "smita",
+        "target": 265000,
+        "aoy": 210969,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "RADHIKA GUPTA",
+        "manager": "smita",
+        "target": 220000,
+        "aoy": 157660,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "YOGITA",
+        "manager": "smita",
+        "target": 240000,
+        "aoy": 127475,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SUHANA SHAIKH",
+        "manager": "smita",
+        "target": 233000,
+        "aoy": 106933,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "PRAJAKTA TIKUDVE",
+        "manager": "smita",
+        "target": 220000,
+        "aoy": 99267,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "DIPALI PATIL",
+        "manager": "smita",
+        "target": 260000,
+        "aoy": 95948,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "JAYESH SHINDE",
+        "manager": "smita",
+        "target": 180000,
+        "aoy": 65951,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "NIDHI KADAM",
+        "manager": "smita",
+        "target": 236000,
+        "aoy": 82169,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "DEEPIKA SONAR",
+        "manager": "smita",
+        "target": 155000,
+        "aoy": 53092,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "ANKITA BAVASKAR",
+        "manager": "smita",
+        "target": 170000,
+        "aoy": 28000,
+        "today": 30000,
+        "projection": 0
+    },
+    {
+        "name": "DIPALI PATTANAIK",
+        "manager": "smita",
+        "target": 253000,
+        "aoy": 83332,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "KUNAL GHOSALKAR",
+        "manager": "smita",
+        "target": 220000,
+        "aoy": 25235,
+        "today": 20000,
+        "projection": 0
+    },
+    {
+        "name": "SIDDHARTH",
+        "manager": "smita",
+        "target": 220000,
+        "aoy": 31623,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "PURSHOTTAM",
+        "manager": "smita",
+        "target": 250000,
+        "aoy": 3150,
+        "today": 16500,
+        "projection": 0
+    },
+    {
+        "name": "SUNIL",
+        "manager": "smita",
+        "target": 300000,
+        "aoy": 10000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "BLANK (SMITA)",
+        "manager": "smita",
+        "target": 0,
+        "aoy": 49000,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "KP",
+        "manager": "poonam",
+        "target": 200000,
+        "aoy": 152200,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SCUBE",
+        "manager": "poonam",
+        "target": 200000,
+        "aoy": 118284,
+        "today": 2000,
+        "projection": 0
+    },
+    {
+        "name": "Cedittriangle",
+        "manager": "poonam",
+        "target": 500000,
+        "aoy": 198980,
+        "today": 0,
+        "projection": 0
+    },
+    {
+        "name": "SETH",
+        "manager": "poonam",
+        "target": 700001,
+        "aoy": 267088,
+        "today": 11021,
+        "projection": 0
+    },
+    {
+        "name": "Kamal Infinity",
+        "manager": "poonam",
+        "target": 0,
+        "aoy": 5573,
+        "today": 0,
+        "projection": 0
+    }
+];
+
+  function bootApp() {
+    initLocalEngine();
+    checkSession();
+    initNotificationEngine();
+  }
+
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', bootApp);
+  } else {
+    bootApp();
+  }
+
+      function initLocalEngine() {
+    var CURRENT_VERSION = 'v4_shravanti_ambuj_updated';
+    if (safeStorage.getItem('shaha_teams_version') !== CURRENT_VERSION) {
+      safeStorage.setItem('shaha_local_callers', JSON.stringify(DEFAULT_CALLERS));
+      var initialSnaps = {};
+      var today = getTodayString();
+      initialSnaps[today] = JSON.parse(JSON.stringify(DEFAULT_CALLERS));
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(initialSnaps));
+      safeStorage.setItem('shaha_teams_version', CURRENT_VERSION);
+    }
+  }
+
+  function getTodayString() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  // 12-Hour Session Checker
+  function checkSession() {
+    var stored = safeStorage.getItem('shaha_session');
+    if (!stored) {
+      showLogin();
+      return;
+    }
+
+    try {
+      var sess = JSON.parse(stored);
+      var now = Date.now();
+      if (now >= sess.expiresAt) {
+        safeStorage.removeItem('shaha_session');
+        showLogin("Your 12-hour session expired. Please sign in for today's shift.");
+        return;
+      }
+      currentSession = sess;
+      startSessionTimer();
+      showApp();
+    } catch(e) {
+      showLogin();
+    }
+  }
+
+  function startSessionTimer() {
+    setInterval(function() {
+      if (!currentSession) return;
+      var remaining = currentSession.expiresAt - Date.now();
+      if (remaining <= 0) {
+        logout();
+      } else {
+        var hrs = Math.floor(remaining / (1000 * 60 * 60));
+        var mins = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+        document.getElementById('sessionTimerText').textContent = 'Expires in ' + hrs + 'h ' + mins + 'm';
+      }
+    }, 60000);
+  }
+
+  function showLogin(msg) {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('appScreen').style.display = 'none';
+    if (msg) {
+      var errBox = document.getElementById('loginError');
+      errBox.textContent = msg;
+      errBox.style.display = 'block';
+    }
+  }
+
+  function showApp() {
+    try {
+      var loginScreen = document.getElementById('loginScreen');
+      var appScreen = document.getElementById('appScreen');
+      if (loginScreen) loginScreen.style.display = 'none';
+      if (appScreen) appScreen.style.display = 'block';
+
+      if (currentSession && currentSession.user) {
+        var navName = document.getElementById('navUserName');
+        if (navName) navName.textContent = currentSession.user.displayName;
+
+        var adminArea = document.getElementById('adminControlsArea');
+        if (adminArea) {
+          if (currentSession.user.role === 'admin' || currentSession.user.role === 'mis') {
+            adminArea.style.display = 'flex';
+          } else {
+            adminArea.style.display = 'none';
+          }
+        }
+      }
+
+      var today = getTodayString();
+      var datePicker = document.getElementById('datePicker');
+      if (datePicker) datePicker.value = today;
+      selectedDateStr = today;
+
+      updateSyncBadge(false);
+      loadLeaderboard(today);
+    } catch(err) {
+      console.error("Error displaying app screen:", err);
+      alert("Error displaying leaderboard: " + err.message);
+    }
+  }
+
+    function loginLocally(match) {
+    var sess = {
+      success: true,
+      user: {
+        username: match.username,
+        displayName: match.displayName,
+        role: match.role,
+        managerKey: match.managerKey
+      },
+      expiresAt: Date.now() + (12 * 60 * 60 * 1000)
+    };
+    safeStorage.setItem('shaha_session', JSON.stringify(sess));
+    currentSession = sess;
+    showApp();
+  }
+
+  function quickFill(uname) {
+    document.getElementById('loginUser').value = uname;
+    document.getElementById('loginPass').value = '1234';
+  }
+
+  function handleLogin(e) {
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+    var uInp = document.getElementById('loginUser');
+    var pInp = document.getElementById('loginPass');
+    if (!uInp || !pInp) return;
+    var u = uInp.value.trim().toLowerCase();
+    var p = pInp.value.trim();
+    var btn = document.getElementById('loginBtn');
+    var errBox = document.getElementById('loginError');
+
+    if (!u) {
+      if (errBox) { errBox.textContent = "Please enter your username"; errBox.style.display = 'block'; }
+      return;
+    }
+
+    if (btn) {
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+    }
+    if (errBox) errBox.style.display = 'none';
+
+    // Safety timeout: never freeze on Verifying
+    setTimeout(function() {
+      if (btn && btn.disabled && btn.textContent === "Verifying...") {
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+      }
+    }, 4000);
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('login', { username: u, password: p })
+        .then(function(res) {
+          if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
+          if (res && res.success) {
+            safeStorage.setItem('shaha_session', JSON.stringify(res));
+            currentSession = res;
+            showApp();
+          } else {
+            var match = DEFAULT_USERS.find(function(usr) { return usr.username === u && usr.pass === p; });
+            if (match) {
+              loginLocally(match);
+            } else {
+              if (errBox) {
+                errBox.textContent = (res && res.message) ? res.message : "Invalid credentials. Password is 1234";
+                errBox.style.display = 'block';
+              }
+            }
+          }
+        })
+        .catch(function(err) {
+          console.warn("API login failed, checking fallback:", err);
+          if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
+          var match = DEFAULT_USERS.find(function(usr) { return usr.username === u && usr.pass === p; });
+          if (match) {
+            loginLocally(match);
+          } else {
+            if (errBox) {
+              errBox.textContent = "Offline / Credentials check: Password is 1234.";
+              errBox.style.display = 'block';
+            }
+          }
+        });
+      return;
+    }
+
+    // Local Test Authentication
+    setTimeout(function() {
+      if (btn) { btn.disabled = false; btn.textContent = "Sign In"; }
+
+      var match = DEFAULT_USERS.find(function(usr) {
+        return usr.username === u && usr.pass === p;
+      });
+
+      if (match) {
+        loginLocally(match);
+      } else {
+        if (errBox) {
+          errBox.textContent = "Invalid credentials. Try: satish, tejas, or ambuj with password: 1234";
+          errBox.style.display = 'block';
+        }
+      }
+    }, 10);
+  }
+
+  function logout() {
+    safeStorage.removeItem('shaha_session');
+    currentSession = null;
+    showLogin("Signed out successfully.");
+  }
+
+  // Client-Side In-Memory Cache for 0ms Instant Date Switching
+  var clientDateCache = {};
+
+  function loadLocalLeaderboardData(dateStr) {
+    var loadBar = document.getElementById('tableLoadingBar');
+    if (loadBar) loadBar.innerHTML = '';
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+
+    if (!snapshots[dateStr]) {
+      var allDates = Object.keys(snapshots).sort();
+      var prevDate = null;
+      for (var i = 0; i < allDates.length; i++) {
+        if (allDates[i] < dateStr) prevDate = allDates[i];
+      }
+      var prevRows = (prevDate && snapshots[prevDate] && Array.isArray(snapshots[prevDate])) ? snapshots[prevDate] : null;
+      if (!prevRows) {
+        try { prevRows = JSON.parse(safeStorage.getItem('shaha_local_callers') || 'null'); } catch(e) {}
+      }
+      if (!prevRows || !Array.isArray(prevRows)) {
+        prevRows = DEFAULT_CALLERS;
+      }
+      var newRows = prevRows.map(function(c) {
+        var prevTot = (Number(c.aoy) || 0) + (Number(c.today) || 0);
+        return {
+          name: c.name,
+          manager: c.manager,
+          target: c.target,
+          aoy: prevTot,
+          today: 0,
+          projection: c.projection
+        };
+      });
+      snapshots[dateStr] = newRows;
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+
+    var rawRows = snapshots[dateStr];
+    if (!rawRows || !Array.isArray(rawRows)) {
+      rawRows = DEFAULT_CALLERS;
+    }
+    var userRole = currentSession.user.role;
+    var userMgr = currentSession.user.managerKey;
+
+    var formatted = rawRows.filter(function(r) {
+      if (userRole === 'manager') {
+        return r.manager === userMgr;
+      }
+      return true;
+    }).map(function(r) {
+      var tgt = Number(r.target) || 0;
+      var aoy = Number(r.aoy) || 0;
+      var today = Number(r.today) || 0;
+      var tot = aoy + today;
+      var bal = tgt - tot;
+      var proj = Number(r.projection) || 0;
+      var pct = tgt > 0 ? (tot / tgt) * 100 : 0;
+      return {
+        officerName: r.name,
+        managerKey: r.manager,
+        target: tgt,
+        aoy: aoy,
+        today: today,
+        total: tot,
+        balance: bal,
+        projection: proj,
+        achievedPct: pct,
+        rank: 0
+      };
+    });
+
+    formatted.sort(function(a, b) {
+      if (b.achievedPct !== a.achievedPct) return b.achievedPct - a.achievedPct;
+      return b.total - a.total;
+    });
+
+    for (var k = 0; k < formatted.length; k++) {
+      formatted[k].rank = k + 1;
+    }
+
+    cachedData = {
+      dateStr: dateStr,
+      records: formatted,
+      userRole: userRole
+    };
+
+    renderLeaderboard();
+  }
+
+  // Load Leaderboard Data (Instant & Non-Blocking)
+  function loadLeaderboard(dateStr) {
+    selectedDateStr = dateStr;
+
+    // Show sleek top loading bar without wiping out table
+    var loadBar = document.getElementById('tableLoadingBar');
+    if (loadBar) loadBar.innerHTML = '<div class="loading-shimmer-bar"></div>';
+
+    // Only show loading text in table if table is completely empty
+    var tbody = document.getElementById('tableBody');
+    if (!tbody.hasChildNodes() || tbody.innerHTML.trim() === '') {
+      tbody.innerHTML = '<tr><td colspan="10" style="padding:40px; color:#64748b;">Loading metrics for ' + dateStr + '...</td></tr>';
+    }
+
+    // Instant Cache Hit check
+    if (clientDateCache[dateStr]) {
+      cachedData = clientDateCache[dateStr];
+      renderLeaderboard();
+      if (!isAppsScript) {
+        if (loadBar) loadBar.innerHTML = '';
+        return;
+      }
+    }
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('getLeaderboard', { date: dateStr, userSession: currentSession })
+        .then(function(data) {
+          if (loadBar) loadBar.innerHTML = '';
+          if (data && data.records && data.records.length > 0) {
+            cachedData = data;
+            clientDateCache[dateStr] = data;
+            renderLeaderboard();
+          } else {
+            loadLocalLeaderboardData(dateStr);
+          }
+        })
+        .catch(function(err) {
+          console.warn("API leaderboard query warning, using local engine:", err);
+          loadLocalLeaderboardData(dateStr);
+        });
+      return;
+    }
+
+    // Instant Local Mock / Rollover Engine
+    loadLocalLeaderboardData(dateStr);
+  }
+
+  function renderLeaderboard() {
+    if (!cachedData || !cachedData.records) return;
+
+    var monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    var dObj = new Date(selectedDateStr);
+    var dateHeaderTag = isNaN(dObj.getTime()) ? selectedDateStr : (monthNames[dObj.getMonth()] + '-' + String(dObj.getDate()).padStart(2, '0'));
+    document.getElementById('tableHeaderTitle').textContent = 'Daily Collection Leaderboard ' + dateHeaderTag;
+
+    var mgrSelect = document.getElementById('managerFilterSelect');
+    var mgrFilter = 'all';
+    if (mgrSelect && currentSession && currentSession.user && currentSession.user.role !== 'manager') {
+      mgrFilter = mgrSelect.value || 'all';
+    }
+
+    var records = cachedData.records.filter(function(r) {
+      if (!mgrFilter || mgrFilter === 'all') return true;
+      return r.managerKey === mgrFilter;
+    });
+
+    var tbody = document.getElementById('tableBody');
+    if (records.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="padding:30px; color:#64748b;">No caller records for this date/team.</td></tr>';
+      document.getElementById('tableFoot').innerHTML = '';
+      return;
+    }
+
+    var html = '';
+    var sumTgt = 0, sumAoy = 0, sumToday = 0, sumTot = 0, sumBal = 0, sumProj = 0;
+
+    for (var i = 0; i < records.length; i++) {
+      var r = records[i];
+      sumTgt += r.target;
+      sumAoy += r.aoy;
+      sumToday += r.today;
+      sumTot += r.total;
+      sumBal += r.balance;
+      sumProj += r.projection;
+
+      var pctClass = getAchievedClass(r.achievedPct);
+      var rankClass = getRankClass(i + 1);
+
+      var isAdmin = (currentSession && (currentSession.user.role === 'admin' || currentSession.user.role === 'mis'));
+      var clickAttr = isAdmin ? ' style="cursor:pointer;" title="Click to Edit (Admin)" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')"' : '';
+
+      html += '<tr>' +
+        '<td>' + (i + 1) + '</td>' +
+        '<td class="cell-officer"' + clickAttr + '>' + escapeHtml(r.officerName) + (isAdmin ? ' ✏️' : '') + '</td>' +
+        '<td style="font-weight:700;"' + clickAttr + '>' + formatNumber(r.target) + '</td>' +
+        '<td' + clickAttr + '>' + formatNumber(r.aoy) + '</td>' +
+        '<td class="cell-today" data-name="' + escapeHtml(r.officerName) + '" data-today="' + r.today + '" onclick="onCellTodayClick(this)">' + formatNumber(r.today) + '</td>' +
+        '<td style="font-weight:700;">' + formatNumber(r.total) + '</td>' +
+        '<td style="color:' + (r.balance < 0 ? '#16a34a' : '#0f172a') + ';">' + formatNumber(r.balance) + '</td>' +
+        '<td' + clickAttr + '>' + formatNumber(r.projection) + '</td>' +
+        '<td class="' + pctClass + '">' + Math.round(r.achievedPct) + '%</td>' +
+        '<td class="' + rankClass + '">' + (i + 1) + '</td>' +
+        (isAdmin ? '<td><button type="button" class="btn-pill" style="padding:4px 8px; font-size:11px; background:#0284c7; color:white; border:none;" onclick="openAdminFullEditModal(' + escapeJsArg(r.officerName) + ')">⚙️ Edit</button></td>' : '') +
+      '</tr>';
+    }
+
+    tbody.innerHTML = html;
+
+    // Footer Total Row
+    var totalAchieved = sumTgt > 0 ? Math.round((sumTot / sumTgt) * 100) : 0;
+    var isAdmin = (currentSession && (currentSession.user.role === 'admin' || currentSession.user.role === 'mis'));
+    document.getElementById('thAdminAction').style.display = isAdmin ? '' : 'none';
+
+    var footHtml = '<tr>' +
+      '<td colspan="2" class="footer-total-label">TOTAL</td>' +
+      '<td>' + formatNumber(sumTgt) + '</td>' +
+      '<td>' + formatNumber(sumAoy) + '</td>' +
+      '<td>' + formatNumber(sumToday) + '</td>' +
+      '<td>' + formatNumber(sumTot) + '</td>' +
+      '<td>' + formatNumber(sumBal) + '</td>' +
+      '<td>' + formatNumber(sumProj) + '</td>' +
+      '<td style="background:#047857; color:#fff; font-weight:800;">' + totalAchieved + '%</td>' +
+      '<td></td>' +
+      (isAdmin ? '<td></td>' : '') +
+    '</tr>';
+    document.getElementById('tableFoot').innerHTML = footHtml;
+  }
+
+  // Formatting & Heatmaps matching screenshot
+  function getAchievedClass(pct) {
+    if (pct >= 100) return 'heat-green';
+    if (pct >= 50) return 'heat-olive';
+    if (pct >= 25) return 'heat-amber';
+    if (pct >= 10) return 'heat-orange';
+    return 'heat-red';
+  }
+
+  function getRankClass(rank) {
+    if (rank === 1) return 'rank-1';
+    if (rank === 2) return 'rank-2';
+    if (rank === 3) return 'rank-3';
+    if (rank <= 6) return 'rank-4';
+    return 'rank-low';
+  }
+
+  function formatNumber(val) {
+    var n = Number(val) || 0;
+    return n.toLocaleString('en-IN');
+  }
+
+  // Date Controls
+  function selectDate(type) {
+    var d = new Date();
+    if (type === 'yesterday') {
+      d.setDate(d.getDate() - 1);
+    } else if (type === 'tomorrow') {
+      d.setDate(d.getDate() + 1);
+    }
+    var str = d.toISOString().slice(0, 10);
+    document.getElementById('datePicker').value = str;
+    loadLeaderboard(str);
+  }
+
+  function onDateChanged() {
+    var val = document.getElementById('datePicker').value;
+    if (val) loadLeaderboard(val);
+  }
+
+  // Edit Today Amount
+  function onCellTodayClick(el) {
+    var name = el.getAttribute('data-name');
+    var today = parseFloat(el.getAttribute('data-today')) || 0;
+    openEditTodayModal(name, today);
+  }
+
+  function openEditTodayModal(officerName, currentToday) {
+    activeEditingOfficer = officerName;
+    document.getElementById('editModalSubtitle').textContent = officerName;
+    document.getElementById('editTodayInput').value = currentToday || '';
+    document.getElementById('editTodayModal').style.display = 'flex';
+  }
+
+  function closeEditModal() {
+    document.getElementById('editTodayModal').style.display = 'none';
+  }
+
+  function adjustAmount(delta) {
+    var inp = document.getElementById('editTodayInput');
+    var cur = parseFloat(inp.value) || 0;
+    inp.value = cur + delta;
+  }
+
+  function setZero() {
+    document.getElementById('editTodayInput').value = 0;
+  }
+
+  function handleSaveToday(e) {
+    e.preventDefault();
+    var btn = document.getElementById('saveTodayBtn');
+    var amt = Math.max(0, parseFloat(document.getElementById('editTodayInput').value) || 0);
+
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+
+    // Optimistic Local Update
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+    if (snapshots[selectedDateStr]) {
+      for (var i = 0; i < snapshots[selectedDateStr].length; i++) {
+        if (snapshots[selectedDateStr][i].name === activeEditingOfficer) {
+          snapshots[selectedDateStr][i].today = amt;
+          break;
+        }
+      }
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+    closeEditModal();
+    loadLeaderboard(selectedDateStr);
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('updateToday', { date: selectedDateStr, officerName: activeEditingOfficer, todayAmount: amt, userSession: currentSession })
+        .then(function(res) {
+          if (res && res.data) {
+            cachedData = res.data;
+            clientDateCache[selectedDateStr] = res.data;
+            renderLeaderboard();
+          }
+        })
+        .catch(function(err) {
+          console.warn("Background sheet sync queued:", err);
+        });
+    }
+    return;
+
+    // Local Test Mode Update
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.textContent = "Update Amount";
+      var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+      if (snapshots[selectedDateStr]) {
+        for (var i = 0; i < snapshots[selectedDateStr].length; i++) {
+          if (snapshots[selectedDateStr][i].name === activeEditingOfficer) {
+            snapshots[selectedDateStr][i].today = amt;
+            break;
+          }
+        }
+        safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+      }
+      closeEditModal();
+      loadLeaderboard(selectedDateStr);
+    }, 0);
+  }
+
+  // Admin Add Caller
+  function openAddCallerModal() {
+    document.getElementById('addCallerModal').style.display = 'flex';
+  }
+
+  function closeAddCallerModal() {
+    document.getElementById('addCallerModal').style.display = 'none';
+  }
+
+  function handleAddCaller(e) {
+    e.preventDefault();
+    var btn = document.getElementById('saveCallerBtn');
+    btn.disabled = true;
+    btn.textContent = "Adding...";
+
+    var name = document.getElementById('newOfficerName').value.trim().toUpperCase();
+    var mgr = document.getElementById('newOfficerMgr').value;
+    var target = parseFloat(document.getElementById('newOfficerTarget').value) || 0;
+    var aoy = parseFloat(document.getElementById('newOfficerAoy').value) || 0;
+    var projection = parseFloat(document.getElementById('newOfficerProjection').value) || 0;
+
+    // Optimistic local add
+    var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
+    var newCaller = { name: name, manager: mgr, target: target, aoy: aoy, today: 0, projection: projection };
+    callers.push(newCaller);
+    safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
+
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+    if (snapshots[selectedDateStr]) {
+      snapshots[selectedDateStr].push(newCaller);
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+    closeAddCallerModal();
+    loadLeaderboard(selectedDateStr);
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('adminAddCaller', { callerData: { name: name, manager: mgr, target: target, aoy: aoy, projection: projection }, userSession: currentSession })
+        .catch(function(e) { console.warn("Add caller API warning:", e); });
+    }
+    return;
+
+    // Local Test Mode Add
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.textContent = "Add Caller";
+      var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
+      var newCaller = { name: name, manager: mgr, target: target, aoy: aoy, today: 0, projection: projection };
+      callers.push(newCaller);
+      safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
+
+      var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+      if (snapshots[selectedDateStr]) {
+        snapshots[selectedDateStr].push(newCaller);
+        safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+      }
+
+      closeAddCallerModal();
+      loadLeaderboard(selectedDateStr);
+    }, 0);
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+
+  // -------------------------------------------------------------
+  // ADMIN FULL FIELD EDITING
+  // -------------------------------------------------------------
+  function escapeJsArg(str) {
+    if (!str) return "''";
+    return "'" + String(str).replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "'";
+  }
+
+  function openAdminFullEditModal(officerName) {
+    if (!currentSession || (currentSession.user.role !== 'admin' && currentSession.user.role !== 'mis')) {
+      return;
+    }
+
+    var record = null;
+    if (cachedData && cachedData.records) {
+      record = cachedData.records.find(function(r) { return r.officerName === officerName; });
+    }
+
+    if (!record) {
+      alert("Could not find record for " + officerName);
+      return;
+    }
+
+    document.getElementById('adminOrigOfficerName').value = officerName;
+    document.getElementById('adminEditName').value = record.officerName;
+    document.getElementById('adminEditManager').value = record.managerKey;
+    document.getElementById('adminEditTarget').value = record.target;
+    document.getElementById('adminEditAoy').value = record.aoy;
+    document.getElementById('adminEditToday').value = record.today;
+    document.getElementById('adminEditProjection').value = record.projection;
+
+    document.getElementById('adminFullEditModal').style.display = 'flex';
+  }
+
+  function closeAdminFullEditModal() {
+    document.getElementById('adminFullEditModal').style.display = 'none';
+  }
+
+  function handleAdminSaveCaller(e) {
+    e.preventDefault();
+    var btn = document.getElementById('adminSaveBtn');
+    btn.disabled = true;
+    btn.textContent = "Saving...";
+
+    var origName = document.getElementById('adminOrigOfficerName').value;
+    var updated = {
+      name: document.getElementById('adminEditName').value.trim().toUpperCase(),
+      manager: document.getElementById('adminEditManager').value,
+      target: parseFloat(document.getElementById('adminEditTarget').value) || 0,
+      aoy: parseFloat(document.getElementById('adminEditAoy').value) || 0,
+      today: parseFloat(document.getElementById('adminEditToday').value) || 0,
+      projection: parseFloat(document.getElementById('adminEditProjection').value) || 0
+    };
+
+    // Optimistic local update
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+    if (snapshots[selectedDateStr]) {
+      for (var s = 0; s < snapshots[selectedDateStr].length; s++) {
+        if (snapshots[selectedDateStr][s].name === origName) {
+          snapshots[selectedDateStr][s] = updated;
+          break;
+        }
+      }
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+    var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
+    for (var c = 0; c < callers.length; c++) {
+      if (callers[c].name === origName) {
+        callers[c] = updated;
+        break;
+      }
+    }
+    safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
+    closeAdminFullEditModal();
+    loadLeaderboard(selectedDateStr);
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('adminUpdateCaller', { origName: origName, date: selectedDateStr, updated: updated, userSession: currentSession })
+        .catch(function(e) { console.warn("Admin update caller API warning:", e); });
+    }
+    return;
+
+    // Local Test Mode Update
+    setTimeout(function() {
+      btn.disabled = false;
+      btn.textContent = "Save All Changes";
+
+      // 1. Update Snapshot
+      var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+      if (snapshots[selectedDateStr]) {
+        for (var i = 0; i < snapshots[selectedDateStr].length; i++) {
+          if (snapshots[selectedDateStr][i].name === origName) {
+            snapshots[selectedDateStr][i] = updated;
+            break;
+          }
+        }
+        safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+      }
+
+      // 2. Update Master Callers
+      var callers = JSON.parse(safeStorage.getItem('shaha_local_callers') || '[]');
+      for (var j = 0; j < callers.length; j++) {
+        if (callers[j].name === origName) {
+          callers[j] = updated;
+          break;
+        }
+      }
+      safeStorage.setItem('shaha_local_callers', JSON.stringify(callers));
+
+      closeAdminFullEditModal();
+      loadLeaderboard(selectedDateStr);
+    }, 0);
+  }
+
+  function handleAdminDeactivate() {
+    var origName = document.getElementById('adminOrigOfficerName').value;
+    if (!confirm("Are you sure you want to deactivate " + origName + "?")) return;
+
+    // Optimistic local deactivate
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+    if (snapshots[selectedDateStr]) {
+      snapshots[selectedDateStr] = snapshots[selectedDateStr].filter(function(c) { return c.name !== origName; });
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+    closeAdminFullEditModal();
+    loadLeaderboard(selectedDateStr);
+
+    var apiUrl = getApiUrl();
+    if (apiUrl && apiUrl.indexOf('http') === 0) {
+      callApi('adminRemoveCaller', { officerName: origName, userSession: currentSession })
+        .catch(function(e) { console.warn("Admin remove caller API warning:", e); });
+    }
+    return;
+
+    // Local test mode deactivate
+    var snapshots = JSON.parse(safeStorage.getItem('shaha_local_snapshots') || '{}');
+    if (snapshots[selectedDateStr]) {
+      snapshots[selectedDateStr] = snapshots[selectedDateStr].filter(function(c) { return c.name !== origName; });
+      safeStorage.setItem('shaha_local_snapshots', JSON.stringify(snapshots));
+      delete clientDateCache[selectedDateStr];
+    }
+    closeAdminFullEditModal();
+    loadLeaderboard(selectedDateStr);
+  }
+
+  // -------------------------------------------------------------
+  // SHIFT PERIOD NOTIFICATIONS ENGINE (10:30, 14:00, 17:00, 18:20)
+  // -------------------------------------------------------------
+  var NOTIF_PERIODS = [
+    { key: 'morning', time: '10:30', name: '🌅 Morning Period', msg: 'Morning collection update! Please check and log opening collections.' },
+    { key: 'afternoon', time: '14:00', name: '☀️ Afternoon Period', msg: 'Post-lunch collection check! Please update today amount per caller.' },
+    { key: 'evening', time: '17:00', name: '🌇 Evening Period', msg: 'Evening push! Review pending balances and log late-day collections.' },
+    { key: 'closing', time: '18:20', name: '🚨 Before Leaving (6:20 PM)', msg: 'Shift closing call! Ensure all collection amounts are finalized before leaving.' }
+  ];
+
+  function initNotificationEngine() {
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window && window.Notification && window.Notification.permission === 'default') {
+        var p = window.Notification.requestPermission();
+        if (p && typeof p.catch === 'function') {
+          p.catch(function(){});
+        }
+      }
+    } catch(e) {
+      console.warn("Notifications unavailable in this environment:", e);
+    }
+    try {
+      updateCurrentPeriodDisplay();
+      setInterval(checkScheduledNotifications, 20000);
+      setInterval(updateCurrentPeriodDisplay, 60000);
+    } catch(e) {}
+  }
+
+  function updateCurrentPeriodDisplay() {
+    var now = new Date();
+    var hrs = now.getHours();
+    var mins = now.getMinutes();
+    var curMins = hrs * 60 + mins;
+
+    var text = 'Evening';
+    if (curMins < 12 * 60) {
+      text = '🌅 Morning (Cutoff 12:00)';
+    } else if (curMins < 16 * 60) {
+      text = '☀️ Afternoon (Cutoff 4:00)';
+    } else if (curMins < 18 * 60 + 20) {
+      text = '🌇 Evening (Closing 6:20)';
+    } else {
+      text = '🌙 Day Closed';
+    }
+
+    var el = document.getElementById('currentPeriodText');
+    if (el) el.textContent = 'Shift: ' + text;
+  }
+
+  function checkScheduledNotifications() {
+    var now = new Date();
+    var hrs = String(now.getHours()).padStart(2, '0');
+    var mins = String(now.getMinutes()).padStart(2, '0');
+    var currentTime = hrs + ':' + mins;
+    var todayStr = getTodayString();
+
+    for (var i = 0; i < NOTIF_PERIODS.length; i++) {
+      var p = NOTIF_PERIODS[i];
+      if (currentTime === p.time) {
+        var notifKey = 'shaha_notif_fired_' + p.key + '_' + todayStr;
+        if (!safeStorage.getItem(notifKey)) {
+          safeStorage.setItem(notifKey, 'true');
+          triggerNotificationAlert(p);
+        }
+      }
+    }
+  }
+
+  function triggerNotificationAlert(period) {
+    playNotificationChime();
+
+    var toast = document.getElementById('notificationToast');
+    if (toast) {
+      document.getElementById('toastTitle').textContent = period.name;
+      document.getElementById('toastMsg').textContent = period.msg;
+      toast.style.display = 'block';
+    }
+
+    try {
+      if (typeof window !== 'undefined' && 'Notification' in window && window.Notification && window.Notification.permission === 'granted') {
+        new window.Notification(period.name, {
+          body: period.msg,
+          icon: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+        });
+      }
+    } catch (e) {}
+  }
+
+  function testNotificationAlert() {
+    triggerNotificationAlert({
+      key: 'closing',
+      name: '🚨 Before Leaving (6:20 PM Reminder)',
+      msg: 'Shift ending! Ensure all caller amounts are finalized before leaving.'
+    });
+  }
+
+  function dismissNotificationToast() {
+    var toast = document.getElementById('notificationToast');
+    if (toast) toast.style.display = 'none';
+  }
+
+  function openFirstCallerEdit() {
+    dismissNotificationToast();
+    if (cachedData && cachedData.records && cachedData.records.length > 0) {
+      var r = cachedData.records[0];
+      openEditTodayModal(r.officerName, r.today);
+    }
+  }
+
+  function playNotificationChime() {
+    try {
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      var ctx = new AudioContext();
+      
+      var osc1 = ctx.createOscillator();
+      var gain1 = ctx.createGain();
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
+      gain1.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
+      osc1.start();
+      osc1.stop(ctx.currentTime + 0.4);
+
+      var osc2 = ctx.createOscillator();
+      var gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(880.00, ctx.currentTime + 0.15);
+      gain2.gain.setValueAtTime(0.25, ctx.currentTime + 0.15);
+      gain2.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.65);
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+      osc2.start(ctx.currentTime + 0.15);
+      osc2.stop(ctx.currentTime + 0.65);
+    } catch (e) {}
+  }
+</script>
+
+</body>
+</html>
